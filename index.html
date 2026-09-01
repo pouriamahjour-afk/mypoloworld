@@ -1,29 +1,379 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>My Polo World</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+color:#111;
+background:white;
+}
+
+header{
+padding:22px 5%;
+border-bottom:1px solid #eee;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-family:Georgia,serif;
+font-size:27px;
+letter-spacing:3px;
+font-weight:bold;
+}
+
+nav{
+display:flex;
+gap:20px;
+}
+
+nav button{
+border:0;
+background:none;
+cursor:pointer;
+font-size:13px;
+}
+
+.hero{
+background:#f5f2eb;
+padding:80px 20px;
+text-align:center;
+}
+
+.hero h1{
+font-family:Georgia,serif;
+font-size:48px;
+letter-spacing:4px;
+margin:0 0 15px;
+}
+
+.hero p{
+letter-spacing:2px;
+color:#555;
+}
+
+.title{
+font-family:Georgia,serif;
+text-align:center;
+font-size:29px;
+margin:45px 0 30px;
+}
+
+.products{
+width:92%;
+max-width:1200px;
+margin:auto;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+padding-bottom:70px;
+}
+
+.product{
+cursor:pointer;
+text-align:center;
+}
+
+.product img{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+display:block;
+background:#f4f4f4;
+}
+
+.product-name{
+margin-top:14px;
+font-size:15px;
+}
+
+.price{
+margin-top:7px;
+font-weight:bold;
+}
+
+.detail{
+width:92%;
+max-width:1150px;
+margin:45px auto;
+display:grid;
+grid-template-columns:1.2fr .8fr;
+gap:50px;
+}
+
+.main-photo{
+width:100%;
+aspect-ratio:1/1;
+object-fit:contain;
+background:#f5f5f5;
+}
+
+.thumbs{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:8px;
+margin-top:10px;
+}
+
+.thumbs img{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+cursor:pointer;
+border:1px solid #eee;
+}
+
+.details h1{
+font-family:Georgia,serif;
+font-size:36px;
+font-weight:normal;
+}
+
+.category{
+font-size:12px;
+letter-spacing:2px;
+color:#777;
+text-transform:uppercase;
+}
+
+.description{
+line-height:1.7;
+color:#555;
+margin-top:25px;
+}
+
+.back{
+display:inline-block;
+margin-bottom:25px;
+cursor:pointer;
+font-size:13px;
+}
+
+footer{
+border-top:1px solid #eee;
+text-align:center;
+padding:30px;
+font-size:12px;
+color:#777;
+}
+
+@media(max-width:800px){
+
+header{
+flex-direction:column;
+gap:18px;
+}
+
+nav{
+gap:12px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.hero h1{
+font-size:36px;
+}
+
+.products{
+grid-template-columns:repeat(2,1fr);
+gap:16px;
+}
+
+.detail{
+grid-template-columns:1fr;
+gap:25px;
+}
+
+.thumbs{
+grid-template-columns:repeat(4,1fr);
+}
+
+}
+</style>
 </head>
 
-<body style="margin:0;font-family:Arial;color:#111;text-align:center">
+<body>
 
-<div style="padding:25px;font-family:Georgia;font-size:28px;letter-spacing:3px">
-MY POLO WORLD
-</div>
+<header>
+<div class="logo">MY POLO WORLD</div>
 
-<div style="background:#f5f2eb;padding:80px 20px">
-<h1 style="font-family:Georgia;font-size:46px">MY POLO WORLD</h1>
+<nav>
+<button onclick="showProducts('All')">ALL</button>
+<button onclick="showProducts('Women')">WOMEN</button>
+<button onclick="showProducts('Men')">MEN</button>
+<button onclick="showProducts('Eyewear')">EYEWEAR</button>
+<button onclick="showProducts('Accessories')">ACCESSORIES</button>
+</nav>
+</header>
+
+<div id="content"></div>
+
+<footer>
+© 2026 MY POLO WORLD
+</footer>
+
+<script src="products.js"></script>
+
+<script>
+
+function home(category='All'){
+
+let list = PRODUCTS;
+
+if(category !== 'All'){
+list = PRODUCTS.filter(p => p.category === category);
+}
+
+document.getElementById('content').innerHTML = `
+
+<section class="hero">
+<h1>MY POLO WORLD</h1>
 <p>POLO • FASHION • EYEWEAR • LIFESTYLE</p>
+</section>
+
+<h2 class="title">
+${category === 'All' ? 'NEW ARRIVALS' : category.toUpperCase()}
+</h2>
+
+<section class="products" id="products"></section>
+
+`;
+
+const box=document.getElementById('products');
+
+list.forEach(p=>{
+
+const item=document.createElement('div');
+
+item.className='product';
+
+item.onclick=()=>openProduct(p.id);
+
+item.innerHTML=`
+
+<img src="${p.images[0]}">
+
+<div class="product-name">
+${p.name}
 </div>
 
-<h2 style="font-family:Georgia;margin-top:50px">NEW ARRIVALS</h2>
-
-<div style="width:300px;margin:30px auto 70px">
-<img src="unnamed.png" style="width:100%;display:block">
-<p style="font-size:16px;margin:15px 0 6px">Women sport skirt</p>
-<b>52$</b>
+<div class="price">
+${p.price}
 </div>
+
+`;
+
+box.appendChild(item);
+
+});
+
+}
+
+function showProducts(category){
+history.pushState({},'',location.pathname);
+home(category);
+}
+
+function openProduct(id){
+
+const p=PRODUCTS.find(x=>x.id===id);
+
+if(!p)return;
+
+history.pushState({},'',`?id=${p.id}`);
+
+document.getElementById('content').innerHTML=`
+
+<div class="detail">
+
+<div>
+
+<div class="back" onclick="goBack()">
+← BACK
+</div>
+
+<img class="main-photo"
+id="mainPhoto"
+src="${p.images[0]}">
+
+<div class="thumbs" id="thumbs"></div>
+
+</div>
+
+<div class="details">
+
+<div class="category">
+${p.category}
+</div>
+
+<h1>
+${p.name}
+</h1>
+
+<div class="price">
+${p.price}
+</div>
+
+<div class="description">
+${p.description || ''}
+</div>
+
+</div>
+
+</div>
+
+`;
+
+const thumbs=document.getElementById('thumbs');
+
+p.images.forEach(photo=>{
+
+const img=document.createElement('img');
+
+img.src=photo;
+
+img.onclick=()=>{
+document.getElementById('mainPhoto').src=photo;
+};
+
+thumbs.appendChild(img);
+
+});
+
+}
+
+function goBack(){
+history.pushState({},'',location.pathname);
+home();
+}
+
+window.onpopstate=loadPage;
+
+function loadPage(){
+
+const params=new URLSearchParams(location.search);
+
+const id=params.get('id');
+
+if(id){
+openProduct(id);
+}else{
+home();
+}
+
+}
+
+loadPage();
+
+</script>
 
 </body>
 </html>
