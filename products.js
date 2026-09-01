@@ -3,9 +3,9 @@ const PRODUCTS = [
 {
 id: "001",
 
-name: "Product 01",
+name: "Womwn sport skirt",
 
-price: "€49",
+price: "$52",
 
 category: "Women",
 
