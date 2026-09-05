@@ -1,0 +1,1409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="My Polo World — a curated world of polo lifestyle brands.">
+<title>My Polo World</title>
+
+<style>
+:root{
+  --ink:#142019;
+  --paper:#fbfaf6;
+  --line:rgba(20,32,25,.14);
+  --green:#204d38;
+  --navy:#071b33;
+  --burgundy:#6f1727;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  color:var(--ink);
+  background:var(--paper);
+  font-family:"Helvetica Neue",Arial,sans-serif;
+}
+
+button,summary,a{
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* HEADER */
+
+.site-header{
+  min-height:76px;
+  padding:0 5vw;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  background:rgba(251,250,246,.96);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.wordmark{
+  color:inherit;
+  text-decoration:none;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.2rem;
+  letter-spacing:.22em;
+}
+
+.site-nav{
+  display:flex;
+  gap:28px;
+}
+
+.site-nav a{
+  color:inherit;
+  text-decoration:none;
+  text-transform:uppercase;
+  font-size:.78rem;
+  letter-spacing:.16em;
+}
+
+/* BANNER */
+
+.hero{
+  width:100%;
+  min-height:clamp(300px,47vw,650px);
+  background:#f0ede5 url("assets/fall-winter-banner.png") center/cover no-repeat;
+  border-bottom:1px solid var(--line);
+}
+
+/* INTRO */
+
+.intro{
+  max-width:760px;
+  margin:auto;
+  padding:74px 24px 46px;
+  text-align:center;
+}
+
+.eyebrow{
+  margin:0 0 18px;
+  font-size:.76rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:#6b706d;
+}
+
+h1{
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(2rem,4vw,3.4rem);
+  font-weight:400;
+  letter-spacing:.06em;
+}
+
+.intro p:last-child{
+  max-width:560px;
+  margin:20px auto 0;
+  color:#59605c;
+  font-family:Georgia,"Times New Roman",serif;
+  line-height:1.75;
+}
+
+/* BRANDS */
+
+.brands{
+  width:min(1240px,92vw);
+  margin:auto;
+  padding-bottom:92px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:22px;
+  align-items:start;
+}
+
+.brand-card{
+  border:1px solid var(--line);
+  background:#fff;
+  overflow:hidden;
+}
+
+.brand-card[data-brand="santa"]{border-bottom:4px solid var(--green)}
+.brand-card[data-brand="sanmarco"]{border-bottom:4px solid var(--navy)}
+.brand-card[data-brand="venezia"]{border-bottom:4px solid var(--burgundy)}
+
+summary{
+  list-style:none;
+}
+
+summary::-webkit-details-marker{
+  display:none;
+}
+
+.brand-summary{cursor:pointer}
+
+.brand-head{
+  min-height:460px;
+  padding:34px 26px 28px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
+}
+
+[data-brand="santa"] .brand-head{background:#f3efe5}
+[data-brand="sanmarco"] .brand-head{background:#f7f4ec}
+[data-brand="venezia"] .brand-head{background:#f4eee8}
+
+.logo-wrap{
+  width:100%;
+  height:325px;
+  display:grid;
+  place-items:center;
+}
+
+.brand-logo{
+  max-width:91%;
+  max-height:305px;
+  object-fit:contain;
+  mix-blend-mode:multiply;
+}
+
+[data-brand="santa"] .brand-logo{
+  max-width:82%;
+}
+
+.brand-label{
+  width:100%;
+  padding-top:24px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+}
+
+.brand-label strong{
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:400;
+  letter-spacing:.06em;
+}
+
+.plus{
+  font-size:1.5rem;
+  transition:.2s;
+}
+
+.brand-card[open]>.brand-summary .plus{
+  transform:rotate(45deg);
+}
+
+/* MENUS */
+
+.category{
+  border-top:1px solid var(--line);
+  background:#fff;
+}
+
+.category-title,
+.subcategory-title{
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  text-transform:uppercase;
+}
+
+.category-title{
+  min-height:64px;
+  padding:0 24px;
+  font-size:.78rem;
+  letter-spacing:.16em;
+}
+
+.category-title:after{
+  content:"+";
+  font-size:1.3rem;
+}
+
+.category[open]>.category-title:after{
+  content:"−";
+}
+
+.subcategory{
+  background:#faf9f5;
+  border-top:1px solid rgba(20,32,25,.09);
+}
+
+.subcategory-title{
+  min-height:55px;
+  padding:0 30px;
+  font-size:.73rem;
+  letter-spacing:.13em;
+}
+
+.subcategory-title:after{
+  content:"+";
+  font-size:1.15rem;
+}
+
+.subcategory[open]>.subcategory-title:after{
+  content:"−";
+}
+
+.leaf-list{
+  background:#fff;
+}
+
+.leaf{
+  width:100%;
+  min-height:48px;
+  padding:0 38px;
+  border:0;
+  border-top:1px solid rgba(20,32,25,.07);
+  background:#fff;
+  color:inherit;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-family:inherit;
+  font-size:.74rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-align:left;
+}
+
+button.leaf{
+  cursor:pointer;
+}
+
+button.leaf:hover{
+  background:#f5f2ea;
+}
+
+.sunglasses-button:after{
+  content:"→";
+  font-size:1rem;
+}
+
+/* COLLECTION */
+
+.collection{
+  width:min(1240px,92vw);
+  margin:0 auto 100px;
+  scroll-margin-top:100px;
+}
+
+.collection[hidden]{
+  display:none;
+}
+
+.collection-banner{
+  min-height:clamp(260px,38vw,520px);
+  background:url("assets/santa-barbara-eyewear-banner.png") center/cover no-repeat;
+}
+
+.collection-title{
+  text-align:center;
+  padding:55px 24px 45px;
+}
+
+.collection-title p{
+  margin:0 0 12px;
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-size:.72rem;
+  color:#777;
+}
+
+.collection-title h2{
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(1.8rem,3vw,2.8rem);
+  font-weight:400;
+}
+
+/* PRODUCTS */
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:20px;
+  align-items:start;
+}
+
+.product{
+  background:#fff;
+  border:1px solid var(--line);
+  overflow:hidden;
+}
+
+.product[open]{
+  grid-column:1/-1;
+}
+
+.product-summary{
+  cursor:pointer;
+}
+
+.product-cover{
+  padding:10px;
+}
+
+.product-cover img{
+  width:100%;
+  aspect-ratio:1/1;
+  display:block;
+  object-fit:contain;
+  background:#fff;
+}
+
+.product-info{
+  padding:19px 20px 20px;
+  border-top:1px solid var(--line);
+}
+
+.product-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:15px;
+}
+
+.product-name{
+  margin:0 0 6px;
+  color:#777;
+  font-size:.68rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+}
+
+.product-code{
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.35rem;
+  font-weight:400;
+}
+
+.product-price{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.2rem;
+  white-space:nowrap;
+}
+
+.view-details{
+  display:block;
+  margin-top:15px;
+  padding-top:13px;
+  border-top:1px solid rgba(20,32,25,.09);
+  font-size:.68rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+}
+
+.view-details:after{
+  content:"View details +";
+}
+
+.product[open] .view-details:after{
+  content:"Close −";
+}
+
+/* OPEN PRODUCT */
+
+.product[open] .product-summary{
+  display:grid;
+  grid-template-columns:minmax(280px,1fr) 1fr;
+  align-items:center;
+}
+
+.product[open] .product-cover{
+  padding:24px;
+}
+
+.product[open] .product-info{
+  border-top:0;
+  border-left:1px solid var(--line);
+  padding:35px;
+}
+
+.product:not([open]) > .product-details{
+  display:none;
+}
+
+.product[open] > .product-details{
+  border-top:1px solid var(--line);
+  padding:28px;
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:35px;
+}
+
+.detail-gallery{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.detail-gallery img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:contain;
+  border:1px solid rgba(20,32,25,.08);
+  background:#fff;
+}
+
+.detail-copy h4{
+  margin:0 0 22px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.6rem;
+  font-weight:400;
+}
+
+.detail-row{
+  padding:12px 0;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  font-size:.82rem;
+}
+
+.detail-row span:first-child{
+  color:#777;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  font-size:.7rem;
+}
+
+
+/* WATCHES - 32 VERIFIED MODELS */
+
+.watch-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:20px;
+  align-items:start;
+}
+
+.watch-card{
+  background:#fff;
+  border:2px solid var(--green);
+  padding:12px;
+}
+
+.watch-card img{
+  width:100%;
+  aspect-ratio:1/1;
+  display:block;
+  object-fit:contain;
+  background:#fff;
+}
+
+.watch-caption{
+  margin:12px 0 0;
+  padding-top:12px;
+  border-top:1px solid rgba(20,32,25,.09);
+  text-align:center;
+  font-size:.72rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#4e5a53;
+}
+
+/* FOOTER */
+
+.site-footer{
+  padding:34px 5vw;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:#656b67;
+  font-size:.76rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+@media(max-width:900px){
+  .site-nav{display:none}
+
+  .brands{
+    grid-template-columns:1fr;
+    max-width:560px;
+  }
+
+  .products{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .watch-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .product[open]{
+    grid-column:1/-1;
+  }
+
+  .product-details{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:520px){
+  .hero{min-height:270px}
+
+  .brands,
+  .collection{
+    width:calc(100% - 28px);
+  }
+
+  .brand-head{
+    min-height:360px;
+    padding:24px 20px;
+  }
+
+  .logo-wrap{
+    height:250px;
+  }
+
+  .products{
+    grid-template-columns:1fr;
+  }
+
+  .watch-grid{
+    grid-template-columns:1fr;
+  }
+
+  .product[open] .product-summary{
+    grid-template-columns:1fr;
+  }
+
+  .product[open] .product-info{
+    border-left:0;
+    border-top:1px solid var(--line);
+  }
+
+  .detail-gallery{
+    grid-template-columns:1fr;
+  }
+
+  .site-footer{
+    flex-direction:column;
+    text-align:center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <a class="wordmark" href="#top">MY POLO WORLD</a>
+
+  <nav class="site-nav">
+    <a href="#brands">Our Brands</a>
+    <a href="#brands">Collections</a>
+  </nav>
+</header>
+
+<main id="top">
+
+<section class="hero"></section>
+
+<section class="intro" id="brands">
+  <p class="eyebrow">Our Houses</p>
+  <h1>Three worlds. One polo spirit.</h1>
+  <p>Discover distinct expressions of polo heritage, shaped through sport, style and place.</p>
+</section>
+
+<section class="brands">
+
+<!-- SANTA BARBARA -->
+
+<details class="brand-card" data-brand="santa">
+
+  <summary class="brand-summary">
+    <div class="brand-head">
+
+      <div class="logo-wrap">
+        <img class="brand-logo"
+             src="assets/santa-barbara.jpeg"
+             alt="Santa Barbara Polo and Racquet Club">
+      </div>
+
+      <div class="brand-label">
+        <strong>Santa Barbara Polo &amp; Racquet Club</strong>
+        <span class="plus">+</span>
+      </div>
+
+    </div>
+  </summary>
+
+</details>
+
+<!-- SAN MARCO -->
+
+<details class="brand-card" data-brand="sanmarco">
+
+  <summary class="brand-summary">
+    <div class="brand-head">
+
+      <div class="logo-wrap">
+        <img class="brand-logo"
+             src="assets/polo-san-marco.png"
+             alt="Polo San Marco">
+      </div>
+
+      <div class="brand-label">
+        <strong>Polo San Marco</strong>
+        <span class="plus">+</span>
+      </div>
+
+    </div>
+  </summary>
+
+</details>
+
+<!-- VENEZIA -->
+
+<details class="brand-card" data-brand="venezia">
+
+  <summary class="brand-summary">
+    <div class="brand-head">
+
+      <div class="logo-wrap">
+        <img class="brand-logo"
+             src="assets/venezia-polo.png"
+             alt="Venezia Polo">
+      </div>
+
+      <div class="brand-label">
+        <strong>Venezia Polo</strong>
+        <span class="plus">+</span>
+      </div>
+
+    </div>
+  </summary>
+
+</details>
+
+</section>
+
+
+<!-- SUNGLASSES -->
+
+<section class="collection" id="santa-sunglasses" hidden>
+
+  <div class="collection-banner"></div>
+
+  <div class="collection-title">
+    <p>Santa Barbara Polo &amp; Racquet Club</p>
+    <h2>Sunglasses Collection</h2>
+  </div>
+
+  <div class="products" id="product-list"></div>
+
+</section>
+
+<section class="collection" id="santa-watches" hidden>
+
+  <div class="collection-title">
+    <p>Santa Barbara Polo &amp; Racquet Club</p>
+    <h2>Watches Collection</h2>
+  </div>
+
+  <div class="watch-grid" id="watch-list"></div>
+
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 My Polo World</span>
+  <span>Fashion · Eyewear · Lifestyle</span>
+</footer>
+
+
+<script>
+
+/* MENU STRUCTURE */
+
+function buildBrandMenu(card){
+
+  const isSanta =
+    card.dataset.brand === "santa";
+
+  const sunglasses =
+    isSanta
+    ? `<button class="leaf sunglasses-button" type="button">Sunglasses</button>`
+    : `<div class="leaf">Sunglasses</div>`;
+
+  const watches =
+    isSanta
+    ? `<button class="leaf watches-button" type="button">Watches</button>`
+    : `<div class="leaf">Watches</div>`;
+
+  card.insertAdjacentHTML("beforeend",`
+
+    <details class="category">
+
+      <summary class="category-title">
+        Apparels
+      </summary>
+
+      <details class="subcategory">
+        <summary class="subcategory-title">Men</summary>
+        <div class="leaf-list">
+          <div class="leaf">Underwear</div>
+          <div class="leaf">Shirts</div>
+          <div class="leaf">T-Shirts</div>
+          <div class="leaf">Polo Shirts</div>
+          <div class="leaf">Pants</div>
+          <div class="leaf">Sweater</div>
+          <div class="leaf">Blouse</div>
+          <div class="leaf">Hoodie</div>
+        </div>
+      </details>
+
+      <details class="subcategory">
+        <summary class="subcategory-title">Women</summary>
+        <div class="leaf-list">
+          <div class="leaf">Blouse</div>
+          <div class="leaf">Skirts</div>
+          <div class="leaf">Shorts</div>
+          <div class="leaf">Underwear</div>
+          <div class="leaf">Pants</div>
+          <div class="leaf">Sweater</div>
+          <div class="leaf">Hoodie</div>
+        </div>
+      </details>
+
+      <details class="subcategory">
+        <summary class="subcategory-title">Kids</summary>
+        <div class="leaf-list">
+          <div class="leaf">Down</div>
+          <div class="leaf">Up</div>
+        </div>
+      </details>
+
+    </details>
+
+
+    <details class="category">
+
+      <summary class="category-title">
+        Accessories
+      </summary>
+
+      <details class="subcategory">
+
+        <summary class="subcategory-title">
+          Eyewear
+        </summary>
+
+        <div class="leaf-list">
+          <div class="leaf">Optical Frames</div>
+          ${sunglasses}
+        </div>
+
+      </details>
+
+      <div class="leaf-list">
+        <div class="leaf">Belt</div>
+        <div class="leaf">Hat</div>
+        <div class="leaf">Bracelet</div>
+        <div class="leaf">Bag</div>
+        <div class="leaf">Necklace</div>
+        ${watches}
+      </div>
+
+    </details>
+
+
+    <details class="category">
+
+      <summary class="category-title">
+        Home
+      </summary>
+
+      <div class="leaf-list">
+        <div class="leaf">Bed</div>
+        <div class="leaf">Living Room</div>
+        <div class="leaf">Kitchen</div>
+        <div class="leaf">Decoration</div>
+      </div>
+
+    </details>
+
+  `);
+}
+
+document
+.querySelectorAll(".brand-card")
+.forEach(buildBrandMenu);
+
+
+/* PRODUCTS */
+
+const products = [
+
+  {
+    code:"1132",
+    price:"$100.7",
+    images:[
+      "assets/sb-1132-front.png",
+      "assets/sb-1132-three-quarter.png",
+      "assets/sb-1132-side.png",
+      "assets/sb-1132-model.png"
+    ]
+  },
+
+  {
+    code:"1137",
+    price:"$80.3",
+    images:[
+      "assets/sb-1137-front.png",
+      "assets/sb-1137-three-quarter.png",
+      "assets/sb-1137-side.png",
+      "assets/sb-1137-model.png"
+    ]
+  },
+
+  {
+    code:"1154",
+    price:"$62",
+    images:[
+      "assets/sb-1154-front.png",
+      "assets/sb-1154-three-quarter.png",
+      "assets/sb-1154-side.png",
+      "assets/sb-1154-model.png"
+    ]
+  },
+
+  {
+    code:"1170",
+    price:"$96",
+    images:[
+      "assets/sb-1170-front.png",
+      "assets/sb-1170-three-quarter.png",
+      "assets/sb-1170-side.png",
+      "assets/sb-1170-model.png"
+    ]
+  }
+
+];
+
+
+const productList =
+  document.getElementById("product-list");
+
+
+products.forEach(function(product){
+
+  productList.insertAdjacentHTML("beforeend",`
+
+    <details class="product">
+
+      <summary class="product-summary">
+
+        <div class="product-cover">
+
+          <img
+            src="${product.images[0]}"
+            alt="Santa Barbara ${product.code}"
+          >
+
+        </div>
+
+        <div class="product-info">
+
+          <div class="product-top">
+
+            <div>
+
+              <p class="product-name">
+                Santa Barbara Sunglasses
+              </p>
+
+              <h3 class="product-code">
+                ${product.code}
+              </h3>
+
+            </div>
+
+            <div class="product-price">
+              ${product.price}
+            </div>
+
+          </div>
+
+          <span class="view-details"></span>
+
+        </div>
+
+      </summary>
+
+
+      <div class="product-details">
+
+        <div class="detail-gallery">
+
+          <img
+            src="${product.images[1]}"
+            alt="${product.code} three quarter"
+          >
+
+          <img
+            src="${product.images[2]}"
+            alt="${product.code} side"
+          >
+
+          <img
+            src="${product.images[3]}"
+            alt="${product.code} model"
+          >
+
+        </div>
+
+
+        <div class="detail-copy">
+
+          <h4>
+            Product Details
+          </h4>
+
+          <div class="detail-row">
+            <span>Brand</span>
+            <span>Santa Barbara Polo &amp; Racquet Club</span>
+          </div>
+
+          <div class="detail-row">
+            <span>Category</span>
+            <span>Sunglasses</span>
+          </div>
+
+          <div class="detail-row">
+            <span>Model</span>
+            <span>${product.code}</span>
+          </div>
+
+          <div class="detail-row">
+            <span>Price</span>
+            <span>${product.price}</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </details>
+
+  `);
+
+});
+
+
+/* WATCHES */
+
+const watches = [
+  {
+    "model": "SB.1.10607-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10607-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10607-5/SB.1.10607-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10607-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10615-1",
+    "images": [
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10615-1/SB.1.10615-1_1.jpg",
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10615-1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10615-1.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10526-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10526-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10526-4/SB.1.10526-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10526-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10596-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10596-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10596-4/SB.1.10596-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10596-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10624-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10624-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10624-3/SB.1.10624-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10624-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10498-2",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10498-2.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10498-2/SB.1.10498-2_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10498-2.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10591-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10591-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10591-5/SB.1.10591-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10591-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10636-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10636-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10636-4/SB.1.10636-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10636-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10547-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10547-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10547-5/SB.1.10547-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10547-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10593-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10593-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10593-5/SB.1.10593-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10593-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10643-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10643-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10643-3/SB.1.10643-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10643-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10538-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10538-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10538-4/SB.1.10538-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10538-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10017-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10017-5/SB.4.10017-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10017-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10022-2",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-2.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-2/SB.4.10022-2_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-2.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10022-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-3/SB.4.10022-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10022-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-5/SB.4.10022-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10021-1",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-1.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-1/SB.4.10021-1_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-1.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10021-2",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-2.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-2/SB.4.10021-2_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-2.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10021-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-4/SB.4.10021-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10015-1",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-1.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10015-1/SB.4.10015-1_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10015-1.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10015-2",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-2.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10015-2/SB.4.10015-2_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10015-2.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10016-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10016-3/SB.4.10016-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10016-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10016-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10016-5/SB.4.10016-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10016-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10017-6",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-6.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10017-6/SB.4.10017-6_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10017-6.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10019-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10019-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10019-4/SB.4.10019-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10019-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.5.10003-1",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-1.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10003-1/SB.5.10003-1_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10003-1.jpg"
+    ]
+  },
+  {
+    "model": "SB.5.10003-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10003-4/SB.5.10003-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10003-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.5.10004-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10004-3/SB.5.10004-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10004-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.5.10004-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10004-4/SB.5.10004-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10004-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.8.10009-6",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-8-10009-6.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.8.10009-6/SB.8.10009-6_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.8.10009-6.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10646-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10646-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10646-3/SB.1.10646-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10646-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10023-1",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10023-1.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10023-1/SB.4.10023-1_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10023-1.jpg"
+    ]
+  }
+];
+
+const watchList =
+  document.getElementById("watch-list");
+
+function showNextWatchImage(img){
+  const sources = JSON.parse(img.dataset.sources || "[]");
+  let index = Number(img.dataset.index || 0) + 1;
+
+  if(index < sources.length){
+    img.dataset.index = index;
+    img.src = sources[index];
+  } else {
+    img.onerror = null;
+    const card = img.closest(".watch-card");
+    if(card) card.remove();
+  }
+}
+
+watches.forEach(function(watch){
+
+  const sources = JSON.stringify(watch.images).replace(/'/g,"&#39;");
+
+  watchList.insertAdjacentHTML("beforeend",`
+
+    <article class="watch-card">
+      <img
+        src="${watch.images[0]}"
+        alt="Santa Barbara ${watch.model}"
+        data-sources='${sources}'
+        data-index="0"
+        referrerpolicy="no-referrer"
+        onerror="showNextWatchImage(this)"
+      >
+      <p class="watch-caption">${watch.model}</p>
+    </article>
+
+  `);
+
+});
+
+/* OPEN SUNGLASSES */
+
+const sunglassesButton =
+  document.querySelector(".sunglasses-button");
+
+const sunglassesSection =
+  document.getElementById("santa-sunglasses");
+
+if(sunglassesButton){
+
+  sunglassesButton.addEventListener(
+    "click",
+    function(){
+
+      sunglassesSection.hidden=false;
+      watchesSection.hidden=true;
+
+      setTimeout(function(){
+
+        sunglassesSection.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+      },50);
+
+    }
+  );
+
+}
+
+
+/* OPEN WATCHES */
+
+const watchesButton =
+  document.querySelector(".watches-button");
+
+const watchesSection =
+  document.getElementById("santa-watches");
+
+if(watchesButton){
+
+  watchesButton.addEventListener(
+    "click",
+    function(){
+
+      watchesSection.hidden=false;
+      sunglassesSection.hidden=true;
+
+      setTimeout(function(){
+
+        watchesSection.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+      },50);
+
+    }
+  );
+
+}
+
+
+/* OPEN / CLOSE PRODUCTS RELIABLY */
+
+document
+.querySelectorAll(".product-summary")
+.forEach(function(summary){
+
+  summary.addEventListener(
+    "click",
+    function(event){
+
+      event.preventDefault();
+
+      const product = summary.closest(".product");
+      const shouldOpen = !product.open;
+
+      document
+      .querySelectorAll(".product")
+      .forEach(function(other){
+        other.open = false;
+      });
+
+      product.open = shouldOpen;
+
+      if(shouldOpen){
+        setTimeout(function(){
+          product.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+          });
+        },50);
+      }
+
+    }
+  );
+
+});
+
+</script>
+
+</body>
+</html>
