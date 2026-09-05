@@ -425,7 +425,11 @@ button.leaf:hover{
   padding:35px;
 }
 
-.product-details{
+.product:not([open]) > .product-details{
+  display:none;
+}
+
+.product[open] > .product-details{
   border-top:1px solid var(--line);
   padding:28px;
   display:grid;
@@ -470,6 +474,41 @@ button.leaf:hover{
   font-size:.7rem;
 }
 
+
+/* WATCHES */
+
+.watch-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:20px;
+  align-items:start;
+}
+
+.watch-card{
+  background:#fff;
+  border:2px solid var(--green);
+  padding:12px;
+}
+
+.watch-card img{
+  width:100%;
+  aspect-ratio:1/1;
+  display:block;
+  object-fit:contain;
+  background:#fff;
+}
+
+.watch-caption{
+  margin:12px 0 0;
+  padding-top:12px;
+  border-top:1px solid rgba(20,32,25,.09);
+  text-align:center;
+  font-size:.72rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#4e5a53;
+}
+
 /* FOOTER */
 
 .site-footer{
@@ -493,6 +532,10 @@ button.leaf:hover{
   }
 
   .products{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .watch-grid{
     grid-template-columns:repeat(2,1fr);
   }
 
@@ -523,6 +566,10 @@ button.leaf:hover{
   }
 
   .products{
+    grid-template-columns:1fr;
+  }
+
+  .watch-grid{
     grid-template-columns:1fr;
   }
 
@@ -657,6 +704,17 @@ button.leaf:hover{
 
 </section>
 
+<section class="collection" id="santa-watches" hidden>
+
+  <div class="collection-title">
+    <p>Santa Barbara Polo &amp; Racquet Club</p>
+    <h2>Watches Collection</h2>
+  </div>
+
+  <div class="watch-grid" id="watch-list"></div>
+
+</section>
+
 </main>
 
 <footer class="site-footer">
@@ -678,6 +736,11 @@ function buildBrandMenu(card){
     isSanta
     ? `<button class="leaf sunglasses-button" type="button">Sunglasses</button>`
     : `<div class="leaf">Sunglasses</div>`;
+
+  const watches =
+    isSanta
+    ? `<button class="leaf watches-button" type="button">Watches</button>`
+    : `<div class="leaf">Watches</div>`;
 
   card.insertAdjacentHTML("beforeend",`
 
@@ -750,7 +813,7 @@ function buildBrandMenu(card){
         <div class="leaf">Bracelet</div>
         <div class="leaf">Bag</div>
         <div class="leaf">Necklace</div>
-        <div class="leaf">Watches</div>
+        ${watches}
       </div>
 
     </details>
@@ -939,6 +1002,328 @@ products.forEach(function(product){
 });
 
 
+/* WATCHES */
+
+const watches = [
+  {
+    "model": "SB.1.10607-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10607-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10607-5/SB.1.10607-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10607-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10615-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10615-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10615-4/SB.1.10615-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10615-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10615-1",
+    "images": [
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10615-1/SB.1.10615-1_1.jpg",
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10615-1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10615-1.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10526-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10526-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10526-4/SB.1.10526-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10526-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10596-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10596-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10596-4/SB.1.10596-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10596-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.8.10001-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-8-10001-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.8.10001-5/SB.8.10001-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.8.10001-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10624-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10624-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10624-3/SB.1.10624-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10624-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10498-2",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10498-2.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10498-2/SB.1.10498-2_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10498-2.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10591-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10591-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10591-5/SB.1.10591-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10591-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10636-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10636-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10636-4/SB.1.10636-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10636-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10547-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10547-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10547-5/SB.1.10547-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10547-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10593-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10593-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10593-5/SB.1.10593-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10593-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10643-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10643-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10643-3/SB.1.10643-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10643-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10538-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10538-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10538-4/SB.1.10538-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10538-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10472-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10472-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10472-5/SB.1.10472-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10472-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10017-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10017-5/SB.4.10017-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10017-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10022-2",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-2.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-2/SB.4.10022-2_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-2.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10022-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-3/SB.4.10022-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10022-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-5/SB.4.10022-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10021-1",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-1.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-1/SB.4.10021-1_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-1.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10021-2",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-2.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-2/SB.4.10021-2_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-2.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10021-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-4/SB.4.10021-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10015-1",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-1.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10015-1/SB.4.10015-1_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10015-1.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10015-2",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-2.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10015-2/SB.4.10015-2_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10015-2.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10016-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10016-3/SB.4.10016-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10016-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10016-5",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-5.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10016-5/SB.4.10016-5_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10016-5.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10017-6",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-6.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10017-6/SB.4.10017-6_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10017-6.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10019-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10019-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10019-4/SB.4.10019-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10019-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.5.10003-1",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-1.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10003-1/SB.5.10003-1_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10003-1.jpg"
+    ]
+  },
+  {
+    "model": "SB.5.10003-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10003-4/SB.5.10003-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10003-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.5.10004-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10004-3/SB.5.10004-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10004-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.5.10004-4",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-4.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10004-4/SB.5.10004-4_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10004-4.jpg"
+    ]
+  },
+  {
+    "model": "SB.8.10009-6",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-8-10009-6.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.8.10009-6/SB.8.10009-6_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.8.10009-6.jpg"
+    ]
+  },
+  {
+    "model": "SB.1.10646-3",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10646-3.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10646-3/SB.1.10646-3_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10646-3.jpg"
+    ]
+  },
+  {
+    "model": "SB.4.10023-1",
+    "images": [
+      "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10023-1.jpg",
+      "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10023-1/SB.4.10023-1_1.jpg",
+      "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10023-1.jpg"
+    ]
+  }
+];
+
+const watchList =
+  document.getElementById("watch-list");
+
+function showNextWatchImage(img){
+  const sources = JSON.parse(img.dataset.sources || "[]");
+  let index = Number(img.dataset.index || 0) + 1;
+
+  if(index < sources.length){
+    img.dataset.index = index;
+    img.src = sources[index];
+  } else {
+    img.onerror = null;
+  }
+}
+
+watches.forEach(function(watch){
+
+  const sources = JSON.stringify(watch.images).replace(/'/g,"&#39;");
+
+  watchList.insertAdjacentHTML("beforeend",`
+
+    <article class="watch-card">
+      <img
+        src="${watch.images[0]}"
+        alt="Santa Barbara ${watch.model}"
+        data-sources='${sources}'
+        data-index="0"
+        referrerpolicy="no-referrer"
+        onerror="showNextWatchImage(this)"
+      >
+      <p class="watch-caption">${watch.model}</p>
+    </article>
+
+  `);
+
+});
+
 /* OPEN SUNGLASSES */
 
 const sunglassesButton =
@@ -954,6 +1339,7 @@ if(sunglassesButton){
     function(){
 
       sunglassesSection.hidden=false;
+      watchesSection.hidden=true;
 
       setTimeout(function(){
 
@@ -970,29 +1356,69 @@ if(sunglassesButton){
 }
 
 
-/* ONLY ONE PRODUCT OPEN AT A TIME */
+/* OPEN WATCHES */
 
-document
-.querySelectorAll(".product")
-.forEach(function(product){
+const watchesButton =
+  document.querySelector(".watches-button");
 
-  product.addEventListener(
-    "toggle",
+const watchesSection =
+  document.getElementById("santa-watches");
+
+if(watchesButton){
+
+  watchesButton.addEventListener(
+    "click",
     function(){
 
-      if(!product.open){
-        return;
-      }
+      watchesSection.hidden=false;
+      sunglassesSection.hidden=true;
+
+      setTimeout(function(){
+
+        watchesSection.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+      },50);
+
+    }
+  );
+
+}
+
+
+/* OPEN / CLOSE PRODUCTS RELIABLY */
+
+document
+.querySelectorAll(".product-summary")
+.forEach(function(summary){
+
+  summary.addEventListener(
+    "click",
+    function(event){
+
+      event.preventDefault();
+
+      const product = summary.closest(".product");
+      const shouldOpen = !product.open;
 
       document
       .querySelectorAll(".product")
       .forEach(function(other){
-
-        if(other!==product){
-          other.open=false;
-        }
-
+        other.open = false;
       });
+
+      product.open = shouldOpen;
+
+      if(shouldOpen){
+        setTimeout(function(){
+          product.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+          });
+        },50);
+      }
 
     }
   );
