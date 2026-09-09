@@ -33,6 +33,15 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .hidden{display:none!important}.help{font-size:12px;color:var(--muted);line-height:1.55}
 img.preview{width:88px;height:88px;object-fit:contain;border:1px solid var(--line);background:#fff}
 .search{min-width:260px}
+.product-filterbar{display:grid;grid-template-columns:1.1fr 1.7fr 2fr auto;gap:10px;align-items:end;margin:14px 0 18px;padding:14px;border:1px solid var(--line);background:#faf9f5}
+.product-filterbar label{margin-bottom:5px}
+.product-group{border:1px solid var(--line);background:#fff;margin-bottom:12px}
+.product-group>summary{cursor:pointer;list-style:none;padding:15px 16px;display:flex;justify-content:space-between;gap:14px;align-items:center;background:#f6f4ee}
+.product-group>summary::-webkit-details-marker{display:none}
+.product-group-title{font-weight:700}
+.product-group-meta{font-size:12px;color:var(--muted);margin-top:4px}
+.product-group-count{white-space:nowrap;font-size:12px;background:#e9eee9;padding:5px 9px;border-radius:999px}
+.product-group-body{padding:10px;display:grid;gap:9px}
 .image-manager{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:8px 0}
 .image-card{border:1px solid var(--line);padding:8px;background:#faf9f5}
 .image-card img{width:100%;aspect-ratio:1/1;display:block;object-fit:contain;background:#fff;border:1px solid #eee}
@@ -43,7 +52,7 @@ img.preview{width:88px;height:88px;object-fit:contain;border:1px solid var(--lin
 .notice{padding:12px;border-left:4px solid var(--green);background:#f3f7f4;font-size:13px;line-height:1.55}
 hr{border:0;border-top:1px solid var(--line);margin:20px 0}
 @media(max-width:900px){.summary-grid,.image-manager{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.c8,.c6,.c5,.c4,.c3,.c2{grid-column:span 12}.item{align-items:flex-start;flex-direction:column}header{align-items:flex-start;flex-direction:column}.summary-grid,.image-manager{grid-template-columns:1fr}.search{min-width:0;width:100%}}
+@media(max-width:760px){.c8,.c6,.c5,.c4,.c3,.c2{grid-column:span 12}.item{align-items:flex-start;flex-direction:column}header{align-items:flex-start;flex-direction:column}.summary-grid,.image-manager{grid-template-columns:1fr}.search{min-width:0;width:100%}.product-filterbar{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -124,10 +133,32 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
     <section class="view" id="view-products">
       <div class="panel">
         <div class="toolbar">
-          <div class="toolbar-left"><h2 style="margin:0">Products</h2><input id="productSearch" class="search" placeholder="Search model, name, brand, category..." oninput="renderProducts()"></div>
+          <div>
+            <h2 style="margin:0">Products</h2>
+            <p class="help" style="margin:6px 0 0">Products are separated by brand and category. Open only the group you need.</p>
+          </div>
           <button class="primary" onclick="openProduct()">+ Add product</button>
         </div>
-        <div id="productList" class="list"></div>
+
+        <div class="product-filterbar">
+          <div>
+            <label>Brand</label>
+            <select id="productBrandFilter" onchange="refreshProductFilterCategories();renderProducts()"></select>
+          </div>
+          <div>
+            <label>Category</label>
+            <select id="productCategoryFilter" onchange="renderProducts()"></select>
+          </div>
+          <div>
+            <label>Search</label>
+            <input id="productSearch" class="search" placeholder="Model / name / price..." oninput="renderProducts()">
+          </div>
+          <div>
+            <button class="secondary" type="button" onclick="clearProductFilters()">Clear filters</button>
+          </div>
+        </div>
+
+        <div id="productList"></div>
       </div>
     </section>
 
@@ -265,7 +296,7 @@ document.querySelectorAll(".tab").forEach(btn=>btn.onclick=()=>{
   if(btn.dataset.view==="site")loadSiteForm();
 });
 
-function renderAll(){renderSummary();renderProducts();renderCategories();renderBanners();renderBrands()}
+function renderAll(){renderSummary();refreshProductFilters();renderProducts();renderCategories();renderBanners();renderBrands()}
 function renderSummary(){
   if(!data)return;
   $("summary").innerHTML=`<div class="summary-grid">
@@ -313,22 +344,101 @@ async function saveSiteSettings(){
   }catch(e){setStatus("Site settings save failed: "+e.message,"err")}
 }
 
+function refreshProductFilters(){
+  if(!data)return;
+  const brandSel=$("productBrandFilter"), categorySel=$("productCategoryFilter");
+  if(!brandSel||!categorySel)return;
+
+  const oldBrand=brandSel.value;
+  brandSel.innerHTML=`<option value="">All brands</option>`+
+    data.brands.map(b=>`<option value="${esc(b.id)}">${esc(b.name)}</option>`).join("");
+  if([...brandSel.options].some(o=>o.value===oldBrand))brandSel.value=oldBrand;
+
+  refreshProductFilterCategories();
+}
+
+function refreshProductFilterCategories(){
+  const brandSel=$("productBrandFilter"), categorySel=$("productCategoryFilter");
+  if(!brandSel||!categorySel||!data)return;
+
+  const oldCategory=categorySel.value;
+  const brand=brandSel.value;
+  let categories=[];
+
+  if(brand){
+    categories=[...new Set(data.products.filter(p=>p.brand===brand).map(p=>p.categoryPath).filter(Boolean))];
+  }else{
+    categories=[...new Set(data.products.map(p=>p.categoryPath).filter(Boolean))];
+  }
+
+  categories.sort((a,b)=>a.localeCompare(b));
+  categorySel.innerHTML=`<option value="">All categories</option>`+
+    categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+
+  if([...categorySel.options].some(o=>o.value===oldCategory))categorySel.value=oldCategory;
+}
+
+function clearProductFilters(){
+  if($("productBrandFilter"))$("productBrandFilter").value="";
+  refreshProductFilterCategories();
+  if($("productCategoryFilter"))$("productCategoryFilter").value="";
+  if($("productSearch"))$("productSearch").value="";
+  renderProducts();
+}
+
 function renderProducts(){
   if(!data)return;
   const q=($("productSearch")?.value||"").toLowerCase().trim();
+  const brandFilter=$("productBrandFilter")?.value||"";
+  const categoryFilter=$("productCategoryFilter")?.value||"";
+
   const rows=data.products.map((p,i)=>({p,i})).filter(({p})=>{
+    if(brandFilter && p.brand!==brandFilter)return false;
+    if(categoryFilter && p.categoryPath!==categoryFilter)return false;
     const hay=[p.code,p.name,p.price,p.categoryPath,brandName(p.brand)].join(" ").toLowerCase();
     return !q||hay.includes(q);
   });
-  $("productList").innerHTML=rows.length?rows.map(({p,i})=>`<div class="item">
-    <div><b>${esc(p.code||p.name||"Untitled")}</b> <span class="badge">${p.active===false?"Hidden":"Live"}</span><br><small>${esc(brandName(p.brand))} · ${esc(p.categoryPath)} · ${esc(p.price)}</small></div>
-    <div class="actions">
-      <button class="ghost" onclick="moveProduct(${i},-1)">↑</button><button class="ghost" onclick="moveProduct(${i},1)">↓</button>
-      <button class="secondary" onclick="duplicateProduct(${i})">Duplicate</button>
-      <button class="secondary" onclick="openProduct(${i})">Edit</button>
-      <button class="danger" onclick="deleteProduct(${i})">Delete</button>
-    </div>
-  </div>`).join(""):`<p class="help">No matching products.</p>`;
+
+  if(!rows.length){
+    $("productList").innerHTML=`<p class="help">No matching products.</p>`;
+    return;
+  }
+
+  const groups=new Map();
+  rows.forEach(row=>{
+    const key=(row.p.brand||"")+"|||"+(row.p.categoryPath||"Uncategorized");
+    if(!groups.has(key))groups.set(key,[]);
+    groups.get(key).push(row);
+  });
+
+  const autoOpen = !!categoryFilter || groups.size===1;
+
+  $("productList").innerHTML=[...groups.entries()].map(([key,items])=>{
+    const [brandId,categoryPath]=key.split("|||");
+    const groupTitle=brandName(brandId);
+    const body=items.map(({p,i})=>`<div class="item">
+      <div><b>${esc(p.code||p.name||"Untitled")}</b> <span class="badge">${p.active===false?"Hidden":"Live"}</span><br>
+      <small>${esc(p.name||"Product")} · ${esc(p.price||"No price")}</small></div>
+      <div class="actions">
+        <button class="ghost" onclick="moveProduct(${i},-1)">↑</button>
+        <button class="ghost" onclick="moveProduct(${i},1)">↓</button>
+        <button class="secondary" onclick="duplicateProduct(${i})">Duplicate</button>
+        <button class="secondary" onclick="openProduct(${i})">Edit</button>
+        <button class="danger" onclick="deleteProduct(${i})">Delete</button>
+      </div>
+    </div>`).join("");
+
+    return `<details class="product-group" ${autoOpen?"open":""}>
+      <summary>
+        <div>
+          <div class="product-group-title">${esc(categoryPath.split(" / ").pop()||categoryPath)}</div>
+          <div class="product-group-meta">${esc(groupTitle)} · ${esc(categoryPath)}</div>
+        </div>
+        <span class="product-group-count">${items.length} product${items.length===1?"":"s"}</span>
+      </summary>
+      <div class="product-group-body">${body}</div>
+    </details>`;
+  }).join("");
 }
 function moveProduct(i,d){moveArray(data.products,i,d)}
 function duplicateProduct(i){
