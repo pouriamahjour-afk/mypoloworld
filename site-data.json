@@ -566,34 +566,6 @@
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10023-1.jpg"
       ],
       "active": true
-    },
-    {
-      "id": "santa-sb-1-0001",
-      "brand": "santa",
-      "categoryPath": "Accessories / Bag",
-      "name": "women's shoulder bag",
-      "code": "sb 1.0001",
-      "price": "$150",
-      "description": "hand made",
-      "images": [
-        "assets/uploads/1788970798695-plmjx-3d2689f6-f010-41a5-b900-1eb018d68c49.png",
-        "assets/uploads/1788970812585-s70bk-21106b36-bc40-4992-8b07-ae30bae5f906.png"
-      ],
-      "active": true
-    },
-    {
-      "id": "santa-sb-1-0001",
-      "brand": "santa",
-      "categoryPath": "Accessories / Bag",
-      "name": "women's shoulder bag",
-      "code": "sb 1.0001",
-      "price": "$150",
-      "description": "hand made",
-      "images": [
-        "assets/uploads/1788970962184-4gn4e-3d2689f6-f010-41a5-b900-1eb018d68c49.png",
-        "assets/uploads/1788970971701-bsnip-21106b36-bc40-4992-8b07-ae30bae5f906.png"
-      ],
-      "active": true
     }
   ]
 }
