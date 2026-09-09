@@ -99,6 +99,22 @@ summary::-webkit-details-marker{display:none}
 .directory-button:hover{background:var(--card-accent);color:#fff}
 .directory-button.coming{border-style:dashed}
 
+.about-section{width:min(1080px,92vw);margin:0 auto 100px;scroll-margin-top:100px}
+.about-section[hidden]{display:none}
+.about-shell{position:relative;background:#fff;border:1px solid var(--line);border-top:4px solid var(--green);padding:clamp(38px,6vw,78px)}
+.about-shell:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(32,77,56,.035),transparent 34%,rgba(111,23,39,.025) 72%,rgba(7,27,51,.035));pointer-events:none}
+.about-inner{position:relative;z-index:1}
+.about-eyebrow{margin:0 0 16px;text-transform:uppercase;letter-spacing:.24em;font-size:.72rem;color:#747b76}
+.about-title{margin:0 0 34px;font:400 clamp(2.2rem,4vw,3.8rem)/1.08 Georgia,"Times New Roman",serif;letter-spacing:.045em}
+.about-story{max-width:860px}
+.about-story p{margin:0 0 22px;color:#4d5550;font:400 1rem/1.95 Georgia,"Times New Roman",serif}
+.about-story strong{color:var(--ink);font-weight:600}
+.about-chapters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:42px 0 34px}
+.about-chapter{padding:20px 18px;border:1px solid var(--line);border-top:3px solid var(--chapter-accent,#204d38);background:#fbfaf6}
+.about-chapter span{display:block;margin-bottom:7px;text-transform:uppercase;letter-spacing:.16em;font-size:.66rem;color:#777}
+.about-chapter b{font:400 1.22rem/1.25 Georgia,"Times New Roman",serif;letter-spacing:.04em}
+.about-signoff{margin:0;padding-top:26px;border-top:1px solid var(--line);font:400 clamp(1.15rem,2vw,1.55rem)/1.5 Georgia,"Times New Roman",serif;letter-spacing:.04em}
+
 .coming-soon-card{border:1px solid var(--line);background:#fff;overflow:hidden}
 .coming-soon-hero{position:relative;min-height:clamp(300px,38vw,500px);padding:42px 44px;display:flex;align-items:flex-end;color:#f7f1e4;overflow:hidden}
 .coming-soon-hero.sanmarco{background:linear-gradient(135deg,#071b33 0%,#0d2544 45%,#b89453 100%)}
@@ -116,13 +132,14 @@ summary::-webkit-details-marker{display:none}
   .site-nav{display:none}
   .brands{grid-template-columns:1fr;max-width:560px}
   .collections-directory{grid-template-columns:1fr}
+  .about-chapters{grid-template-columns:1fr}
   .products,.watch-grid{grid-template-columns:repeat(2,1fr)}
   .product[open]{grid-column:1/-1}
   .product-details{grid-template-columns:1fr}
 }
 @media(max-width:520px){
   .hero{min-height:270px}
-  .brands,.collection{width:calc(100% - 28px)}
+  .brands,.collection,.about-section{width:calc(100% - 28px)}
   .brand-head{min-height:360px;padding:24px 20px}
   .logo-wrap{height:250px}
   .products,.watch-grid{grid-template-columns:1fr}
@@ -139,6 +156,7 @@ summary::-webkit-details-marker{display:none}
   <nav class="site-nav">
     <a href="#brands" onclick="event.preventDefault(); showOurBrands();">Our Brands</a>
     <a href="#collections" onclick="event.preventDefault(); showCollectionsDirectory();">Collections</a>
+    <a href="#about" onclick="event.preventDefault(); showAboutUs();">About Us</a>
   </nav>
 </header>
 
@@ -152,6 +170,39 @@ summary::-webkit-details-marker{display:none}
   </section>
 
   <section class="brands" id="brandGrid"></section>
+
+  <section class="about-section" id="aboutUs" hidden>
+    <div class="about-shell">
+      <div class="about-inner">
+        <p class="about-eyebrow">About Us</p>
+        <h2 class="about-title">Three Cities. One Spirit.</h2>
+
+        <div class="about-story">
+          <p>Our story began with a simple belief: <strong>polo is more than a sport — it is a way of life.</strong> A world where heritage, freedom, travel, beauty, and attention to detail come together.</p>
+
+          <p>That vision led us to three different places around the world — three destinations with three distinct personalities, yet all connected by the same spirit.</p>
+
+          <p>In <strong>Santa Barbara</strong>, polo meets sunshine, nature, ease, and the freedom of the American West Coast. This is where a world begins in which clothing, bags, eyewear, and accessories are refined, yet effortless and made for real life. <strong>Santa Barbara Polo &amp; Racquet Club</strong> represents the bright, sporty, and relaxed side of our world.</p>
+
+          <p>From there, the journey continues to Italy — to <strong>San Marco</strong>. Here, European elegance, classical architecture, and the art of dressing well become part of the story. <strong>Polo San Marco</strong> is the more sophisticated and urban expression of the family: navy and gold, clean lines, and a sense of quiet confidence that never needs to shout to be noticed.</p>
+
+          <p>But the story would not be complete without Venice.</p>
+
+          <p><strong>Venezia Polo</strong> is inspired by a city that has always lived somewhere between reality and dream — water, stone, light, art, and centuries of history. Here, polo becomes more daring, more artistic, and more romantic. Deep colors, unexpected details, and inspiration drawn from Venice’s canals, palaces, and hidden streets shape the character of Venezia Polo.</p>
+
+          <p>To us, these are not simply three separate brands. They are <strong>three chapters of one story.</strong></p>
+        </div>
+
+        <div class="about-chapters" aria-label="The three chapters of My Polo World">
+          <div class="about-chapter" style="--chapter-accent:#204d38"><span>Santa Barbara</span><b>The Freedom</b></div>
+          <div class="about-chapter" style="--chapter-accent:#071b33"><span>San Marco</span><b>The Elegance</b></div>
+          <div class="about-chapter" style="--chapter-accent:#6f1727"><span>Venezia</span><b>The Imagination</b></div>
+        </div>
+
+        <p class="about-signoff"><strong>My Polo World</strong> — Three worlds. One polo spirit.</p>
+      </div>
+    </div>
+  </section>
 
   <section class="collection" id="collection" hidden>
     <div class="collection-banner" id="collectionBanner" hidden></div>
@@ -207,6 +258,11 @@ function hideCollectionView() {
   if(section) section.hidden = true;
 }
 
+function hideAboutUs() {
+  const section = document.getElementById("aboutUs");
+  if(section) section.hidden = true;
+}
+
 function restoreMenuOpenKeys(keys=[]) {
   const wanted = new Set(keys || []);
   document.querySelectorAll('details[data-nav-key]').forEach(el => {
@@ -227,6 +283,7 @@ function applyHistoryState(state, options={}) {
   try {
     if(state.type === "home") {
       hideCollectionView();
+      hideAboutUs();
       closeAllProducts();
       restoreMenuOpenKeys([]);
       if(scroll) window.scrollTo({top:0, behavior:"auto"});
@@ -243,8 +300,14 @@ function applyHistoryState(state, options={}) {
       return;
     }
 
+    if(state.type === "about") {
+      showAboutUs(false, scroll);
+      return;
+    }
+
     if(state.type === "menu") {
       hideCollectionView();
+      hideAboutUs();
       closeAllProducts();
       restoreMenuOpenKeys(state.openKeys || []);
       return;
@@ -377,6 +440,7 @@ function topLevelCategories(brandId) {
 function showOurBrands(pushHistory=true, scroll=true) {
   if(!SITE) return;
   hideCollectionView();
+  hideAboutUs();
   closeAllProducts();
 
   suppressHistoryEvents = true;
@@ -395,6 +459,7 @@ function openDirectoryCategory(brandId, topCategory) {
   }
 
   hideCollectionView();
+  hideAboutUs();
   closeAllProducts();
   const keys = [`brand:${brandId}`, `path:${brandId}:${topCategory}`];
 
@@ -410,6 +475,7 @@ function openDirectoryCategory(brandId, topCategory) {
 
 function showCollectionsDirectory(pushHistory=true, scroll=true) {
   if(!SITE) return;
+  hideAboutUs();
   const section = document.getElementById("collection");
   const bannerEl = document.getElementById("collectionBanner");
   bannerEl.hidden = true;
@@ -436,6 +502,21 @@ function showCollectionsDirectory(pushHistory=true, scroll=true) {
   document.getElementById("collectionContent").innerHTML = `<div class="collections-directory">${cards}</div>`;
   section.hidden = false;
   if(pushHistory) pushInternalState(historyState("collections-directory"));
+  if(scroll) setTimeout(() => section.scrollIntoView({behavior:"smooth", block:"start"}), 20);
+}
+
+function showAboutUs(pushHistory=true, scroll=true) {
+  hideCollectionView();
+  closeAllProducts();
+
+  suppressHistoryEvents = true;
+  restoreMenuOpenKeys([]);
+  setTimeout(() => { suppressHistoryEvents = false; }, 0);
+
+  const section = document.getElementById("aboutUs");
+  if(!section) return;
+  section.hidden = false;
+  if(pushHistory) pushInternalState(historyState("about"));
   if(scroll) setTimeout(() => section.scrollIntoView({behavior:"smooth", block:"start"}), 20);
 }
 
@@ -558,6 +639,7 @@ function handleBrandClick(event, brandId) {
 }
 
 function openBrandComingSoon(brandId, pushHistory=true) {
+  hideAboutUs();
   const section = document.getElementById("collection");
   const b = brandById(brandId);
   const isVenezia = brandId === "venezia";
@@ -592,6 +674,7 @@ function openBrandComingSoon(brandId, pushHistory=true) {
 }
 
 function openCollection(brandId, categoryPath, pushHistory=true) {
+  hideAboutUs();
   const section = document.getElementById("collection");
   const b = brandById(brandId);
   const banner = chooseBanner(brandId, categoryPath);
