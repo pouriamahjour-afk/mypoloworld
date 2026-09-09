@@ -580,6 +580,19 @@
         "assets/uploads/1788972326669-onx0w-21106b36-bc40-4992-8b07-ae30bae5f906.png"
       ],
       "active": true
+    },
+    {
+      "id": "santa-sb-2-0001",
+      "brand": "santa",
+      "categoryPath": "Apparels / Women / Sweater",
+      "name": "WOMEN DENIM JACKET",
+      "code": "SB 2.0001",
+      "price": "99.9",
+      "description": "DENIM JACKET",
+      "images": [
+        "assets/uploads/1788973061391-kmt6a-650b3813-4876-4f97-b8df-316972caab73.png"
+      ],
+      "active": true
     }
   ]
 }
