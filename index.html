@@ -88,13 +88,17 @@ summary::-webkit-details-marker{display:none}
 .watch-card img{width:100%;aspect-ratio:1/1;display:block;object-fit:contain;background:#fff}
 .watch-caption{margin:12px 0 0;padding-top:12px;border-top:1px solid rgba(20,32,25,.09);text-align:center;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#4e5a53}
 .empty{grid-column:1/-1;padding:70px 20px;text-align:center;color:#777;border:1px solid var(--line);background:#fff}
+
 .coming-soon-card{border:1px solid var(--line);background:#fff;overflow:hidden}
-.coming-soon-hero{position:relative;min-height:clamp(300px,38vw,500px);padding:42px 44px;display:flex;align-items:flex-end;background:linear-gradient(135deg,#071b33 0%,#0d2544 45%,#b89453 100%);color:#f7f1e4;overflow:hidden}
+.coming-soon-hero{position:relative;min-height:clamp(300px,38vw,500px);padding:42px 44px;display:flex;align-items:flex-end;color:#f7f1e4;overflow:hidden}
+.coming-soon-hero.sanmarco{background:linear-gradient(135deg,#071b33 0%,#0d2544 45%,#b89453 100%)}
+.coming-soon-hero.venezia{background:linear-gradient(135deg,#48131f 0%,#742835 34%,#2d5b57 70%,#b58a50 100%)}
 .coming-soon-hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 22%,rgba(255,255,255,.18),transparent 26%),radial-gradient(circle at 82% 22%,rgba(255,255,255,.12),transparent 18%),linear-gradient(135deg,rgba(255,255,255,.08),transparent 45%)}
+.coming-soon-hero.venezia:after{content:"";position:absolute;inset:auto -8% -32% -8%;height:58%;background:repeating-radial-gradient(ellipse at center,rgba(247,241,228,.12) 0 2px,transparent 3px 14px);transform:scaleY(.34);opacity:.5;pointer-events:none}
 .coming-soon-copy{position:relative;z-index:1;max-width:760px}
 .coming-kicker{margin:0 0 16px;text-transform:uppercase;letter-spacing:.24em;font-size:.72rem;opacity:.88}
 .coming-title{margin:0 0 16px;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2.2rem,4vw,4rem);font-weight:400;letter-spacing:.05em;line-height:1.05}
-.coming-text{margin:0;max-width:620px;font-family:Georgia,"Times New Roman",serif;font-size:1.02rem;line-height:1.9;color:rgba(247,241,228,.92)}
+.coming-text{margin:0;max-width:650px;font-family:Georgia,"Times New Roman",serif;font-size:1.02rem;line-height:1.9;color:rgba(247,241,228,.92)}
 .coming-pill{display:inline-block;margin-top:26px;padding:10px 18px;border:1px solid rgba(247,241,228,.45);border-radius:999px;font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;background:rgba(255,255,255,.06)}
 .site-footer{padding:34px 5vw;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;color:#656b67;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase}
 .error-box{margin:30px auto;padding:20px;width:min(900px,92vw);background:#fff;border:1px solid #b66;color:#6a1d1d}
@@ -309,7 +313,7 @@ function brandHasLiveProducts(brandId) {
 }
 
 function handleBrandClick(event, brandId) {
-  if (brandId === "sanmarco" && !brandHasLiveProducts(brandId)) {
+  if ((brandId === "sanmarco" || brandId === "venezia") && !brandHasLiveProducts(brandId)) {
     event.preventDefault();
     openBrandComingSoon(brandId);
   }
@@ -318,6 +322,13 @@ function handleBrandClick(event, brandId) {
 function openBrandComingSoon(brandId) {
   const section = document.getElementById("collection");
   const b = brandById(brandId);
+  const isVenezia = brandId === "venezia";
+  const themeClass = isVenezia ? "venezia" : "sanmarco";
+  const kicker = isVenezia ? "Venezia Polo" : "Polo San Marco";
+  const copy = isVenezia
+    ? "A Venetian world of lagoon green, deep burgundy and antique gold is being prepared — inspired by canals, palazzi and timeless Italian elegance. The first Venezia Polo collection will arrive here soon."
+    : "A refined world of navy and gold is being prepared. The first Polo San Marco collection will arrive here soon.";
+
   document.getElementById("collectionBrand").textContent = b.name;
   document.getElementById("collectionHeading").textContent = "Under Construction";
 
@@ -327,11 +338,11 @@ function openBrandComingSoon(brandId) {
 
   document.getElementById("collectionContent").innerHTML = `
     <div class="coming-soon-card">
-      <div class="coming-soon-hero">
+      <div class="coming-soon-hero ${themeClass}">
         <div class="coming-soon-copy">
-          <p class="coming-kicker">Polo San Marco</p>
+          <p class="coming-kicker">${kicker}</p>
           <h3 class="coming-title">Under Construction</h3>
-          <p class="coming-text">A refined world of navy and gold is being prepared. The first Polo San Marco collection will arrive here soon.</p>
+          <p class="coming-text">${copy}</p>
           <span class="coming-pill">Coming Soon</span>
         </div>
       </div>
