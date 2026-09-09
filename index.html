@@ -88,6 +88,16 @@ summary::-webkit-details-marker{display:none}
 .watch-card img{width:100%;aspect-ratio:1/1;display:block;object-fit:contain;background:#fff}
 .watch-caption{margin:12px 0 0;padding-top:12px;border-top:1px solid rgba(20,32,25,.09);text-align:center;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#4e5a53}
 .empty{grid-column:1/-1;padding:70px 20px;text-align:center;color:#777;border:1px solid var(--line);background:#fff}
+.collections-directory{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch}
+.directory-card{--card-accent:#204d38;border:1px solid var(--line);border-top:4px solid var(--card-accent);background:#fff;padding:26px;display:flex;flex-direction:column;min-height:310px}
+.directory-logo{height:112px;display:grid;place-items:center;margin-bottom:20px;background:#faf8f2}
+.directory-logo img{max-width:82%;max-height:92px;object-fit:contain;mix-blend-mode:multiply}
+.directory-card h3{margin:0 0 10px;font:400 1.45rem/1.25 Georgia,"Times New Roman",serif;letter-spacing:.04em}
+.directory-card p{margin:0 0 22px;color:#727873;font:400 .9rem/1.65 Georgia,"Times New Roman",serif}
+.directory-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:auto}
+.directory-button{appearance:none;border:1px solid var(--card-accent);background:#fff;color:var(--ink);padding:10px 13px;cursor:pointer;font:600 .68rem/1 "Helvetica Neue",Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.directory-button:hover{background:var(--card-accent);color:#fff}
+.directory-button.coming{border-style:dashed}
 
 .coming-soon-card{border:1px solid var(--line);background:#fff;overflow:hidden}
 .coming-soon-hero{position:relative;min-height:clamp(300px,38vw,500px);padding:42px 44px;display:flex;align-items:flex-end;color:#f7f1e4;overflow:hidden}
@@ -105,6 +115,7 @@ summary::-webkit-details-marker{display:none}
 @media(max-width:900px){
   .site-nav{display:none}
   .brands{grid-template-columns:1fr;max-width:560px}
+  .collections-directory{grid-template-columns:1fr}
   .products,.watch-grid{grid-template-columns:repeat(2,1fr)}
   .product[open]{grid-column:1/-1}
   .product-details{grid-template-columns:1fr}
@@ -126,8 +137,8 @@ summary::-webkit-details-marker{display:none}
 <header class="site-header">
   <a class="wordmark" href="#top">MY POLO WORLD</a>
   <nav class="site-nav">
-    <a href="#brands">Our Brands</a>
-    <a href="#brands">Collections</a>
+    <a href="#brands" onclick="event.preventDefault(); showOurBrands();">Our Brands</a>
+    <a href="#collections" onclick="event.preventDefault(); showCollectionsDirectory();">Collections</a>
   </nav>
 </header>
 
@@ -219,6 +230,16 @@ function applyHistoryState(state, options={}) {
       closeAllProducts();
       restoreMenuOpenKeys([]);
       if(scroll) window.scrollTo({top:0, behavior:"auto"});
+      return;
+    }
+
+    if(state.type === "brands") {
+      showOurBrands(false, scroll);
+      return;
+    }
+
+    if(state.type === "collections-directory") {
+      showCollectionsDirectory(false, scroll);
       return;
     }
 
@@ -342,6 +363,80 @@ function renderBrands() {
       ${renderTreeNode(buildTree(SITE.categories[b.id] || []), b.id)}
     </details>
   `).join("");
+}
+
+function topLevelCategories(brandId) {
+  const seen = new Set();
+  (SITE?.categories?.[brandId] || []).forEach(path => {
+    const top = String(path).split("/").map(x=>x.trim()).filter(Boolean)[0];
+    if(top) seen.add(top);
+  });
+  return Array.from(seen);
+}
+
+function showOurBrands(pushHistory=true, scroll=true) {
+  if(!SITE) return;
+  hideCollectionView();
+  closeAllProducts();
+
+  suppressHistoryEvents = true;
+  restoreMenuOpenKeys([]);
+  setTimeout(() => { suppressHistoryEvents = false; }, 0);
+
+  if(pushHistory) pushInternalState(historyState("brands"));
+  if(scroll) setTimeout(() => document.getElementById("brands")?.scrollIntoView({behavior:"smooth", block:"start"}), 20);
+}
+
+function openDirectoryCategory(brandId, topCategory) {
+  if(!SITE) return;
+  if((brandId === "sanmarco" || brandId === "venezia") && !brandHasLiveProducts(brandId)) {
+    openBrandComingSoon(brandId);
+    return;
+  }
+
+  hideCollectionView();
+  closeAllProducts();
+  const keys = [`brand:${brandId}`, `path:${brandId}:${topCategory}`];
+
+  suppressHistoryEvents = true;
+  restoreMenuOpenKeys(keys);
+  setTimeout(() => { suppressHistoryEvents = false; }, 0);
+
+  pushInternalState(historyState("menu", {openKeys:keys}));
+  setTimeout(() => {
+    document.querySelector(`.brand-card[data-brand="${CSS.escape(brandId)}"]`)?.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 20);
+}
+
+function showCollectionsDirectory(pushHistory=true, scroll=true) {
+  if(!SITE) return;
+  const section = document.getElementById("collection");
+  const bannerEl = document.getElementById("collectionBanner");
+  bannerEl.hidden = true;
+  bannerEl.style.backgroundImage = "";
+
+  document.getElementById("collectionBrand").textContent = "My Polo World";
+  document.getElementById("collectionHeading").textContent = "Collections";
+
+  const cards = (SITE.brands || []).map(b => {
+    const tops = topLevelCategories(b.id);
+    const live = brandHasLiveProducts(b.id);
+    const actions = tops.length
+      ? tops.map(top => `<button class="directory-button ${live ? "" : "coming"}" type="button" onclick='openDirectoryCategory(${JSON.stringify(b.id)}, ${JSON.stringify(top)})'>${esc(top)}${live ? "" : " · Soon"}</button>`).join("")
+      : `<button class="directory-button coming" type="button" onclick='openBrandComingSoon(${JSON.stringify(b.id)})'>Coming Soon</button>`;
+
+    return `<article class="directory-card" style="--card-accent:${esc(b.accent || "#204d38")}">
+      <div class="directory-logo">${b.logo ? `<img src="${esc(b.logo)}" alt="${esc(b.name)}">` : ""}</div>
+      <h3>${esc(b.name)}</h3>
+      <p>${live ? "Choose a collection family to browse its categories and products." : "This house is being prepared. Open it for a preview of what is coming."}</p>
+      <div class="directory-actions">${actions}</div>
+    </article>`;
+  }).join("");
+
+  document.getElementById("collectionContent").innerHTML = `<div class="collections-directory">${cards}</div>`;
+  section.hidden = false;
+  if(pushHistory) pushInternalState(historyState("collections-directory"));
+  if(scroll) setTimeout(() => section.scrollIntoView({behavior:"smooth", block:"start"}), 20);
 }
 
 function chooseBanner(brandId, categoryPath) {
