@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "site": {
+    "title": "My Polo World",
+    "heroImage": "assets/fall-winter-banner.png"
+  },
+  "brands": [
+    {
+      "id": "santa",
+      "name": "Santa Barbara Polo & Racquet Club",
+      "logo": "assets/santa-barbara.jpeg",
+      "accent": "#204d38"
+    },
+    {
+      "id": "sanmarco",
+      "name": "Polo San Marco",
+      "logo": "assets/polo-san-marco.png",
+      "accent": "#071b33"
+    },
+    {
+      "id": "venezia",
+      "name": "Venezia Polo",
+      "logo": "assets/venezia-polo.png",
+      "accent": "#6f1727"
+    }
+  ],
+  "categories": {
+    "santa": [
+      "Apparels / Men / Underwear",
+      "Apparels / Men / Shirts",
+      "Apparels / Men / T-Shirts",
+      "Apparels / Men / Polo Shirts",
+      "Apparels / Men / Pants",
+      "Apparels / Men / Sweater",
+      "Apparels / Men / Blouse",
+      "Apparels / Men / Hoodie",
+      "Apparels / Women / Blouse",
+      "Apparels / Women / Skirts",
+      "Apparels / Women / Shorts",
+      "Apparels / Women / Underwear",
+      "Apparels / Women / Pants",
+      "Apparels / Women / Sweater",
+      "Apparels / Women / Hoodie",
+      "Apparels / Kids / Down",
+      "Apparels / Kids / Up",
+      "Accessories / Eyewear / Optical Frames",
+      "Accessories / Eyewear / Sunglasses",
+      "Accessories / Belt",
+      "Accessories / Hat",
+      "Accessories / Bracelet",
+      "Accessories / Bag",
+      "Accessories / Necklace",
+      "Accessories / Watches",
+      "Home / Bed",
+      "Home / Living Room",
+      "Home / Kitchen",
+      "Home / Decoration"
+    ],
+    "sanmarco": [
+      "Apparels / Men",
+      "Apparels / Women",
+      "Apparels / Kids",
+      "Accessories / Eyewear / Optical Frames",
+      "Accessories / Eyewear / Sunglasses",
+      "Home"
+    ],
+    "venezia": [
+      "Apparels / Men",
+      "Apparels / Women",
+      "Apparels / Kids",
+      "Accessories / Eyewear / Optical Frames",
+      "Accessories / Eyewear / Sunglasses",
+      "Home"
+    ]
+  },
+  "banners": [
+    {
+      "id": "home-hero",
+      "brand": "",
+      "location": "home-hero",
+      "title": "",
+      "subtitle": "",
+      "image": "assets/fall-winter-banner.png",
+      "active": true
+    },
+    {
+      "id": "santa-sunglasses",
+      "brand": "santa",
+      "location": "collection",
+      "title": "Sunglasses Collection",
+      "subtitle": "Santa Barbara Polo & Racquet Club",
+      "image": "assets/santa-barbara-eyewear-banner.png",
+      "active": true
+    }
+  ],
+  "products": [
+    {
+      "id": "santa-1132",
+      "brand": "santa",
+      "categoryPath": "Accessories / Eyewear / Sunglasses",
+      "name": "Santa Barbara Sunglasses",
+      "code": "1132",
+      "price": "$100.7",
+      "description": "",
+      "images": [
+        "assets/sb-1132-front.png",
+        "assets/sb-1132-three-quarter.png",
+        "assets/sb-1132-side.png",
+        "assets/sb-1132-model.png"
+      ],
+      "active": true
+    },
+    {
+      "id": "santa-1137",
+      "brand": "santa",
+      "categoryPath": "Accessories / Eyewear / Sunglasses",
+      "name": "Santa Barbara Sunglasses",
+      "code": "1137",
+      "price": "$80.3",
+      "description": "",
+      "images": [
+        "assets/sb-1137-front.png",
+        "assets/sb-1137-three-quarter.png",
+        "assets/sb-1137-side.png",
+        "assets/sb-1137-model.png"
+      ],
+      "active": true
+    },
+    {
+      "id": "santa-1154",
+      "brand": "santa",
+      "categoryPath": "Accessories / Eyewear / Sunglasses",
+      "name": "Santa Barbara Sunglasses",
+      "code": "1154",
+      "price": "$62",
+      "description": "",
+      "images": [
+        "assets/sb-1154-front.png",
+        "assets/sb-1154-three-quarter.png",
+        "assets/sb-1154-side.png",
+        "assets/sb-1154-model.png"
+      ],
+      "active": true
+    },
+    {
+      "id": "santa-1170",
+      "brand": "santa",
+      "categoryPath": "Accessories / Eyewear / Sunglasses",
+      "name": "Santa Barbara Sunglasses",
+      "code": "1170",
+      "price": "$96",
+      "description": "",
+      "images": [
+        "assets/sb-1170-front.png",
+        "assets/sb-1170-three-quarter.png",
+        "assets/sb-1170-side.png",
+        "assets/sb-1170-model.png"
+      ],
+      "active": true
+    }
+  ]
+}
