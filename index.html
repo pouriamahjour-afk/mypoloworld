@@ -123,9 +123,9 @@ summary::-webkit-details-marker{display:none}
   <section class="hero" id="hero"></section>
 
   <section class="intro" id="brands">
-    <p class="eyebrow">Our Houses</p>
-    <h1>Three worlds. One polo spirit.</h1>
-    <p>Discover distinct expressions of polo heritage, shaped through sport, style and place.</p>
+    <p class="eyebrow" id="introEyebrow">Our Houses</p>
+    <h1 id="introHeadline">Three worlds. One polo spirit.</h1>
+    <p id="introText">Discover distinct expressions of polo heritage, shaped through sport, style and place.</p>
   </section>
 
   <section class="brands" id="brandGrid"></section>
@@ -143,8 +143,8 @@ summary::-webkit-details-marker{display:none}
 </main>
 
 <footer class="site-footer">
-  <span>© 2026 My Polo World</span>
-  <span>Fashion · Eyewear · Lifestyle</span>
+  <span id="footerLeft">© 2026 My Polo World</span>
+  <span id="footerRight">Fashion · Eyewear · Lifestyle</span>
 </footer>
 
 <script>
@@ -339,6 +339,16 @@ async function loadSite() {
 
     document.title = SITE.site?.title || "My Polo World";
     document.querySelector(".wordmark").textContent = (SITE.site?.title || "My Polo World").toUpperCase();
+
+    const metaDescription = SITE.site?.metaDescription || "My Polo World — a curated world of polo lifestyle brands.";
+    const metaEl = document.querySelector('meta[name="description"]');
+    if(metaEl) metaEl.setAttribute("content", metaDescription);
+
+    document.getElementById("introEyebrow").textContent = SITE.site?.introEyebrow || "Our Houses";
+    document.getElementById("introHeadline").textContent = SITE.site?.introHeadline || "Three worlds. One polo spirit.";
+    document.getElementById("introText").textContent = SITE.site?.introText || "Discover distinct expressions of polo heritage, shaped through sport, style and place.";
+    document.getElementById("footerLeft").textContent = SITE.site?.footerLeft || "© 2026 My Polo World";
+    document.getElementById("footerRight").textContent = SITE.site?.footerRight || "Fashion · Eyewear · Lifestyle";
 
     const homeBanner = (SITE.banners || []).find(b => b.active !== false && (b.id === "home-hero" || b.location === "home-hero"));
     const heroImage = homeBanner?.image || SITE.site?.heroImage || "assets/fall-winter-banner.png";
