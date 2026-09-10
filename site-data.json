@@ -152,7 +152,8 @@
         "assets/sb-1132-side.png",
         "assets/sb-1132-model.png"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-1137",
@@ -168,7 +169,8 @@
         "assets/sb-1137-side.png",
         "assets/sb-1137-model.png"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-1154",
@@ -184,7 +186,8 @@
         "assets/sb-1154-side.png",
         "assets/sb-1154-model.png"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-1170",
@@ -192,6 +195,7 @@
       "categoryPath": "Accessories / Eyewear / Sunglasses",
       "name": "Santa Barbara Sunglasses",
       "code": "1170",
+      "barcode": "8682308379310",
       "price": "$96",
       "description": "",
       "images": [
@@ -213,7 +217,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10607-5.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10526-4",
@@ -226,7 +231,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10526-4.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10596-4",
@@ -239,7 +245,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10596-4.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10624-3",
@@ -252,7 +259,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10624-3.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10498-2",
@@ -265,7 +273,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10498-2.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10591-5",
@@ -278,7 +287,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10591-5.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10636-4",
@@ -291,7 +301,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10636-4.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10547-5",
@@ -304,7 +315,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10547-5.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10593-5",
@@ -317,7 +329,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10593-5.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10643-3",
@@ -330,7 +343,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10643-3.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10538-4",
@@ -343,7 +357,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10538-4.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10017-5",
@@ -356,7 +371,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-5.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10022-2",
@@ -369,7 +385,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-2.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10022-3",
@@ -382,7 +399,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-3.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10022-5",
@@ -395,7 +413,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-5.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10021-1",
@@ -408,7 +427,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-1.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10021-2",
@@ -421,7 +441,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-2.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10021-4",
@@ -434,7 +455,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-4.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10015-1",
@@ -447,7 +469,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-1.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10015-2",
@@ -460,7 +483,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-2.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10016-3",
@@ -473,7 +497,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-3.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10016-5",
@@ -486,7 +511,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-5.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10017-6",
@@ -499,7 +525,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-6.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10019-4",
@@ -512,7 +539,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10019-4.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-5-10003-1",
@@ -525,7 +553,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-1.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-5-10003-4",
@@ -538,7 +567,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-4.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-5-10004-3",
@@ -551,7 +581,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-3.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-5-10004-4",
@@ -564,7 +595,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-4.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-8-10009-6",
@@ -577,7 +609,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-8-10009-6.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-1-10646-3",
@@ -590,7 +623,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10646-3.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-watch-sb-4-10023-1",
@@ -603,7 +637,8 @@
       "images": [
         "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10023-1.jpg"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-sb-1-0001",
@@ -617,7 +652,8 @@
         "assets/uploads/1788972317542-2u1zc-3d2689f6-f010-41a5-b900-1eb018d68c49.png",
         "assets/uploads/1788972326669-onx0w-21106b36-bc40-4992-8b07-ae30bae5f906.png"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     },
     {
       "id": "santa-sb-2-0001",
@@ -630,7 +666,8 @@
       "images": [
         "assets/uploads/1788973061391-kmt6a-650b3813-4876-4f97-b8df-316972caab73.png"
       ],
-      "active": true
+      "active": true,
+      "barcode": ""
     }
   ]
 }
