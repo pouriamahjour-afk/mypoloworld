@@ -25,6 +25,7 @@ textarea{min-height:92px;resize:vertical} button{border:0;border-radius:6px;padd
 .badge{display:inline-block;padding:3px 7px;border-radius:999px;background:#eef2ee;font-size:11px;margin-left:6px}
 .status{padding:10px 12px;border-radius:6px;background:#f0efe9;font-size:13px}.ok{background:#e6f3e9}.err{background:#f9e3e3}
 .hidden{display:none!important}.help{font-size:12px;color:var(--muted);line-height:1.55}
+.field-inline{display:flex;gap:8px;align-items:stretch}.field-inline input{flex:1}.field-inline button{white-space:nowrap}.mono{font-family:Consolas,Monaco,monospace;letter-spacing:.04em}
 img.preview{width:88px;height:88px;object-fit:contain;border:1px solid var(--line);background:#fff}
 hr{border:0;border-top:1px solid var(--line);margin:20px 0}
 @media(max-width:760px){.c6,.c4,.c3{grid-column:span 12}.item{align-items:flex-start;flex-direction:column}header{align-items:flex-start;flex-direction:column}}
@@ -79,7 +80,7 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
 
     <section class="view" id="view-products">
       <div class="panel">
-        <div class="toolbar"><h2>Products</h2><button class="primary" onclick="openProduct()">+ Add product</button></div>
+        <div class="toolbar"><h2>Products</h2><div class="actions"><button class="secondary" onclick="generateMissingBarcodes()">Generate missing barcodes</button><button class="primary" onclick="openProduct()">+ Add product</button></div></div>
         <div id="productList" class="list"></div>
       </div>
     </section>
@@ -186,6 +187,54 @@ function normalize(){
   data.site ||= {title:"My Polo World",heroImage:""};
   data.brands ||= []; data.categories ||= {}; data.banners ||= []; data.products ||= [];
   data.brands.forEach(b=>data.categories[b.id] ||= []);
+  data.products.forEach(p=>{ p.barcode=normalizeBarcode(p.barcode||""); });
+}
+function normalizeBarcode(v=""){return String(v).trim().toUpperCase().replace(/\s+/g,"")}
+function generateUniqueBarcode(){
+  let code="";
+  do{
+    const a=Date.now().toString().slice(-8);
+    const r=crypto.getRandomValues(new Uint32Array(1))[0].toString().padStart(10,"0").slice(-6);
+    code="MPW-"+a+"-"+r;
+  }while(data.products.some(p=>normalizeBarcode(p.barcode)===code));
+  return code;
+}
+function productUrl(barcode){
+  const b=normalizeBarcode(barcode);
+  return b ? (location.origin+"/?barcode="+encodeURIComponent(b)) : "";
+}
+function updateProductLink(){
+  if($("pProductUrl")) $("pProductUrl").value=productUrl($("pBarcode")?.value||"");
+}
+function generateBarcodeIntoForm(){
+  if(!$("pBarcode"))return;
+  $("pBarcode").value=generateUniqueBarcode();
+  updateProductLink();
+}
+async function copyProductLink(){
+  const value=$("pProductUrl")?.value||"";
+  if(!value)return setStatus("Generate or enter a barcode first.","err");
+  try{await navigator.clipboard.writeText(value);setStatus("Product link copied.","ok")}
+  catch(e){$("pProductUrl").select();document.execCommand("copy");setStatus("Product link copied.","ok")}
+}
+function generateMissingBarcodes(){
+  if(!data)return;
+  let n=0;
+  data.products.forEach(p=>{if(!normalizeBarcode(p.barcode)){p.barcode=generateUniqueBarcode();n++}});
+  if(!n)return setStatus("All products already have barcodes.","ok");
+  markDirty();renderAll();setStatus(n+" barcode"+(n===1?"":"s")+" generated in draft. Click Save all changes to publish.","ok");
+}
+function xmlEsc(s=""){return String(s).replace(/[<>&'"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"}[c]))}
+function buildSitemap(){
+  const base="https://mypoloworld.com/";
+  const urls=[base,...data.products.filter(p=>p.active!==false&&normalizeBarcode(p.barcode)).map(p=>base+"?barcode="+encodeURIComponent(normalizeBarcode(p.barcode)))];
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(u=>'  <url><loc>'+xmlEsc(u)+'</loc></url>').join('\n')+'\n</urlset>\n';
+}
+async function putTextFile(path,text,message){
+  let sha=null;
+  try{const f=await gh("/contents/"+path+"?ref="+encodeURIComponent(branch));sha=f.sha}catch(e){if(!String(e.message).startsWith("404"))throw e}
+  const body={message,content:encode64(text),branch}; if(sha)body.sha=sha;
+  return gh("/contents/"+path,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
 }
 $("connectBtn").onclick=async()=>{
   token=$("token").value.trim(); repo=$("repo").value.trim(); branch=$("branch").value.trim()||"main";
@@ -202,7 +251,10 @@ $("saveAll").onclick=async()=>{
     const body={message:"Update site content from admin panel",content:encode64(JSON.stringify(data,null,2)),branch};
     if(dataSha)body.sha=dataSha;
     const out=await gh("/contents/"+DATA_FILE,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    dataSha=out.content.sha; dirty=false; setStatus("Saved successfully. GitHub Pages will update shortly.","ok"); renderSummary();
+    dataSha=out.content.sha;
+    try{await putTextFile("sitemap.xml",buildSitemap(),"Update product sitemap from admin panel")}
+    catch(e){dirty=false;renderSummary();setStatus("Site data saved, but sitemap update failed: "+e.message,"err");return}
+    dirty=false; setStatus("Saved successfully. Site data and product sitemap updated; GitHub Pages will refresh shortly.","ok"); renderSummary();
   }catch(e){$("saveAll").disabled=false;setStatus("Save failed: "+e.message,"err")}
 };
 
@@ -218,7 +270,7 @@ function renderSummary(){
   $("summary").innerHTML=`<div class="row">
     <div class="c3 panel"><b>${data.brands.length}</b><br><span class="help">Brands</span></div>
     <div class="c3 panel"><b>${Object.values(data.categories).flat().length}</b><br><span class="help">Category paths</span></div>
-    <div class="c3 panel"><b>${data.products.length}</b><br><span class="help">Products</span></div>
+    <div class="c3 panel"><b>${data.products.length}</b><br><span class="help">Products · ${data.products.filter(p=>normalizeBarcode(p.barcode)).length} barcoded</span></div>
     <div class="c3 panel"><b>${data.banners.length}</b><br><span class="help">Banners</span></div>
     <div class="c12"><span class="badge">${dirty?"Unsaved changes":"Everything saved"}</span></div>
   </div>`;
@@ -229,25 +281,28 @@ function categoryOptions(brand,selected=""){return (data.categories[brand]||[]).
 
 function renderProducts(){
   $("productList").innerHTML=data.products.length?data.products.map((p,i)=>`<div class="item">
-    <div><b>${esc(p.code||p.name)}</b> <span class="badge">${p.active===false?"Hidden":"Live"}</span><br><small>${esc(brandName(p.brand))} · ${esc(p.categoryPath)} · ${esc(p.price)}</small></div>
+    <div><b>${esc(p.code||p.name)}</b> <span class="badge">${p.active===false?"Hidden":"Live"}</span><br><small>${esc(brandName(p.brand))} · ${esc(p.categoryPath)} · ${esc(p.price)}${p.barcode?" · Barcode: "+esc(p.barcode):" · No barcode"}</small></div>
     <div class="actions"><button class="secondary" onclick="openProduct(${i})">Edit</button><button class="danger" onclick="deleteProduct(${i})">Delete</button></div>
   </div>`).join(""):`<p class="help">No products yet.</p>`;
 }
 function openProduct(i=-1){
-  const p=i>=0?clone(data.products[i]):{id:"",brand:data.brands[0]?.id||"",categoryPath:"",name:"",code:"",price:"",description:"",images:[],active:true};
+  const p=i>=0?clone(data.products[i]):{id:"",brand:data.brands[0]?.id||"",categoryPath:"",name:"",code:"",barcode:generateUniqueBarcode(),price:"",description:"",images:[],active:true};
   openEditor("Product",`<div class="row">
     <div class="c4"><label>Brand</label><select id="pBrand" onchange="refreshProductCategories()">${brandOptions(p.brand)}</select></div>
     <div class="c4"><label>Category</label><select id="pCategory"></select></div>
     <div class="c4"><label>Model / Code</label><input id="pCode" value="${esc(p.code)}"></div>
     <div class="c6"><label>Product name</label><input id="pName" value="${esc(p.name)}"></div>
+    <div class="c6"><label>Barcode</label><div class="field-inline"><input class="mono" id="pBarcode" value="${esc(p.barcode||"")}" oninput="updateProductLink()" placeholder="MPW-..."><button class="secondary" type="button" onclick="generateBarcodeIntoForm()">Generate</button></div><div class="help">Unique internal product identifier. You can replace it with your own barcode value.</div></div>
     <div class="c3"><label>Price</label><input id="pPrice" value="${esc(p.price)}" placeholder="$95"></div>
     <div class="c3"><label>Status</label><select id="pActive"><option value="true" ${p.active!==false?"selected":""}>Live</option><option value="false" ${p.active===false?"selected":""}>Hidden</option></select></div>
+    <div class="c6"><label>Direct product URL</label><div class="field-inline"><input class="mono" id="pProductUrl" readonly><button class="secondary" type="button" onclick="copyProductLink()">Copy link</button></div></div>
     <div class="c12"><label>Description</label><textarea id="pDesc">${esc(p.description||"")}</textarea></div>
     <div class="c12"><label>Image paths — one per line</label><textarea id="pImages">${esc((p.images||[]).join("\n"))}</textarea></div>
     <div class="c6"><label>Upload image(s)</label><input id="pUpload" type="file" accept="image/*" multiple></div>
     <div class="c12"><button class="primary" onclick="saveProduct(${i})">Save product</button></div>
   </div>`);
   refreshProductCategories(p.categoryPath);
+  updateProductLink();
 }
 function refreshProductCategories(selected){
   const b=$("pBrand")?.value;if(!$("pCategory"))return;
@@ -266,12 +321,16 @@ async function uploadFiles(fileInput){
 }
 async function saveProduct(i){
   try{
+    const barcode=normalizeBarcode($("pBarcode").value);
+    if(!barcode)return setStatus("Every product needs a barcode. Enter one or click Generate.","err");
+    const duplicate=data.products.findIndex((p,idx)=>idx!==i&&normalizeBarcode(p.barcode)===barcode);
+    if(duplicate>=0)return setStatus("This barcode is already used by product "+(data.products[duplicate].code||data.products[duplicate].name)+".","err");
     const uploaded=$("pUpload").files.length?await uploadFiles($("pUpload")):[];
     const currentImages=$("pImages").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
     const obj={
       id:i>=0?data.products[i].id:slug($("pBrand").value+"-"+($("pCode").value||$("pName").value)),
       brand:$("pBrand").value,categoryPath:$("pCategory").value,name:$("pName").value.trim(),
-      code:$("pCode").value.trim(),price:$("pPrice").value.trim(),description:$("pDesc").value.trim(),
+      code:$("pCode").value.trim(),barcode,price:$("pPrice").value.trim(),description:$("pDesc").value.trim(),
       images:[...currentImages,...uploaded],active:$("pActive").value==="true"
     };
     if(i>=0)data.products[i]=obj;else data.products.push(obj);
