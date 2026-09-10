@@ -27,7 +27,7 @@ button,summary,a{-webkit-tap-highlight-color:transparent}
 .eyebrow{margin:0 0 18px;font-size:.76rem;letter-spacing:.25em;text-transform:uppercase;color:#6b706d}
 h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2rem,4vw,3.4rem);font-weight:400;letter-spacing:.06em}
 .intro p:last-child{max-width:560px;margin:20px auto 0;color:#59605c;font-family:Georgia,"Times New Roman",serif;line-height:1.75}
-.brands{width:min(1240px,92vw);margin:auto;padding-bottom:92px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:start}
+.brands{width:min(1240px,92vw);margin:auto;padding-bottom:calc(92px + var(--menu-space,0px));display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:start;transition:padding-bottom .18s ease}
 .brand-card{border:1px solid var(--line);border-bottom:4px solid var(--accent,#204d38);background:#fff;overflow:hidden}
 summary{list-style:none}
 summary::-webkit-details-marker{display:none}
@@ -486,6 +486,45 @@ document.addEventListener("toggle", event => {
   });
 }, true);
 
+// Keep desktop flyout menus in their own white space instead of covering the collection/banner below.
+function updateDesktopMenuSpace() {
+  const grid = document.getElementById("brandGrid");
+  if(!grid) return;
+  if(window.innerWidth <= 900) {
+    grid.style.setProperty("--menu-space", "0px");
+    return;
+  }
+
+  const openBrands = Array.from(grid.querySelectorAll(".brand-card[open]"));
+  if(!openBrands.length) {
+    grid.style.setProperty("--menu-space", "0px");
+    return;
+  }
+
+  const summaries = Array.from(grid.querySelectorAll(".brand-card > .brand-summary"));
+  const baseBottom = summaries.length ? Math.max(...summaries.map(el => el.getBoundingClientRect().bottom)) : grid.getBoundingClientRect().bottom;
+
+  const visibleMenus = Array.from(grid.querySelectorAll(".brand-menu-root, .flyout-children")).filter(el => {
+    const cs = getComputedStyle(el);
+    return cs.display !== "none" && el.getClientRects().length;
+  });
+  const menuBottom = visibleMenus.length ? Math.max(...visibleMenus.map(el => el.getBoundingClientRect().bottom)) : baseBottom;
+  const needed = Math.max(0, Math.ceil(menuBottom - baseBottom + 18));
+  grid.style.setProperty("--menu-space", needed + "px");
+}
+
+document.addEventListener("toggle", event => {
+  const el = event.target;
+  if(!(el instanceof HTMLDetailsElement)) return;
+  if(!el.dataset.navKey) return;
+  requestAnimationFrame(() => requestAnimationFrame(updateDesktopMenuSpace));
+}, true);
+
+window.addEventListener("resize", () => {
+  clearTimeout(window.__menuSpaceTimer);
+  window.__menuSpaceTimer = setTimeout(updateDesktopMenuSpace, 80);
+});
+
 function esc(s="") {
   return String(s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 }
@@ -943,6 +982,7 @@ async function loadSite() {
     document.getElementById("hero").style.backgroundImage = `url("${heroImage}")`;
 
     renderBrands();
+    updateDesktopMenuSpace();
     initializeInternalHistory();
   } catch(e) {
     document.getElementById("loadError").innerHTML = `<div class="error-box">Website data could not be loaded. ${esc(e.message)}</div>`;
