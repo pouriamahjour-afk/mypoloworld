@@ -7,58 +7,32 @@
 <title>My Polo World — Admin</title>
 <style>
 :root{--ink:#162019;--paper:#f7f4ec;--card:#fff;--line:#d9d7d0;--green:#204d38;--danger:#9b2c2c;--muted:#6c746f}
-*{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}
+*{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}
 header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:16px 4vw;display:flex;gap:16px;align-items:center;justify-content:space-between}
 h1{font:400 24px Georgia,serif;margin:0}.sub{color:var(--muted);font-size:12px}
-.wrap{width:min(1220px,94vw);margin:26px auto 80px}
+.wrap{width:min(1180px,94vw);margin:26px auto 80px}
 .panel{background:#fff;border:1px solid var(--line);padding:20px;margin-bottom:18px}
-.row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.c12{grid-column:span 12}.c8{grid-column:span 8}.c6{grid-column:span 6}.c5{grid-column:span 5}.c4{grid-column:span 4}.c3{grid-column:span 3}.c2{grid-column:span 2}
+.row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.c12{grid-column:span 12}.c6{grid-column:span 6}.c4{grid-column:span 4}.c3{grid-column:span 3}
 label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 7px;color:#58605b}
-input,select,textarea,button{font:inherit}
-input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);background:#fff;border-radius:6px}
-textarea{min-height:92px;resize:vertical}
-button{border:0;border-radius:6px;padding:10px 15px;cursor:pointer}
-button:disabled{opacity:.45;cursor:not-allowed}
-.primary{background:var(--green);color:#fff}.secondary{background:#ecebe6}.danger{background:#f7e7e7;color:var(--danger)}.ghost{background:#fff;border:1px solid var(--line)}
+input,select,textarea,button{font:inherit} input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);background:#fff;border-radius:6px}
+textarea{min-height:92px;resize:vertical} button{border:0;border-radius:6px;padding:10px 15px;cursor:pointer}
+.primary{background:var(--green);color:#fff}.secondary{background:#ecebe6}.danger{background:#f7e7e7;color:var(--danger)}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab{background:#e9e7e0}.tab.active{background:var(--green);color:#fff}
 .view{display:none}.view.active{display:block}
 .toolbar{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-.toolbar-left,.toolbar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.list{display:grid;gap:10px}
-.item{border:1px solid var(--line);background:#fff;padding:14px;display:flex;justify-content:space-between;gap:16px;align-items:center}
-.item small{color:var(--muted)}.actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.list{display:grid;gap:10px}.item{border:1px solid var(--line);background:#fff;padding:14px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.item small{color:var(--muted)} .actions{display:flex;gap:7px;flex-wrap:wrap}
 .badge{display:inline-block;padding:3px 7px;border-radius:999px;background:#eef2ee;font-size:11px;margin-left:6px}
 .status{padding:10px 12px;border-radius:6px;background:#f0efe9;font-size:13px}.ok{background:#e6f3e9}.err{background:#f9e3e3}
 .hidden{display:none!important}.help{font-size:12px;color:var(--muted);line-height:1.55}
-.barcode-hint{margin-top:6px;font-size:11px;color:var(--muted);line-height:1.45}.barcode-hint.good{color:#287044}.barcode-hint.bad{color:var(--danger)}
 img.preview{width:88px;height:88px;object-fit:contain;border:1px solid var(--line);background:#fff}
-.search{min-width:260px}
-.product-filterbar{display:grid;grid-template-columns:1.1fr 1.7fr 2fr auto;gap:10px;align-items:end;margin:14px 0 18px;padding:14px;border:1px solid var(--line);background:#faf9f5}
-.product-filterbar label{margin-bottom:5px}
-.product-group{border:1px solid var(--line);background:#fff;margin-bottom:12px}
-.product-group>summary{cursor:pointer;list-style:none;padding:15px 16px;display:flex;justify-content:space-between;gap:14px;align-items:center;background:#f6f4ee}
-.product-group>summary::-webkit-details-marker{display:none}
-.product-group-title{font-weight:700}
-.product-group-meta{font-size:12px;color:var(--muted);margin-top:4px}
-.product-group-count{white-space:nowrap;font-size:12px;background:#e9eee9;padding:5px 9px;border-radius:999px}
-.product-group-body{padding:10px;display:grid;gap:9px}
-.image-manager{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:8px 0}
-.image-card{border:1px solid var(--line);padding:8px;background:#faf9f5}
-.image-card img{width:100%;aspect-ratio:1/1;display:block;object-fit:contain;background:#fff;border:1px solid #eee}
-.image-card code{display:block;font-size:10px;word-break:break-all;margin:7px 0;color:#666}
-.image-actions{display:flex;gap:5px;flex-wrap:wrap}
-.image-actions button{padding:6px 8px;font-size:11px}
-.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric{border:1px solid var(--line);padding:18px;background:#fff}.metric b{font-size:22px}
-.notice{padding:12px;border-left:4px solid var(--green);background:#f3f7f4;font-size:13px;line-height:1.55}
 hr{border:0;border-top:1px solid var(--line);margin:20px 0}
-@media(max-width:900px){.summary-grid,.image-manager{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.c8,.c6,.c5,.c4,.c3,.c2{grid-column:span 12}.item{align-items:flex-start;flex-direction:column}header{align-items:flex-start;flex-direction:column}.summary-grid,.image-manager{grid-template-columns:1fr}.search{min-width:0;width:100%}.product-filterbar{grid-template-columns:1fr}}
+@media(max-width:760px){.c6,.c4,.c3{grid-column:span 12}.item{align-items:flex-start;flex-direction:column}header{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
 <header>
-  <div><h1>MY POLO WORLD — ADMIN</h1><div class="sub">Site · Products · Categories · Banners · Brands</div></div>
+  <div><h1>MY POLO WORLD — ADMIN</h1><div class="sub">Products · Categories · Banners · Brands</div></div>
   <button class="primary" id="saveAll" disabled>Save all changes</button>
 </header>
 
@@ -77,14 +51,10 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
         <label>Branch</label>
         <input id="branch" value="main">
       </div>
-      <div class="c12" id="rememberTokenRow" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <div class="c12">
         <button class="primary" id="connectBtn">Connect to GitHub</button>
-        <label style="display:flex;align-items:center;gap:8px;margin:0;text-transform:none;letter-spacing:0">
-          <input id="rememberToken" type="checkbox" style="width:auto"> Remember token on this device
-        </label>
-        <button type="button" class="secondary" id="forgetToken">Forget saved token</button>
+        <span class="help">The token is never written into this page or site-data.json. It stays only in this open tab.</span>
       </div>
-      <div class="c12"><span class="help">Remember Token stores the token in this browser only. Use it only on your own laptop.</span></div>
     </div>
   </section>
 
@@ -93,7 +63,6 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
   <div id="app" class="hidden">
     <div class="tabs">
       <button class="tab active" data-view="dashboard">Dashboard</button>
-      <button class="tab" data-view="site">Site Settings</button>
       <button class="tab" data-view="products">Products</button>
       <button class="tab" data-view="categories">Categories</button>
       <button class="tab" data-view="banners">Banners</button>
@@ -102,85 +71,30 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
 
     <section class="view active" id="view-dashboard">
       <div class="panel">
-        <div class="toolbar">
-          <div><h2 style="margin:0">Dashboard</h2><p class="help">Changes go live only after Save all changes.</p></div>
-          <div class="toolbar-right">
-            <button class="secondary" onclick="downloadBackup()">Download backup</button>
-            <button class="secondary" onclick="reloadFromGitHub()">Reload from GitHub</button>
-          </div>
-        </div>
+        <h2>Dashboard</h2>
+        <p class="help">Changes are edited here first. They go live only after you click <b>Save all changes</b>.</p>
         <div id="summary"></div>
-        <div class="notice" style="margin-top:18px">You can add/edit/delete content, upload images, change homepage text, reorder brands/categories/products, duplicate products and target banners to exact collection paths. Products with a valid GTIN-13 automatically get a static Google-friendly page plus sitemap entry when you click Save all changes.</div>
-      </div>
-    </section>
-
-    <section class="view" id="view-site">
-      <div class="panel">
-        <div class="toolbar"><h2>Site Settings</h2><button class="primary" onclick="saveSiteSettings()">Save settings to draft</button></div>
-        <div class="row">
-          <div class="c6"><label>Site title</label><input id="sTitle"></div>
-          <div class="c6"><label>Meta description</label><input id="sMeta"></div>
-          <div class="c4"><label>Intro eyebrow</label><input id="sEyebrow"></div>
-          <div class="c8"><label>Intro headline</label><input id="sHeadline"></div>
-          <div class="c12"><label>Intro text</label><textarea id="sIntro"></textarea></div>
-          <div class="c6"><label>Footer left</label><input id="sFooterLeft"></div>
-          <div class="c6"><label>Footer right</label><input id="sFooterRight"></div>
-          <div class="c8"><label>Home hero image path</label><input id="sHero"></div>
-          <div class="c4"><label>Upload home hero</label><input id="sHeroUpload" type="file" accept="image/*"></div>
-        </div>
       </div>
     </section>
 
     <section class="view" id="view-products">
       <div class="panel">
-        <div class="toolbar">
-          <div>
-            <h2 style="margin:0">Products</h2>
-            <p class="help" style="margin:6px 0 0">Products are separated by brand and category. Open only the group you need.</p>
-          </div>
-          <button class="primary" onclick="openProduct()">+ Add product</button>
-        </div>
-
-        <div class="product-filterbar">
-          <div>
-            <label>Brand</label>
-            <select id="productBrandFilter" onchange="refreshProductFilterCategories();renderProducts()"></select>
-          </div>
-          <div>
-            <label>Category</label>
-            <select id="productCategoryFilter" onchange="renderProducts()"></select>
-          </div>
-          <div>
-            <label>Search</label>
-            <input id="productSearch" class="search" placeholder="Model / name / price..." oninput="renderProducts()">
-          </div>
-          <div>
-            <button class="secondary" type="button" onclick="clearProductFilters()">Clear filters</button>
-          </div>
-        </div>
-
-        <div id="productList"></div>
+        <div class="toolbar"><h2>Products</h2><button class="primary" onclick="openProduct()">+ Add product</button></div>
+        <div id="productList" class="list"></div>
       </div>
     </section>
 
     <section class="view" id="view-categories">
       <div class="panel">
-        <div class="toolbar">
-          <div class="toolbar-left"><h2 style="margin:0">Categories</h2><input id="categorySearch" class="search" placeholder="Search category..." oninput="renderCategories()"></div>
-          <button class="primary" onclick="openCategory()">+ Add category path</button>
-        </div>
-        <p class="help">Any number of levels is allowed, e.g. <b>Apparels / Women / Jackets / Leather</b>. Use ↑ ↓ to control display order.</p>
+        <div class="toolbar"><h2>Categories</h2><button class="primary" onclick="openCategory()">+ Add category path</button></div>
+        <p class="help">Use paths such as: <b>Apparels / Women / Skirts</b>. You can create as many levels as you want.</p>
         <div id="categoryList" class="list"></div>
       </div>
     </section>
 
     <section class="view" id="view-banners">
       <div class="panel">
-        <div class="toolbar">
-          <div class="toolbar-left"><h2 style="margin:0">Banners</h2><input id="bannerSearch" class="search" placeholder="Search banner..." oninput="renderBanners()"></div>
-          <button class="primary" onclick="openBanner()">+ Add banner</button>
-        </div>
-        <p class="help">Location can be <b>home-hero</b>, <b>collection</b>, or an exact category path such as <b>Accessories / Eyewear / Sunglasses</b>.</p>
+        <div class="toolbar"><h2>Banners</h2><button class="primary" onclick="openBanner()">+ Add banner</button></div>
         <div id="bannerList" class="list"></div>
       </div>
     </section>
@@ -188,7 +102,6 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
     <section class="view" id="view-brands">
       <div class="panel">
         <div class="toolbar"><h2>Brands</h2><button class="primary" onclick="openBrand()">+ Add brand</button></div>
-        <p class="help">Use ↑ ↓ to change the order of brand cards on the homepage.</p>
         <div id="brandList" class="list"></div>
       </div>
     </section>
@@ -202,73 +115,39 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
 
 <script>
 const DATA_FILE="site-data.json";
-const TOKEN_KEY="mypoloworld_admin_token_v1";
-const PUBLIC_ORIGIN="https://mypoloworld.com";
-const SEO_MANIFEST_FILE="generated-product-pages.json";
-const STATIC_PRODUCT_PAGE_VERSION=1;
-let token="",repo="",branch="main",data=null,dataSha=null,dirty=false;
-let editingProductImages=[];
+let token="", repo="", branch="main", data=null, dataSha=null, dirty=false;
 
 const defaultData={
-  version:2,
-  site:{
-    title:"My Polo World",
-    metaDescription:"My Polo World — a curated world of polo lifestyle brands.",
-    heroImage:"assets/fall-winter-banner.png",
-    introEyebrow:"Our Houses",
-    introHeadline:"Three worlds. One polo spirit.",
-    introText:"Discover distinct expressions of polo heritage, shaped through sport, style and place.",
-    footerLeft:"© 2026 My Polo World",
-    footerRight:"Fashion · Eyewear · Lifestyle"
+  version:1,
+  site:{title:"My Polo World",heroImage:"assets/fall-winter-banner.png"},
+  brands:[
+    {id:"santa",name:"Santa Barbara Polo & Racquet Club",logo:"assets/santa-barbara.jpeg",accent:"#204d38"},
+    {id:"sanmarco",name:"Polo San Marco",logo:"assets/polo-san-marco.png",accent:"#071b33"},
+    {id:"venezia",name:"Venezia Polo",logo:"assets/venezia-polo.png",accent:"#6f1727"}
+  ],
+  categories:{
+    santa:["Apparels / Men / Underwear","Apparels / Men / Shirts","Apparels / Men / T-Shirts","Apparels / Men / Polo Shirts","Apparels / Men / Pants","Apparels / Men / Sweater","Apparels / Men / Blouse","Apparels / Men / Hoodie","Apparels / Women / Blouse","Apparels / Women / Skirts","Apparels / Women / Shorts","Apparels / Women / Underwear","Apparels / Women / Pants","Apparels / Women / Sweater","Apparels / Women / Hoodie","Apparels / Kids / Down","Apparels / Kids / Up","Accessories / Eyewear / Optical Frames","Accessories / Eyewear / Sunglasses","Accessories / Belt","Accessories / Hat","Accessories / Bracelet","Accessories / Bag","Accessories / Necklace","Accessories / Watches","Home / Bed","Home / Living Room","Home / Kitchen","Home / Decoration"],
+    sanmarco:["Apparels / Men","Apparels / Women","Apparels / Kids","Accessories / Eyewear / Optical Frames","Accessories / Eyewear / Sunglasses","Home"],
+    venezia:["Apparels / Men","Apparels / Women","Apparels / Kids","Accessories / Eyewear / Optical Frames","Accessories / Eyewear / Sunglasses","Home"]
   },
-  brands:[],
-  categories:{},
-  banners:[],
-  products:[]
+  banners:[
+    {id:"home-hero",brand:"",location:"home-hero",title:"",subtitle:"",image:"assets/fall-winter-banner.png",active:true},
+    {id:"santa-sunglasses",brand:"santa",location:"collection",title:"Sunglasses Collection",subtitle:"Santa Barbara Polo & Racquet Club",image:"assets/santa-barbara-eyewear-banner.png",active:true}
+  ],
+  products:[
+    {id:"santa-1132",brand:"santa",categoryPath:"Accessories / Eyewear / Sunglasses",name:"Santa Barbara Sunglasses",code:"1132",price:"$100.7",description:"",images:["assets/sb-1132-front.png","assets/sb-1132-three-quarter.png","assets/sb-1132-side.png","assets/sb-1132-model.png"],active:true},
+    {id:"santa-1137",brand:"santa",categoryPath:"Accessories / Eyewear / Sunglasses",name:"Santa Barbara Sunglasses",code:"1137",price:"$80.3",description:"",images:["assets/sb-1137-front.png","assets/sb-1137-three-quarter.png","assets/sb-1137-side.png","assets/sb-1137-model.png"],active:true},
+    {id:"santa-1154",brand:"santa",categoryPath:"Accessories / Eyewear / Sunglasses",name:"Santa Barbara Sunglasses",code:"1154",price:"$62",description:"",images:["assets/sb-1154-front.png","assets/sb-1154-three-quarter.png","assets/sb-1154-side.png","assets/sb-1154-model.png"],active:true},
+    {id:"santa-1170",brand:"santa",categoryPath:"Accessories / Eyewear / Sunglasses",name:"Santa Barbara Sunglasses",code:"1170",price:"$96",description:"",images:["assets/sb-1170-front.png","assets/sb-1170-three-quarter.png","assets/sb-1170-side.png","assets/sb-1170-model.png"],active:true}
+  ]
 };
 
 function $(id){return document.getElementById(id)}
 function esc(s=""){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function slug(s=""){return String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||("item-"+Date.now())}
+function slug(s=""){return s.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"") || ("item-"+Date.now())}
 function clone(o){return JSON.parse(JSON.stringify(o))}
-function setStatus(msg,type=""){ $("status").className="status "+type;$("status").textContent=msg }
+function setStatus(msg,type=""){ $("status").className="status "+type; $("status").textContent=msg }
 function markDirty(){dirty=true;$("saveAll").disabled=false;renderSummary()}
-function moveArray(arr,i,delta){const j=i+delta;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];markDirty();renderAll()}
-function brandName(id){return (data.brands.find(b=>b.id===id)||{}).name||id}
-function brandOptions(selected=""){return data.brands.map(b=>`<option value="${esc(b.id)}" ${b.id===selected?"selected":""}>${esc(b.name)}</option>`).join("")}
-function categoryOptions(brand,selected=""){return (data.categories[brand]||[]).map(p=>`<option value="${esc(p)}" ${p===selected?"selected":""}>${esc(p)}</option>`).join("")}
-function digitsOnly(v=""){return String(v).replace(/\D/g,"")}
-function validGTIN13(v=""){
-  const x=digitsOnly(v);if(x.length!==13)return false;
-  let sum=0;for(let i=0;i<12;i++)sum+=Number(x[i])*(i%2?3:1);
-  return (10-(sum%10))%10===Number(x[12]);
-}
-function starterProductBarcodeMigration(){
-  let changed=false;
-  const p=(data.products||[]).find(x=>x.id==="santa-1132" || (x.brand==="santa" && String(x.code)==="1132"));
-  if(p){
-    if(!p.modelNumber){p.modelNumber="SBS.1.1132.COL01";changed=true}
-    if(!p.gtin13){p.gtin13="8682308298710";changed=true}
-  }
-  return changed;
-}
-function updateBarcodeHint(){
-  const el=$("pBarcodeHint"), input=$("pGTIN13");if(!el||!input)return;
-  const v=digitsOnly(input.value);input.value=v;
-  if(!v){el.className="barcode-hint";el.textContent="Optional. Use the 13-digit EAN / GTIN printed on the product barcode. Saving all changes automatically creates its Google-friendly product page and sitemap entry.";return}
-  if(validGTIN13(v)){el.className="barcode-hint good";el.textContent="Valid GTIN-13 ✓"}
-  else{el.className="barcode-hint bad";el.textContent="Invalid GTIN-13 — check the 13 digits."}
-}
-
-function normalize(){
-  data ||= clone(defaultData);
-  data.version=2;
-  data.site ||= {};
-  const d=defaultData.site;
-  for(const [k,v] of Object.entries(d)) if(data.site[k]===undefined)data.site[k]=v;
-  data.brands ||= [];data.categories ||= {};data.banners ||= [];data.products ||= [];
-  data.brands.forEach(b=>data.categories[b.id] ||= []);
-}
 
 async function gh(path,opts={}){
   const r=await fetch("https://api.github.com/repos/"+repo+path,{
@@ -283,386 +162,93 @@ async function gh(path,opts={}){
   if(!r.ok){let t=await r.text();throw new Error(r.status+" "+t)}
   return r.status===204?null:r.json();
 }
-function decode64(s){const bin=atob(s.replace(/\n/g,""));const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
-function encode64(s){const bytes=new TextEncoder().encode(s);let bin="";bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin)}
-
-function seoEscapeHtml(s=""){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function seoEscapeXml(s=""){return String(s).replace(/[<>&'\"]/g,m=>({"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"}[m]))}
-function absolutePublicUrl(path=""){
-  const v=String(path||"").trim();
-  if(!v)return "";
-  if(/^https?:\/\//i.test(v))return v;
-  return PUBLIC_ORIGIN+"/"+v.replace(/^\/+/,"");
+function decode64(s){
+  const bin=atob(s.replace(/\n/g,"")); const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
 }
-function productStaticPath(p){
-  const gtin=digitsOnly(p?.gtin13||"");
-  if(!validGTIN13(gtin))return "";
-  return "products/"+gtin+".html";
+function encode64(s){
+  const bytes=new TextEncoder().encode(s); let bin=""; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin);
 }
-function productStaticUrl(p){const path=productStaticPath(p);return path?PUBLIC_ORIGIN+"/"+path:""}
-function productPageSignature(p){
-  const payload={v:STATIC_PRODUCT_PAGE_VERSION,id:p.id||"",brand:p.brand||"",categoryPath:p.categoryPath||"",name:p.name||"",code:p.code||"",modelNumber:p.modelNumber||"",gtin13:digitsOnly(p.gtin13||""),price:p.price||"",description:p.description||"",images:(p.images||[]).filter(Boolean),active:p.active!==false};
-  const str=JSON.stringify(payload);let h=2166136261;
-  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
-  return (h>>>0).toString(16);
-}
-function parseProductPrice(v=""){
-  const raw=String(v||"").trim();
-  const value=(raw.match(/[0-9]+(?:[.,][0-9]+)?/)||[])[0]?.replace(",",".")||"";
-  let currency="";
-  if(/\$|USD/i.test(raw))currency="USD";else if(/€|EUR/i.test(raw))currency="EUR";else if(/£|GBP/i.test(raw))currency="GBP";
-  return {value,currency};
-}
-function jsonLdSafe(obj){return JSON.stringify(obj).replace(/</g,"\\u003c")}
-function buildStaticProductPage(p){
-  const brand=brandName(p.brand)||"My Polo World";
-  const gtin=digitsOnly(p.gtin13||"");
-  const model=(p.modelNumber||p.code||"").trim();
-  const title=[brand,model||p.name].filter(Boolean).join(" — ");
-  const description=(p.description||`${p.name||"Product"} by ${brand}. Model ${model||p.code||""}. GTIN-13 ${gtin}.`).trim();
-  const url=productStaticUrl(p);
-  const images=(p.images||[]).filter(Boolean).map(absolutePublicUrl);
-  const cover=images[0]||"";
-  const price=parseProductPrice(p.price);
-  const productSchema={
-    "@context":"https://schema.org",
-    "@type":"Product",
-    "name":p.name||model||"Product",
-    "sku":p.code||model||undefined,
-    "mpn":model||undefined,
-    "gtin13":gtin||undefined,
-    "brand":{"@type":"Brand","name":brand},
-    "image":images.length?images:undefined,
-    "description":description,
-    "url":url
-  };
-  if(price.value&&price.currency){productSchema.offers={"@type":"Offer","url":url,"priceCurrency":price.currency,"price":price.value,"availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition"}}
-  const breadcrumbs={"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
-    {"@type":"ListItem","position":1,"name":"My Polo World","item":PUBLIC_ORIGIN+"/"},
-    {"@type":"ListItem","position":2,"name":brand,"item":PUBLIC_ORIGIN+"/#brands"},
-    {"@type":"ListItem","position":3,"name":model||p.name||gtin,"item":url}
-  ]};
-  const gallery=images.slice(1,7).map((src,i)=>`<img src="${seoEscapeHtml(src)}" alt="${seoEscapeHtml(title)} view ${i+2}" loading="lazy">`).join("");
-  return `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${seoEscapeHtml(title)} | My Polo World</title>
-<meta name="description" content="${seoEscapeHtml(description.slice(0,160))}">
-<meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="canonical" href="${seoEscapeHtml(url)}">
-<meta property="og:type" content="product">
-<meta property="og:title" content="${seoEscapeHtml(title)}">
-<meta property="og:description" content="${seoEscapeHtml(description.slice(0,180))}">
-<meta property="og:url" content="${seoEscapeHtml(url)}">
-${cover?`<meta property="og:image" content="${seoEscapeHtml(cover)}">`:""}
-<script type="application/ld+json">${jsonLdSafe(productSchema)}<\/script>
-<script type="application/ld+json">${jsonLdSafe(breadcrumbs)}<\/script>
-<style>
-:root{--ink:#142019;--paper:#fbfaf6;--line:rgba(20,32,25,.14);--green:#204d38}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}.top{padding:24px 5vw;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;align-items:center}.wordmark{font-family:Georgia,serif;letter-spacing:.22em;font-size:20px;text-decoration:none;color:inherit}.back{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);text-decoration:none}.page{width:min(1180px,92vw);margin:48px auto 80px}.product{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);background:#fff;border:1px solid var(--line)}.media{padding:28px;display:grid;place-items:center;min-height:560px}.media img{max-width:100%;max-height:620px;object-fit:contain}.copy{padding:42px;border-left:1px solid var(--line)}.eyebrow{text-transform:uppercase;letter-spacing:.16em;color:#707772;font-size:12px}.copy h1{font:400 38px/1.15 Georgia,serif;margin:12px 0 10px}.model{font:400 22px Georgia,serif;margin:0 0 30px}.row{display:flex;justify-content:space-between;gap:20px;padding:15px 0;border-top:1px solid var(--line)}.row span:first-child{color:#777;font-size:12px;text-transform:uppercase;letter-spacing:.1em}.gtin{font-family:monospace;letter-spacing:.08em}.desc{line-height:1.75;color:#555;margin:28px 0}.cta{display:inline-block;padding:13px 18px;background:var(--green);color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;font-size:12px}.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}.gallery img{width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid var(--line);padding:8px}@media(max-width:800px){.product{grid-template-columns:1fr}.copy{border-left:0;border-top:1px solid var(--line)}.media{min-height:360px}.gallery{grid-template-columns:repeat(2,1fr)}}
-</style>
-</head>
-<body>
-<header class="top"><a class="wordmark" href="${PUBLIC_ORIGIN}/">MY POLO WORLD</a><a class="back" href="${PUBLIC_ORIGIN}/?barcode=${encodeURIComponent(gtin)}">View in collection →</a></header>
-<main class="page">
-<section class="product">
-<div class="media">${cover?`<img src="${seoEscapeHtml(cover)}" alt="${seoEscapeHtml(title)}">`:""}</div>
-<div class="copy">
-<div class="eyebrow">${seoEscapeHtml(brand)}</div>
-<h1>${seoEscapeHtml(p.name||"Product")}</h1>
-<p class="model">${seoEscapeHtml(model||p.code||"")}</p>
-<div class="row"><span>Model Number</span><strong>${seoEscapeHtml(model||p.code||"")}</strong></div>
-<div class="row"><span>GTIN-13</span><strong class="gtin">${seoEscapeHtml(gtin)}</strong></div>
-${p.price?`<div class="row"><span>Price</span><strong>${seoEscapeHtml(p.price)}</strong></div>`:""}
-${p.categoryPath?`<div class="row"><span>Collection</span><strong>${seoEscapeHtml(p.categoryPath)}</strong></div>`:""}
-<p class="desc">${seoEscapeHtml(description)}</p>
-<a class="cta" href="${PUBLIC_ORIGIN}/?barcode=${encodeURIComponent(gtin)}">View full product</a>
-</div>
-</section>
-${gallery?`<div class="gallery">${gallery}</div>`:""}
-</main>
-</body>
-</html>`;
-}
-function buildSitemapXml(products){
-  const today=new Date().toISOString().slice(0,10);
-  const urls=[PUBLIC_ORIGIN+"/",...products.map(productStaticUrl).filter(Boolean)];
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u,i)=>`  <url><loc>${seoEscapeXml(u)}</loc><lastmod>${today}</lastmod><changefreq>${i===0?"weekly":"monthly"}</changefreq><priority>${i===0?"1.0":"0.8"}</priority></url>`).join("\n")}\n</urlset>\n`;
-}
-function buildRobotsTxt(){return `User-agent: *\nAllow: /\n\nSitemap: ${PUBLIC_ORIGIN}/sitemap.xml\n`}
-async function getGitHubContentFile(path){
-  try{return await gh("/contents/"+path+"?ref="+encodeURIComponent(branch))}
-  catch(e){if(/^404\b/.test(String(e.message||"")))return null;throw e}
-}
-async function putTextFileIfChanged(path,content,message){
-  const existing=await getGitHubContentFile(path);
-  if(existing?.content){try{if(decode64(existing.content)===content)return {changed:false,sha:existing.sha}}catch(e){}}
-  const body={message,content:encode64(content),branch};if(existing?.sha)body.sha=existing.sha;
-  const out=await gh("/contents/"+path,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-  return {changed:true,sha:out?.content?.sha||""};
-}
-async function deleteGitHubFileIfExists(path,message){
-  const existing=await getGitHubContentFile(path);if(!existing?.sha)return false;
-  await gh("/contents/"+path,{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({message,sha:existing.sha,branch})});return true;
-}
-async function loadSeoManifest(){
-  const f=await getGitHubContentFile(SEO_MANIFEST_FILE);if(!f?.content)return {version:1,pages:{}};
-  try{const x=JSON.parse(decode64(f.content));return x&&x.pages?x:{version:1,pages:{}}}catch(e){return {version:1,pages:{}}}
-}
-async function publishSeoProductPages(){
-  const products=(data.products||[]).filter(p=>p.active!==false && validGTIN13(digitsOnly(p.gtin13||"")));
-  const oldManifest=await loadSeoManifest();
-  const nextManifest={version:1,generatedAt:new Date().toISOString(),pages:{}};
-  let changedCount=0,skippedCount=0,deletedCount=0;
-  for(let i=0;i<products.length;i++){
-    const p=products[i],path=productStaticPath(p),signature=productPageSignature(p);
-    nextManifest.pages[path]=signature;
-    if(oldManifest.pages?.[path]===signature){skippedCount++;continue}
-    setStatus(`Publishing Google product pages… ${i+1}/${products.length}`);
-    await putTextFileIfChanged(path,buildStaticProductPage(p),`Publish product page ${p.modelNumber||p.code||p.id}`);changedCount++;
-  }
-  for(const oldPath of Object.keys(oldManifest.pages||{})){
-    if(nextManifest.pages[oldPath])continue;
-    setStatus("Removing old generated product page…");
-    if(await deleteGitHubFileIfExists(oldPath,"Remove old generated product page"))deletedCount++;
-  }
-  setStatus("Updating sitemap.xml and robots.txt…");
-  await putTextFileIfChanged("sitemap.xml",buildSitemapXml(products),"Update product sitemap");
-  await putTextFileIfChanged("robots.txt",buildRobotsTxt(),"Update robots and sitemap location");
-  await putTextFileIfChanged(SEO_MANIFEST_FILE,JSON.stringify(nextManifest,null,2),"Update generated product page manifest");
-  return {products:products.length,changedCount,skippedCount,deletedCount};
-}
-
 async function loadData(){
-  const f=await gh("/contents/"+DATA_FILE+"?ref="+encodeURIComponent(branch));
-  data=JSON.parse(decode64(f.content));dataSha=f.sha;dirty=false;
-  normalize();
-  const barcodePrepared=starterProductBarcodeMigration();
-  dirty=barcodePrepared;
-  $("app").classList.remove("hidden");
-  $("saveAll").disabled=!dirty;
-  loadSiteForm();
-  renderAll();
-  setStatus(barcodePrepared ? "Connected. Model 1132 barcode is prepared in draft. Click Save all changes once to publish it." : "Connected. Existing site-data.json loaded.","ok");
+  try{
+    const f=await gh("/contents/"+DATA_FILE+"?ref="+encodeURIComponent(branch));
+    data=JSON.parse(decode64(f.content)); dataSha=f.sha;
+    setStatus("Connected. Existing site-data.json loaded.","ok");
+  }catch(e){
+    if(String(e.message).startsWith("404")){
+      data=clone(defaultData); dataSha=null; dirty=true;
+      setStatus("Connected. site-data.json does not exist yet; a starter version is loaded. Click Save all changes to create it.","ok");
+    }else throw e;
+  }
+  normalize(); $("app").classList.remove("hidden"); $("saveAll").disabled=!dirty; renderAll();
 }
-async function connect(){
-  token=$("token").value.trim();repo=$("repo").value.trim();branch=$("branch").value.trim()||"main";
+function normalize(){
+  data.site ||= {title:"My Polo World",heroImage:""};
+  data.brands ||= []; data.categories ||= {}; data.banners ||= []; data.products ||= [];
+  data.brands.forEach(b=>data.categories[b.id] ||= []);
+}
+$("connectBtn").onclick=async()=>{
+  token=$("token").value.trim(); repo=$("repo").value.trim(); branch=$("branch").value.trim()||"main";
   if(!token)return setStatus("Paste the GitHub token first.","err");
-  if($("rememberToken").checked)localStorage.setItem(TOKEN_KEY,token);else localStorage.removeItem(TOKEN_KEY);
-  try{setStatus("Connecting...");await gh("");await loadData()}catch(e){setStatus("Connection failed: "+e.message,"err")}
-}
-$("connectBtn").onclick=connect;
-$("forgetToken").onclick=()=>{localStorage.removeItem(TOKEN_KEY);$("token").value="";$("rememberToken").checked=false;setStatus("Saved token forgotten from this browser.","ok")};
-
+  try{
+    setStatus("Connecting...");
+    await gh("");
+    await loadData();
+  }catch(e){setStatus("Connection failed: "+e.message,"err")}
+};
 $("saveAll").onclick=async()=>{
   try{
-    $("saveAll").disabled=true;setStatus("Saving site data to GitHub...");
+    $("saveAll").disabled=true; setStatus("Saving changes to GitHub...");
     const body={message:"Update site content from admin panel",content:encode64(JSON.stringify(data,null,2)),branch};
     if(dataSha)body.sha=dataSha;
     const out=await gh("/contents/"+DATA_FILE,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    dataSha=out.content.sha;
-    const seo=await publishSeoProductPages();
-    dirty=false;
-    setStatus(`Saved. ${seo.products} barcode product page${seo.products===1?"":"s"} published for Google; sitemap.xml updated. GitHub Pages will update shortly.`,"ok");
-    renderSummary();
-  }catch(e){$("saveAll").disabled=false;setStatus("Save/publish failed: "+e.message,"err")}
+    dataSha=out.content.sha; dirty=false; setStatus("Saved successfully. GitHub Pages will update shortly.","ok"); renderSummary();
+  }catch(e){$("saveAll").disabled=false;setStatus("Save failed: "+e.message,"err")}
 };
 
 document.querySelectorAll(".tab").forEach(btn=>btn.onclick=()=>{
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
   document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
-  btn.classList.add("active");$("view-"+btn.dataset.view).classList.add("active");closeEditor();
-  if(btn.dataset.view==="site")loadSiteForm();
+  btn.classList.add("active"); $("view-"+btn.dataset.view).classList.add("active"); closeEditor();
 });
 
-function renderAll(){renderSummary();refreshProductFilters();renderProducts();renderCategories();renderBanners();renderBrands()}
+function renderAll(){renderSummary();renderProducts();renderCategories();renderBanners();renderBrands()}
 function renderSummary(){
   if(!data)return;
-  $("summary").innerHTML=`<div class="summary-grid">
-    <div class="metric"><b>${data.brands.length}</b><br><span class="help">Brands</span></div>
-    <div class="metric"><b>${Object.values(data.categories).flat().length}</b><br><span class="help">Category paths</span></div>
-    <div class="metric"><b>${data.products.length}</b><br><span class="help">Products</span></div>
-    <div class="metric"><b>${data.banners.length}</b><br><span class="help">Banners</span></div>
-  </div><p><span class="badge">${dirty?"Unsaved changes":"Everything saved"}</span></p>`;
+  $("summary").innerHTML=`<div class="row">
+    <div class="c3 panel"><b>${data.brands.length}</b><br><span class="help">Brands</span></div>
+    <div class="c3 panel"><b>${Object.values(data.categories).flat().length}</b><br><span class="help">Category paths</span></div>
+    <div class="c3 panel"><b>${data.products.length}</b><br><span class="help">Products</span></div>
+    <div class="c3 panel"><b>${data.banners.length}</b><br><span class="help">Banners</span></div>
+    <div class="c12"><span class="badge">${dirty?"Unsaved changes":"Everything saved"}</span></div>
+  </div>`;
 }
-function downloadBackup(){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="mypoloworld-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href);
-}
-async function reloadFromGitHub(){
-  if(dirty&&!confirm("Discard unsaved changes and reload from GitHub?"))return;
-  try{setStatus("Reloading...");await loadData()}catch(e){setStatus("Reload failed: "+e.message,"err")}
-}
-
-function loadSiteForm(){
-  if(!data)return;
-  $("sTitle").value=data.site.title||"";
-  $("sMeta").value=data.site.metaDescription||"";
-  $("sEyebrow").value=data.site.introEyebrow||"";
-  $("sHeadline").value=data.site.introHeadline||"";
-  $("sIntro").value=data.site.introText||"";
-  $("sFooterLeft").value=data.site.footerLeft||"";
-  $("sFooterRight").value=data.site.footerRight||"";
-  $("sHero").value=data.site.heroImage||"";
-}
-async function saveSiteSettings(){
-  try{
-    const uploads=$("sHeroUpload").files.length?await uploadFiles($("sHeroUpload")):[];
-    data.site={
-      ...data.site,
-      title:$("sTitle").value.trim()||"My Polo World",
-      metaDescription:$("sMeta").value.trim(),
-      introEyebrow:$("sEyebrow").value.trim(),
-      introHeadline:$("sHeadline").value.trim(),
-      introText:$("sIntro").value.trim(),
-      footerLeft:$("sFooterLeft").value.trim(),
-      footerRight:$("sFooterRight").value.trim(),
-      heroImage:uploads[0]||$("sHero").value.trim()
-    };
-    $("sHero").value=data.site.heroImage;markDirty();setStatus("Site settings changed in draft. Click Save all changes to publish.","ok");
-  }catch(e){setStatus("Site settings save failed: "+e.message,"err")}
-}
-
-function refreshProductFilters(){
-  if(!data)return;
-  const brandSel=$("productBrandFilter"), categorySel=$("productCategoryFilter");
-  if(!brandSel||!categorySel)return;
-
-  const oldBrand=brandSel.value;
-  brandSel.innerHTML=`<option value="">All brands</option>`+
-    data.brands.map(b=>`<option value="${esc(b.id)}">${esc(b.name)}</option>`).join("");
-  if([...brandSel.options].some(o=>o.value===oldBrand))brandSel.value=oldBrand;
-
-  refreshProductFilterCategories();
-}
-
-function refreshProductFilterCategories(){
-  const brandSel=$("productBrandFilter"), categorySel=$("productCategoryFilter");
-  if(!brandSel||!categorySel||!data)return;
-
-  const oldCategory=categorySel.value;
-  const brand=brandSel.value;
-  let categories=[];
-
-  if(brand){
-    categories=[...new Set(data.products.filter(p=>p.brand===brand).map(p=>p.categoryPath).filter(Boolean))];
-  }else{
-    categories=[...new Set(data.products.map(p=>p.categoryPath).filter(Boolean))];
-  }
-
-  categories.sort((a,b)=>a.localeCompare(b));
-  categorySel.innerHTML=`<option value="">All categories</option>`+
-    categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
-
-  if([...categorySel.options].some(o=>o.value===oldCategory))categorySel.value=oldCategory;
-}
-
-function clearProductFilters(){
-  if($("productBrandFilter"))$("productBrandFilter").value="";
-  refreshProductFilterCategories();
-  if($("productCategoryFilter"))$("productCategoryFilter").value="";
-  if($("productSearch"))$("productSearch").value="";
-  renderProducts();
-}
+function brandName(id){return (data.brands.find(b=>b.id===id)||{}).name||id}
+function brandOptions(selected=""){return data.brands.map(b=>`<option value="${esc(b.id)}" ${b.id===selected?"selected":""}>${esc(b.name)}</option>`).join("")}
+function categoryOptions(brand,selected=""){return (data.categories[brand]||[]).map(p=>`<option value="${esc(p)}" ${p===selected?"selected":""}>${esc(p)}</option>`).join("")}
 
 function renderProducts(){
-  if(!data)return;
-  const q=($("productSearch")?.value||"").toLowerCase().trim();
-  const brandFilter=$("productBrandFilter")?.value||"";
-  const categoryFilter=$("productCategoryFilter")?.value||"";
-
-  const rows=data.products.map((p,i)=>({p,i})).filter(({p})=>{
-    if(brandFilter && p.brand!==brandFilter)return false;
-    if(categoryFilter && p.categoryPath!==categoryFilter)return false;
-    const hay=[p.code,p.modelNumber,p.gtin13,p.name,p.price,p.categoryPath,brandName(p.brand)].join(" ").toLowerCase();
-    return !q||hay.includes(q);
-  });
-
-  if(!rows.length){
-    $("productList").innerHTML=`<p class="help">No matching products.</p>`;
-    return;
-  }
-
-  const groups=new Map();
-  rows.forEach(row=>{
-    const key=(row.p.brand||"")+"|||"+(row.p.categoryPath||"Uncategorized");
-    if(!groups.has(key))groups.set(key,[]);
-    groups.get(key).push(row);
-  });
-
-  const autoOpen = !!categoryFilter || groups.size===1;
-
-  $("productList").innerHTML=[...groups.entries()].map(([key,items])=>{
-    const [brandId,categoryPath]=key.split("|||");
-    const groupTitle=brandName(brandId);
-    const body=items.map(({p,i})=>`<div class="item">
-      <div><b>${esc(p.code||p.name||"Untitled")}</b> <span class="badge">${p.active===false?"Hidden":"Live"}</span><br>
-      <small>${esc(p.name||"Product")} · ${esc(p.price||"No price")}${p.gtin13?` · GTIN ${esc(p.gtin13)}`:""}</small></div>
-      <div class="actions">
-        <button class="ghost" onclick="moveProduct(${i},-1)">↑</button>
-        <button class="ghost" onclick="moveProduct(${i},1)">↓</button>
-        <button class="secondary" onclick="duplicateProduct(${i})">Duplicate</button>
-        <button class="secondary" onclick="openProduct(${i})">Edit</button>
-        <button class="danger" onclick="deleteProduct(${i})">Delete</button>
-      </div>
-    </div>`).join("");
-
-    return `<details class="product-group" ${autoOpen?"open":""}>
-      <summary>
-        <div>
-          <div class="product-group-title">${esc(categoryPath.split(" / ").pop()||categoryPath)}</div>
-          <div class="product-group-meta">${esc(groupTitle)} · ${esc(categoryPath)}</div>
-        </div>
-        <span class="product-group-count">${items.length} product${items.length===1?"":"s"}</span>
-      </summary>
-      <div class="product-group-body">${body}</div>
-    </details>`;
-  }).join("");
-}
-function moveProduct(i,d){moveArray(data.products,i,d)}
-function duplicateProduct(i){
-  const p=clone(data.products[i]);p.id=slug((p.brand||"product")+"-"+(p.code||p.name||"copy")+"-"+Date.now());p.code=(p.code||"")+" COPY";
-  data.products.splice(i+1,0,p);markDirty();renderAll();setStatus("Product duplicated in draft. Edit the copy, then Save all changes.","ok");
+  $("productList").innerHTML=data.products.length?data.products.map((p,i)=>`<div class="item">
+    <div><b>${esc(p.code||p.name)}</b> <span class="badge">${p.active===false?"Hidden":"Live"}</span><br><small>${esc(brandName(p.brand))} · ${esc(p.categoryPath)} · ${esc(p.price)}</small></div>
+    <div class="actions"><button class="secondary" onclick="openProduct(${i})">Edit</button><button class="danger" onclick="deleteProduct(${i})">Delete</button></div>
+  </div>`).join(""):`<p class="help">No products yet.</p>`;
 }
 function openProduct(i=-1){
-  const p=i>=0?clone(data.products[i]):{id:"",brand:data.brands[0]?.id||"",categoryPath:"",name:"",code:"",modelNumber:"",gtin13:"",price:"",description:"",images:[],active:true};
-  editingProductImages=[...(p.images||[])];
+  const p=i>=0?clone(data.products[i]):{id:"",brand:data.brands[0]?.id||"",categoryPath:"",name:"",code:"",price:"",description:"",images:[],active:true};
   openEditor("Product",`<div class="row">
     <div class="c4"><label>Brand</label><select id="pBrand" onchange="refreshProductCategories()">${brandOptions(p.brand)}</select></div>
     <div class="c4"><label>Category</label><select id="pCategory"></select></div>
-    <div class="c4"><label>Short model / code</label><input id="pCode" value="${esc(p.code)}" placeholder="1132"></div>
-    <div class="c4"><label>Full model number</label><input id="pModelNumber" value="${esc(p.modelNumber||p.code||"")}" placeholder="SBS.1.1132.COL01"></div>
-    <div class="c4"><label>Barcode / GTIN-13</label><input id="pGTIN13" value="${esc(p.gtin13||"")}" inputmode="numeric" maxlength="13" placeholder="8682308298710" oninput="updateBarcodeHint()"><div id="pBarcodeHint" class="barcode-hint"></div></div>
+    <div class="c4"><label>Model / Code</label><input id="pCode" value="${esc(p.code)}"></div>
     <div class="c6"><label>Product name</label><input id="pName" value="${esc(p.name)}"></div>
     <div class="c3"><label>Price</label><input id="pPrice" value="${esc(p.price)}" placeholder="$95"></div>
     <div class="c3"><label>Status</label><select id="pActive"><option value="true" ${p.active!==false?"selected":""}>Live</option><option value="false" ${p.active===false?"selected":""}>Hidden</option></select></div>
     <div class="c12"><label>Description</label><textarea id="pDesc">${esc(p.description||"")}</textarea></div>
-    <div class="c12"><label>Images — first image is the cover</label><div id="imageManager" class="image-manager"></div></div>
-    <div class="c8"><label>Add image path / URL</label><input id="pImagePath" placeholder="assets/... or https://..."></div>
-    <div class="c4" style="align-self:end"><button class="secondary" type="button" onclick="addImagePath()">Add path</button></div>
-    <div class="c6"><label>Upload new image(s)</label><input id="pUpload" type="file" accept="image/*" multiple></div>
-    <div class="c12"><button class="primary" onclick="saveProduct(${i})">Save product to draft</button></div>
+    <div class="c12"><label>Image paths — one per line</label><textarea id="pImages">${esc((p.images||[]).join("\n"))}</textarea></div>
+    <div class="c6"><label>Upload image(s)</label><input id="pUpload" type="file" accept="image/*" multiple></div>
+    <div class="c12"><button class="primary" onclick="saveProduct(${i})">Save product</button></div>
   </div>`);
-  refreshProductCategories(p.categoryPath);renderImageManager();updateBarcodeHint();
+  refreshProductCategories(p.categoryPath);
 }
-function renderImageManager(){
-  const el=$("imageManager");if(!el)return;
-  el.innerHTML=editingProductImages.length?editingProductImages.map((src,i)=>`<div class="image-card">
-    <img src="${esc(src)}" alt="image ${i+1}">
-    <code>${esc(src)}</code>
-    <div class="image-actions">
-      <button class="ghost" onclick="moveProductImage(${i},-1)">↑</button>
-      <button class="ghost" onclick="moveProductImage(${i},1)">↓</button>
-      <button class="secondary" onclick="makeCover(${i})">${i===0?"Cover ✓":"Make cover"}</button>
-      <button class="danger" onclick="removeProductImage(${i})">Remove</button>
-    </div>
-  </div>`).join(""):`<p class="help">No images yet.</p>`;
-}
-function addImagePath(){const v=$("pImagePath").value.trim();if(v){editingProductImages.push(v);$("pImagePath").value="";renderImageManager()}}
-function moveProductImage(i,d){const j=i+d;if(j<0||j>=editingProductImages.length)return;[editingProductImages[i],editingProductImages[j]]=[editingProductImages[j],editingProductImages[i]];renderImageManager()}
-function makeCover(i){if(i<=0)return;const [x]=editingProductImages.splice(i,1);editingProductImages.unshift(x);renderImageManager()}
-function removeProductImage(i){editingProductImages.splice(i,1);renderImageManager()}
 function refreshProductCategories(selected){
   const b=$("pBrand")?.value;if(!$("pCategory"))return;
   $("pCategory").innerHTML=categoryOptions(b,selected||$("pCategory").value);
@@ -670,8 +256,8 @@ function refreshProductCategories(selected){
 async function uploadFiles(fileInput){
   const paths=[];
   for(const file of [...fileInput.files]){
-    const arr=new Uint8Array(await file.arrayBuffer());let bin="";arr.forEach(b=>bin+=String.fromCharCode(b));
-    const content=btoa(bin);const safe=(file.name||"image").toLowerCase().replace(/[^a-z0-9._-]+/g,"-");
+    const arr=new Uint8Array(await file.arrayBuffer()); let bin=""; arr.forEach(b=>bin+=String.fromCharCode(b));
+    const content=btoa(bin); const safe=(file.name||"image").toLowerCase().replace(/[^a-z0-9._-]+/g,"-");
     const path="assets/uploads/"+Date.now()+"-"+Math.random().toString(36).slice(2,7)+"-"+safe;
     await gh("/contents/"+path,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:"Upload image from admin panel",content,branch})});
     paths.push(path);
@@ -680,19 +266,13 @@ async function uploadFiles(fileInput){
 }
 async function saveProduct(i){
   try{
-    const gtin13=digitsOnly($("pGTIN13")?.value||"");
-    if(gtin13 && !validGTIN13(gtin13))return setStatus("Barcode is not a valid GTIN-13. Please check the 13 digits.","err");
-    if(gtin13){
-      const duplicate=(data.products||[]).findIndex((p,idx)=>idx!==i && digitsOnly(p.gtin13||"")===gtin13);
-      if(duplicate>=0)return setStatus("This barcode is already assigned to another product.","err");
-    }
     const uploaded=$("pUpload").files.length?await uploadFiles($("pUpload")):[];
+    const currentImages=$("pImages").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
     const obj={
       id:i>=0?data.products[i].id:slug($("pBrand").value+"-"+($("pCode").value||$("pName").value)),
       brand:$("pBrand").value,categoryPath:$("pCategory").value,name:$("pName").value.trim(),
-      code:$("pCode").value.trim(),modelNumber:$("pModelNumber").value.trim(),gtin13,
-      price:$("pPrice").value.trim(),description:$("pDesc").value.trim(),
-      images:[...editingProductImages,...uploaded],active:$("pActive").value==="true"
+      code:$("pCode").value.trim(),price:$("pPrice").value.trim(),description:$("pDesc").value.trim(),
+      images:[...currentImages,...uploaded],active:$("pActive").value==="true"
     };
     if(i>=0)data.products[i]=obj;else data.products.push(obj);
     markDirty();renderAll();closeEditor();setStatus("Product changed in draft. Click Save all changes to publish.","ok");
@@ -701,62 +281,45 @@ async function saveProduct(i){
 function deleteProduct(i){if(confirm("Delete this product?")){data.products.splice(i,1);markDirty();renderAll()}}
 
 function renderCategories(){
-  if(!data)return;
-  const q=($("categorySearch")?.value||"").toLowerCase().trim();let out=[];
-  data.brands.forEach(b=>(data.categories[b.id]||[]).forEach((p,i)=>{
-    if(q&&!(b.name+" "+p).toLowerCase().includes(q))return;
-    out.push(`<div class="item"><div><b>${esc(p)}</b><br><small>${esc(b.name)}</small></div><div class="actions">
-      <button class="ghost" onclick="moveCategory('${esc(b.id)}',${i},-1)">↑</button><button class="ghost" onclick="moveCategory('${esc(b.id)}',${i},1)">↓</button>
-      <button class="secondary" onclick="openCategory('${esc(b.id)}',${i})">Edit</button><button class="danger" onclick="deleteCategory('${esc(b.id)}',${i})">Delete</button>
-    </div></div>`);
-  }));
-  $("categoryList").innerHTML=out.join("")||`<p class="help">No matching categories.</p>`;
+  let out=[];
+  data.brands.forEach(b=>(data.categories[b.id]||[]).forEach((p,i)=>out.push(`<div class="item"><div><b>${esc(p)}</b><br><small>${esc(b.name)}</small></div><div class="actions"><button class="secondary" onclick="openCategory('${esc(b.id)}',${i})">Edit</button><button class="danger" onclick="deleteCategory('${esc(b.id)}',${i})">Delete</button></div></div>`)));
+  $("categoryList").innerHTML=out.join("")||`<p class="help">No categories yet.</p>`;
 }
-function moveCategory(b,i,d){moveArray(data.categories[b],i,d)}
 function openCategory(brand="",i=-1){
   const b=brand||data.brands[0]?.id||"";const value=i>=0?data.categories[b][i]:"";
   openEditor("Category path",`<div class="row">
     <div class="c4"><label>Brand</label><select id="cBrand">${brandOptions(b)}</select></div>
     <div class="c8"><label>Path</label><input id="cPath" value="${esc(value)}" placeholder="Apparels / Women / Jackets"></div>
-    <div class="c12"><button class="primary" onclick="saveCategory('${esc(b)}',${i})">Save category to draft</button></div>
+    <div class="c12"><button class="primary" onclick="saveCategory('${esc(b)}',${i})">Save category</button></div>
   </div>`);
 }
 function saveCategory(oldBrand,i){
   const nb=$("cBrand").value,p=$("cPath").value.trim();if(!p)return;
   data.categories[nb] ||= [];
-  if(i>=0){
-    if(oldBrand===nb)data.categories[nb][i]=p;
-    else{data.categories[oldBrand].splice(i,1);data.categories[nb].push(p)}
-  }else data.categories[nb].push(p);
-  data.categories[nb]=data.categories[nb].filter((x,idx,a)=>a.indexOf(x)===idx);
+  if(i>=0){data.categories[oldBrand].splice(i,1);data.categories[nb].push(p)}else data.categories[nb].push(p);
+  data.categories[nb]=[...new Set(data.categories[nb])].sort();
   markDirty();renderAll();closeEditor();
 }
-function deleteCategory(b,i){if(confirm("Delete this category path? Products in it are not deleted automatically.")){data.categories[b].splice(i,1);markDirty();renderAll()}}
+function deleteCategory(b,i){if(confirm("Delete this category path?")){data.categories[b].splice(i,1);markDirty();renderAll()}}
 
 function renderBanners(){
-  if(!data)return;
-  const q=($("bannerSearch")?.value||"").toLowerCase().trim();
-  const rows=data.banners.map((b,i)=>({b,i})).filter(({b})=>!q||[b.id,b.location,b.title,b.subtitle,brandName(b.brand)].join(" ").toLowerCase().includes(q));
-  $("bannerList").innerHTML=rows.length?rows.map(({b,i})=>`<div class="item">
+  $("bannerList").innerHTML=data.banners.length?data.banners.map((b,i)=>`<div class="item">
     <div style="display:flex;gap:12px;align-items:center">${b.image?`<img class="preview" src="${esc(b.image)}">`:""}<div><b>${esc(b.id)}</b> <span class="badge">${b.active===false?"Hidden":"Live"}</span><br><small>${esc(b.location)}${b.brand?" · "+esc(brandName(b.brand)):""}</small></div></div>
-    <div class="actions"><button class="ghost" onclick="moveBanner(${i},-1)">↑</button><button class="ghost" onclick="moveBanner(${i},1)">↓</button><button class="secondary" onclick="openBanner(${i})">Edit</button><button class="danger" onclick="deleteBanner(${i})">Delete</button></div>
-  </div>`).join(""):`<p class="help">No matching banners.</p>`;
+    <div class="actions"><button class="secondary" onclick="openBanner(${i})">Edit</button><button class="danger" onclick="deleteBanner(${i})">Delete</button></div>
+  </div>`).join(""):`<p class="help">No banners yet.</p>`;
 }
-function moveBanner(i,d){moveArray(data.banners,i,d)}
 function openBanner(i=-1){
   const b=i>=0?clone(data.banners[i]):{id:"banner-"+Date.now(),brand:"",location:"",title:"",subtitle:"",image:"",active:true};
-  const paths=Object.values(data.categories).flat();
   openEditor("Banner",`<div class="row">
     <div class="c4"><label>Banner ID</label><input id="bId" value="${esc(b.id)}"></div>
     <div class="c4"><label>Brand (optional)</label><select id="bBrand"><option value="">All / Home</option>${brandOptions(b.brand)}</select></div>
-    <div class="c4"><label>Location</label><input id="bLocation" list="categoryPaths" value="${esc(b.location)}" placeholder="home-hero"></div>
-    <datalist id="categoryPaths"><option value="home-hero"><option value="collection">${paths.map(p=>`<option value="${esc(p)}">`).join("")}</datalist>
+    <div class="c4"><label>Location</label><input id="bLocation" value="${esc(b.location)}" placeholder="home-hero"></div>
     <div class="c6"><label>Title</label><input id="bTitle" value="${esc(b.title||"")}"></div>
     <div class="c6"><label>Subtitle</label><input id="bSubtitle" value="${esc(b.subtitle||"")}"></div>
     <div class="c8"><label>Image path</label><input id="bImage" value="${esc(b.image||"")}"></div>
     <div class="c4"><label>Status</label><select id="bActive"><option value="true" ${b.active!==false?"selected":""}>Live</option><option value="false" ${b.active===false?"selected":""}>Hidden</option></select></div>
     <div class="c6"><label>Upload replacement image</label><input id="bUpload" type="file" accept="image/*"></div>
-    <div class="c12"><button class="primary" onclick="saveBanner(${i})">Save banner to draft</button></div>
+    <div class="c12"><button class="primary" onclick="saveBanner(${i})">Save banner</button></div>
   </div>`);
 }
 async function saveBanner(i){
@@ -764,19 +327,17 @@ async function saveBanner(i){
     const uploads=$("bUpload").files.length?await uploadFiles($("bUpload")):[];
     const obj={id:$("bId").value.trim()||("banner-"+Date.now()),brand:$("bBrand").value,location:$("bLocation").value.trim(),title:$("bTitle").value.trim(),subtitle:$("bSubtitle").value.trim(),image:uploads[0]||$("bImage").value.trim(),active:$("bActive").value==="true"};
     if(i>=0)data.banners[i]=obj;else data.banners.push(obj);
-    markDirty();renderAll();closeEditor();setStatus("Banner changed in draft. Click Save all changes to publish.","ok");
+    markDirty();renderAll();closeEditor();
   }catch(e){setStatus("Banner save failed: "+e.message,"err")}
 }
 function deleteBanner(i){if(confirm("Delete this banner?")){data.banners.splice(i,1);markDirty();renderAll()}}
 
 function renderBrands(){
-  if(!data)return;
   $("brandList").innerHTML=data.brands.length?data.brands.map((b,i)=>`<div class="item">
     <div style="display:flex;gap:12px;align-items:center">${b.logo?`<img class="preview" src="${esc(b.logo)}">`:""}<div><b>${esc(b.name)}</b><br><small>ID: ${esc(b.id)} · ${esc(b.accent||"")}</small></div></div>
-    <div class="actions"><button class="ghost" onclick="moveBrand(${i},-1)">↑</button><button class="ghost" onclick="moveBrand(${i},1)">↓</button><button class="secondary" onclick="openBrand(${i})">Edit</button><button class="danger" onclick="deleteBrand(${i})">Delete</button></div>
+    <div class="actions"><button class="secondary" onclick="openBrand(${i})">Edit</button><button class="danger" onclick="deleteBrand(${i})">Delete</button></div>
   </div>`).join(""):`<p class="help">No brands yet.</p>`;
 }
-function moveBrand(i,d){moveArray(data.brands,i,d)}
 function openBrand(i=-1){
   const b=i>=0?clone(data.brands[i]):{id:"",name:"",logo:"",accent:"#204d38"};
   openEditor("Brand",`<div class="row">
@@ -785,7 +346,7 @@ function openBrand(i=-1){
     <div class="c2"><label>Accent</label><input id="rAccent" type="color" value="${esc(b.accent||"#204d38")}"></div>
     <div class="c8"><label>Logo path</label><input id="rLogo" value="${esc(b.logo||"")}"></div>
     <div class="c4"><label>Upload logo</label><input id="rUpload" type="file" accept="image/*"></div>
-    <div class="c12"><button class="primary" onclick="saveBrand(${i})">Save brand to draft</button></div>
+    <div class="c12"><button class="primary" onclick="saveBrand(${i})">Save brand</button></div>
   </div>`);
 }
 async function saveBrand(i){
@@ -794,21 +355,15 @@ async function saveBrand(i){
     const id=i>=0?data.brands[i].id:slug($("rId").value||$("rName").value);
     const obj={id,name:$("rName").value.trim(),logo:uploads[0]||$("rLogo").value.trim(),accent:$("rAccent").value};
     if(i>=0)data.brands[i]=obj;else{data.brands.push(obj);data.categories[id]=[]}
-    markDirty();renderAll();closeEditor();setStatus("Brand changed in draft. Click Save all changes to publish.","ok");
+    markDirty();renderAll();closeEditor();
   }catch(e){setStatus("Brand save failed: "+e.message,"err")}
 }
 function deleteBrand(i){
   const b=data.brands[i];if(!confirm("Delete brand "+b.name+"? Products are not deleted automatically."))return;
   data.brands.splice(i,1);delete data.categories[b.id];markDirty();renderAll();
 }
-
 function openEditor(title,html){$("editorTitle").textContent=title;$("editorBody").innerHTML=html;$("editor").classList.remove("hidden");$("editor").scrollIntoView({behavior:"smooth",block:"start"})}
 function closeEditor(){$("editor").classList.add("hidden");$("editorBody").innerHTML=""}
-
-window.addEventListener("load",()=>{
-  const saved=localStorage.getItem(TOKEN_KEY);
-  if(saved){$("token").value=saved;$("rememberToken").checked=true;setTimeout(connect,120)}
-});
 </script>
 </body>
 </html>
