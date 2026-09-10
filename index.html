@@ -53,6 +53,57 @@ summary::-webkit-details-marker{display:none}
 .leaf{width:100%;min-height:48px;padding:0 38px;border:0;border-top:1px solid rgba(20,32,25,.07);background:#fff;color:inherit;display:flex;align-items:center;justify-content:space-between;font-family:inherit;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;cursor:pointer}
 .leaf:hover{background:#f5f2ea}
 .leaf:after{content:"→";font-size:1rem}
+
+/* DESKTOP CASCADING CATEGORY MENU */
+@media(min-width:901px){
+  .brand-card{position:relative;overflow:visible}
+  .brand-menu-root{
+    position:absolute;
+    left:-1px;
+    top:100%;
+    width:270px;
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:0 16px 36px rgba(20,32,25,.16);
+    z-index:60;
+  }
+  .brand-card:not([open])>.brand-menu-root{display:none}
+  .brand-menu-root>.category{position:relative;border-top:0;border-bottom:1px solid rgba(20,32,25,.09)}
+  .brand-menu-root .category,
+  .brand-menu-root .subcategory{position:relative}
+  .brand-menu-root .category-title,
+  .brand-menu-root .subcategory-title{
+    min-height:52px;
+    padding:0 18px;
+    background:#fff;
+  }
+  .brand-menu-root .subcategory-title{font-size:.7rem}
+  .brand-menu-root .category-title:after,
+  .brand-menu-root .subcategory-title:after,
+  .brand-menu-root .category[open]>.category-title:after,
+  .brand-menu-root .subcategory[open]>.subcategory-title:after{
+    content:"→";
+    font-size:1rem;
+  }
+  .flyout-children{
+    position:absolute;
+    left:100%;
+    top:-1px;
+    width:270px;
+    min-height:100%;
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:0 16px 36px rgba(20,32,25,.15);
+    z-index:61;
+  }
+  details:not([open])>.flyout-children{display:none}
+  .flyout-children>.subcategory,
+  .flyout-children>.leaf-list{border-top:0;border-bottom:1px solid rgba(20,32,25,.08)}
+  .flyout-children .leaf{min-height:50px;padding:0 18px;background:#fff}
+  .brand-menu-root summary:hover,
+  .brand-menu-root .leaf:hover{background:#f5f2ea}
+}
+
 .collection{width:min(1240px,92vw);margin:0 auto 100px;scroll-margin-top:100px}
 .collection[hidden]{display:none}
 .collection-banner{min-height:clamp(260px,38vw,520px);background:center/cover no-repeat}
@@ -80,9 +131,60 @@ summary::-webkit-details-marker{display:none}
 .product[open]>.product-details{border-top:1px solid var(--line);padding:28px;display:grid;grid-template-columns:2fr 1fr;gap:35px}
 .detail-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .detail-gallery img{width:100%;aspect-ratio:1/1;object-fit:contain;border:1px solid rgba(20,32,25,.08);background:#fff}
+.product[open] .product-cover img,
+.product[open] .detail-gallery img{cursor:zoom-in}
 .detail-copy h4{margin:0 0 22px;font-family:Georgia,"Times New Roman",serif;font-size:1.6rem;font-weight:400}
 .detail-row{padding:12px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;font-size:.82rem}
 .detail-row span:first-child{color:#777;text-transform:uppercase;letter-spacing:.1em;font-size:.7rem}
+
+/* PRODUCT IMAGE LIGHTBOX */
+.image-lightbox[hidden]{display:none}
+.image-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  background:rgba(5,9,7,.94);
+  display:grid;
+  place-items:center;
+  padding:34px 78px;
+}
+.lightbox-image{
+  display:block;
+  max-width:min(92vw,1500px);
+  max-height:88vh;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  background:#fff;
+  box-shadow:0 24px 70px rgba(0,0,0,.38);
+}
+.lightbox-control{
+  position:absolute;
+  border:1px solid rgba(255,255,255,.45);
+  background:rgba(0,0,0,.32);
+  color:#fff;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  line-height:1;
+  backdrop-filter:blur(4px);
+}
+.lightbox-control:hover{background:rgba(255,255,255,.13)}
+.lightbox-close{top:18px;right:22px;width:48px;height:48px;font-size:2rem}
+.lightbox-prev,.lightbox-next{top:50%;transform:translateY(-50%);width:54px;height:70px;font-size:2.4rem}
+.lightbox-prev{left:18px}
+.lightbox-next{right:18px}
+.lightbox-counter{
+  position:absolute;
+  left:50%;
+  bottom:16px;
+  transform:translateX(-50%);
+  color:#fff;
+  padding:7px 12px;
+  background:rgba(0,0,0,.34);
+  font-size:.72rem;
+  letter-spacing:.14em;
+}
 .watch-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;align-items:start}
 .watch-card{background:#fff;border:2px solid var(--green);padding:12px}
 .watch-card img{width:100%;aspect-ratio:1/1;display:block;object-fit:contain;background:#fff}
@@ -136,6 +238,8 @@ summary::-webkit-details-marker{display:none}
   .products,.watch-grid{grid-template-columns:repeat(2,1fr)}
   .product[open]{grid-column:1/-1}
   .product-details{grid-template-columns:1fr}
+  .brand-menu-root{position:static;width:auto;border:0;box-shadow:none}
+  .flyout-children{position:static;width:auto;min-height:0;border:0;box-shadow:none}
 }
 @media(max-width:520px){
   .hero{min-height:270px}
@@ -147,6 +251,12 @@ summary::-webkit-details-marker{display:none}
   .product[open] .product-info{border-left:0;border-top:1px solid var(--line)}
   .detail-gallery{grid-template-columns:1fr}
   .site-footer{flex-direction:column;text-align:center}
+  .image-lightbox{padding:58px 12px 54px}
+  .lightbox-image{max-width:96vw;max-height:82vh}
+  .lightbox-close{top:10px;right:10px;width:44px;height:44px}
+  .lightbox-prev,.lightbox-next{width:44px;height:58px;font-size:2rem}
+  .lightbox-prev{left:6px}
+  .lightbox-next{right:6px}
 }
 </style>
 </head>
@@ -216,6 +326,14 @@ summary::-webkit-details-marker{display:none}
   <div id="loadError"></div>
 </main>
 
+<div class="image-lightbox" id="imageLightbox" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Product image viewer">
+  <button class="lightbox-control lightbox-close" type="button" aria-label="Close image viewer" onclick="closeImageLightbox()">×</button>
+  <button class="lightbox-control lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous image" onclick="stepImageLightbox(-1)">‹</button>
+  <img class="lightbox-image" id="lightboxImage" alt="">
+  <button class="lightbox-control lightbox-next" id="lightboxNext" type="button" aria-label="Next image" onclick="stepImageLightbox(1)">›</button>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
 <footer class="site-footer">
   <span id="footerLeft">© 2026 My Polo World</span>
   <span id="footerRight">Fashion · Eyewear · Lifestyle</span>
@@ -223,6 +341,7 @@ summary::-webkit-details-marker{display:none}
 
 <script>
 const FALLBACK_WATCHES = [{"model": "SB.1.10607-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10607-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10607-5/SB.1.10607-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10607-5.jpg"]}, {"model": "SB.1.10615-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10615-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10615-4/SB.1.10615-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10615-4.jpg"]}, {"model": "SB.1.10615-1", "images": ["https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10615-1/SB.1.10615-1_1.jpg", "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10615-1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10615-1.jpg"]}, {"model": "SB.1.10526-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10526-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10526-4/SB.1.10526-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10526-4.jpg"]}, {"model": "SB.1.10596-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10596-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10596-4/SB.1.10596-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10596-4.jpg"]}, {"model": "SB.8.10001-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-8-10001-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.8.10001-5/SB.8.10001-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.8.10001-5.jpg"]}, {"model": "SB.1.10624-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10624-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10624-3/SB.1.10624-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10624-3.jpg"]}, {"model": "SB.1.10498-2", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10498-2.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10498-2/SB.1.10498-2_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10498-2.jpg"]}, {"model": "SB.1.10591-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10591-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10591-5/SB.1.10591-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10591-5.jpg"]}, {"model": "SB.1.10636-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10636-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10636-4/SB.1.10636-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10636-4.jpg"]}, {"model": "SB.1.10547-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10547-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10547-5/SB.1.10547-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10547-5.jpg"]}, {"model": "SB.1.10593-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10593-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10593-5/SB.1.10593-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10593-5.jpg"]}, {"model": "SB.1.10643-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10643-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10643-3/SB.1.10643-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10643-3.jpg"]}, {"model": "SB.1.10538-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10538-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10538-4/SB.1.10538-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10538-4.jpg"]}, {"model": "SB.1.10472-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10472-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10472-5/SB.1.10472-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10472-5.jpg"]}, {"model": "SB.4.10017-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10017-5/SB.4.10017-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10017-5.jpg"]}, {"model": "SB.4.10022-2", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-2.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-2/SB.4.10022-2_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-2.jpg"]}, {"model": "SB.4.10022-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-3/SB.4.10022-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-3.jpg"]}, {"model": "SB.4.10022-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-5/SB.4.10022-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-5.jpg"]}, {"model": "SB.4.10021-1", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-1.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-1/SB.4.10021-1_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-1.jpg"]}, {"model": "SB.4.10021-2", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-2.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-2/SB.4.10021-2_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-2.jpg"]}, {"model": "SB.4.10021-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-4/SB.4.10021-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-4.jpg"]}, {"model": "SB.4.10015-1", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-1.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10015-1/SB.4.10015-1_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10015-1.jpg"]}, {"model": "SB.4.10015-2", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-2.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10015-2/SB.4.10015-2_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10015-2.jpg"]}, {"model": "SB.4.10016-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10016-3/SB.4.10016-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10016-3.jpg"]}, {"model": "SB.4.10016-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10016-5/SB.4.10016-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10016-5.jpg"]}, {"model": "SB.4.10017-6", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-6.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10017-6/SB.4.10017-6_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10017-6.jpg"]}, {"model": "SB.4.10019-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10019-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10019-4/SB.4.10019-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10019-4.jpg"]}, {"model": "SB.5.10003-1", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-1.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10003-1/SB.5.10003-1_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10003-1.jpg"]}, {"model": "SB.5.10003-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10003-4/SB.5.10003-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10003-4.jpg"]}, {"model": "SB.5.10004-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10004-3/SB.5.10004-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10004-3.jpg"]}, {"model": "SB.5.10004-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10004-4/SB.5.10004-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10004-4.jpg"]}, {"model": "SB.8.10009-6", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-8-10009-6.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.8.10009-6/SB.8.10009-6_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.8.10009-6.jpg"]}, {"model": "SB.1.10646-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10646-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10646-3/SB.1.10646-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10646-3.jpg"]}, {"model": "SB.4.10023-1", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10023-1.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10023-1/SB.4.10023-1_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10023-1.jpg"]}];
+
 let SITE = null;
 
 // Internal browser history for every opened brand/category/collection/product.
@@ -391,7 +510,7 @@ function buildTree(paths) {
 }
 
 function renderTreeNode(node, brandId, prefix=[]) {
-  return Object.entries(node).map(([name, children], index) => {
+  return Object.entries(node).map(([name, children]) => {
     const path = [...prefix, name];
     const keys = Object.keys(children);
     if (!keys.length) {
@@ -403,7 +522,9 @@ function renderTreeNode(node, brandId, prefix=[]) {
     const navKey = `path:${brandId}:${path.join(" / ")}`;
     return `<details class="${cls}" data-nav-key="${esc(navKey)}">
       <summary class="${titleCls}">${esc(name)}</summary>
-      ${renderTreeNode(children, brandId, path)}
+      <div class="flyout-children">
+        ${renderTreeNode(children, brandId, path)}
+      </div>
     </details>`;
   }).join("");
 }
@@ -423,7 +544,9 @@ function renderBrands() {
           </div>
         </div>
       </summary>
-      ${renderTreeNode(buildTree(SITE.categories[b.id] || []), b.id)}
+      <div class="brand-menu-root">
+        ${renderTreeNode(buildTree(SITE.categories[b.id] || []), b.id)}
+      </div>
     </details>
   `).join("");
 }
@@ -592,6 +715,88 @@ function showNextWatchImage(img) {
     img.onerror = null;
   }
 }
+
+/* Full-screen product image viewer */
+const LIGHTBOX = {images:[], index:0};
+
+function renderImageLightbox() {
+  const box = document.getElementById("imageLightbox");
+  const img = document.getElementById("lightboxImage");
+  const counter = document.getElementById("lightboxCounter");
+  const prev = document.getElementById("lightboxPrev");
+  const next = document.getElementById("lightboxNext");
+  if(!box || !img || !LIGHTBOX.images.length) return;
+
+  const item = LIGHTBOX.images[LIGHTBOX.index];
+  img.src = item.src;
+  img.alt = item.alt || "Product image";
+  counter.textContent = `${LIGHTBOX.index + 1} / ${LIGHTBOX.images.length}`;
+  const multiple = LIGHTBOX.images.length > 1;
+  prev.hidden = !multiple;
+  next.hidden = !multiple;
+}
+
+function openImageLightbox(images, index=0) {
+  if(!Array.isArray(images) || !images.length) return;
+  LIGHTBOX.images = images;
+  LIGHTBOX.index = Math.max(0, Math.min(index, images.length - 1));
+  const box = document.getElementById("imageLightbox");
+  if(!box) return;
+  box.hidden = false;
+  box.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  renderImageLightbox();
+}
+
+function stepImageLightbox(delta) {
+  if(!LIGHTBOX.images.length) return;
+  LIGHTBOX.index = (LIGHTBOX.index + delta + LIGHTBOX.images.length) % LIGHTBOX.images.length;
+  renderImageLightbox();
+}
+
+function closeImageLightbox() {
+  const box = document.getElementById("imageLightbox");
+  if(!box || box.hidden) return;
+  box.hidden = true;
+  box.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  const img = document.getElementById("lightboxImage");
+  if(img) img.removeAttribute("src");
+}
+
+document.addEventListener("click", event => {
+  const target = event.target;
+  if(!(target instanceof Element)) return;
+
+  const box = document.getElementById("imageLightbox");
+  if(box && target === box) {
+    closeImageLightbox();
+    return;
+  }
+
+  const clicked = target.closest("details.product[open] .product-cover img, details.product[open] .detail-gallery img");
+  if(!clicked) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+
+  const product = clicked.closest("details.product");
+  const productImages = Array.from(product.querySelectorAll(".product-cover img, .detail-gallery img"));
+  const index = Math.max(0, productImages.indexOf(clicked));
+  openImageLightbox(productImages.map(image => ({
+    src:image.currentSrc || image.src,
+    alt:image.alt || "Product image"
+  })), index);
+}, true);
+
+document.addEventListener("keydown", event => {
+  const box = document.getElementById("imageLightbox");
+  if(!box || box.hidden) return;
+  if(event.key === "Escape") closeImageLightbox();
+  if(event.key === "ArrowLeft") stepImageLightbox(-1);
+  if(event.key === "ArrowRight") stepImageLightbox(1);
+});
 
 function bindProductOpenClose() {
   document.querySelectorAll(".product-summary").forEach(summary => {
