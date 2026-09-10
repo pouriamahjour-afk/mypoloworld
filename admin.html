@@ -110,7 +110,7 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
           </div>
         </div>
         <div id="summary"></div>
-        <div class="notice" style="margin-top:18px">You can add/edit/delete content, upload images, change homepage text, reorder brands/categories/products, duplicate products and target banners to exact collection paths.</div>
+        <div class="notice" style="margin-top:18px">You can add/edit/delete content, upload images, change homepage text, reorder brands/categories/products, duplicate products and target banners to exact collection paths. Products with a valid GTIN-13 automatically get a static Google-friendly page plus sitemap entry when you click Save all changes.</div>
       </div>
     </section>
 
@@ -203,6 +203,9 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
 <script>
 const DATA_FILE="site-data.json";
 const TOKEN_KEY="mypoloworld_admin_token_v1";
+const PUBLIC_ORIGIN="https://mypoloworld.com";
+const SEO_MANIFEST_FILE="generated-product-pages.json";
+const STATIC_PRODUCT_PAGE_VERSION=1;
 let token="",repo="",branch="main",data=null,dataSha=null,dirty=false;
 let editingProductImages=[];
 
@@ -252,7 +255,7 @@ function starterProductBarcodeMigration(){
 function updateBarcodeHint(){
   const el=$("pBarcodeHint"), input=$("pGTIN13");if(!el||!input)return;
   const v=digitsOnly(input.value);input.value=v;
-  if(!v){el.className="barcode-hint";el.textContent="Optional. Use the 13-digit EAN / GTIN printed on the product barcode.";return}
+  if(!v){el.className="barcode-hint";el.textContent="Optional. Use the 13-digit EAN / GTIN printed on the product barcode. Saving all changes automatically creates its Google-friendly product page and sitemap entry.";return}
   if(validGTIN13(v)){el.className="barcode-hint good";el.textContent="Valid GTIN-13 ✓"}
   else{el.className="barcode-hint bad";el.textContent="Invalid GTIN-13 — check the 13 digits."}
 }
@@ -283,6 +286,154 @@ async function gh(path,opts={}){
 function decode64(s){const bin=atob(s.replace(/\n/g,""));const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
 function encode64(s){const bytes=new TextEncoder().encode(s);let bin="";bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin)}
 
+function seoEscapeHtml(s=""){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function seoEscapeXml(s=""){return String(s).replace(/[<>&'\"]/g,m=>({"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"}[m]))}
+function absolutePublicUrl(path=""){
+  const v=String(path||"").trim();
+  if(!v)return "";
+  if(/^https?:\/\//i.test(v))return v;
+  return PUBLIC_ORIGIN+"/"+v.replace(/^\/+/,"");
+}
+function productStaticPath(p){
+  const gtin=digitsOnly(p?.gtin13||"");
+  if(!validGTIN13(gtin))return "";
+  return "products/"+gtin+".html";
+}
+function productStaticUrl(p){const path=productStaticPath(p);return path?PUBLIC_ORIGIN+"/"+path:""}
+function productPageSignature(p){
+  const payload={v:STATIC_PRODUCT_PAGE_VERSION,id:p.id||"",brand:p.brand||"",categoryPath:p.categoryPath||"",name:p.name||"",code:p.code||"",modelNumber:p.modelNumber||"",gtin13:digitsOnly(p.gtin13||""),price:p.price||"",description:p.description||"",images:(p.images||[]).filter(Boolean),active:p.active!==false};
+  const str=JSON.stringify(payload);let h=2166136261;
+  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
+  return (h>>>0).toString(16);
+}
+function parseProductPrice(v=""){
+  const raw=String(v||"").trim();
+  const value=(raw.match(/[0-9]+(?:[.,][0-9]+)?/)||[])[0]?.replace(",",".")||"";
+  let currency="";
+  if(/\$|USD/i.test(raw))currency="USD";else if(/€|EUR/i.test(raw))currency="EUR";else if(/£|GBP/i.test(raw))currency="GBP";
+  return {value,currency};
+}
+function jsonLdSafe(obj){return JSON.stringify(obj).replace(/</g,"\\u003c")}
+function buildStaticProductPage(p){
+  const brand=brandName(p.brand)||"My Polo World";
+  const gtin=digitsOnly(p.gtin13||"");
+  const model=(p.modelNumber||p.code||"").trim();
+  const title=[brand,model||p.name].filter(Boolean).join(" — ");
+  const description=(p.description||`${p.name||"Product"} by ${brand}. Model ${model||p.code||""}. GTIN-13 ${gtin}.`).trim();
+  const url=productStaticUrl(p);
+  const images=(p.images||[]).filter(Boolean).map(absolutePublicUrl);
+  const cover=images[0]||"";
+  const price=parseProductPrice(p.price);
+  const productSchema={
+    "@context":"https://schema.org",
+    "@type":"Product",
+    "name":p.name||model||"Product",
+    "sku":p.code||model||undefined,
+    "mpn":model||undefined,
+    "gtin13":gtin||undefined,
+    "brand":{"@type":"Brand","name":brand},
+    "image":images.length?images:undefined,
+    "description":description,
+    "url":url
+  };
+  if(price.value&&price.currency){productSchema.offers={"@type":"Offer","url":url,"priceCurrency":price.currency,"price":price.value,"availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition"}}
+  const breadcrumbs={"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"My Polo World","item":PUBLIC_ORIGIN+"/"},
+    {"@type":"ListItem","position":2,"name":brand,"item":PUBLIC_ORIGIN+"/#brands"},
+    {"@type":"ListItem","position":3,"name":model||p.name||gtin,"item":url}
+  ]};
+  const gallery=images.slice(1,7).map((src,i)=>`<img src="${seoEscapeHtml(src)}" alt="${seoEscapeHtml(title)} view ${i+2}" loading="lazy">`).join("");
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${seoEscapeHtml(title)} | My Polo World</title>
+<meta name="description" content="${seoEscapeHtml(description.slice(0,160))}">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="${seoEscapeHtml(url)}">
+<meta property="og:type" content="product">
+<meta property="og:title" content="${seoEscapeHtml(title)}">
+<meta property="og:description" content="${seoEscapeHtml(description.slice(0,180))}">
+<meta property="og:url" content="${seoEscapeHtml(url)}">
+${cover?`<meta property="og:image" content="${seoEscapeHtml(cover)}">`:""}
+<script type="application/ld+json">${jsonLdSafe(productSchema)}</script>
+<script type="application/ld+json">${jsonLdSafe(breadcrumbs)}</script>
+<style>
+:root{--ink:#142019;--paper:#fbfaf6;--line:rgba(20,32,25,.14);--green:#204d38}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}.top{padding:24px 5vw;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;align-items:center}.wordmark{font-family:Georgia,serif;letter-spacing:.22em;font-size:20px;text-decoration:none;color:inherit}.back{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);text-decoration:none}.page{width:min(1180px,92vw);margin:48px auto 80px}.product{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);background:#fff;border:1px solid var(--line)}.media{padding:28px;display:grid;place-items:center;min-height:560px}.media img{max-width:100%;max-height:620px;object-fit:contain}.copy{padding:42px;border-left:1px solid var(--line)}.eyebrow{text-transform:uppercase;letter-spacing:.16em;color:#707772;font-size:12px}.copy h1{font:400 38px/1.15 Georgia,serif;margin:12px 0 10px}.model{font:400 22px Georgia,serif;margin:0 0 30px}.row{display:flex;justify-content:space-between;gap:20px;padding:15px 0;border-top:1px solid var(--line)}.row span:first-child{color:#777;font-size:12px;text-transform:uppercase;letter-spacing:.1em}.gtin{font-family:monospace;letter-spacing:.08em}.desc{line-height:1.75;color:#555;margin:28px 0}.cta{display:inline-block;padding:13px 18px;background:var(--green);color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;font-size:12px}.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}.gallery img{width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid var(--line);padding:8px}@media(max-width:800px){.product{grid-template-columns:1fr}.copy{border-left:0;border-top:1px solid var(--line)}.media{min-height:360px}.gallery{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header class="top"><a class="wordmark" href="${PUBLIC_ORIGIN}/">MY POLO WORLD</a><a class="back" href="${PUBLIC_ORIGIN}/?barcode=${encodeURIComponent(gtin)}">View in collection →</a></header>
+<main class="page">
+<section class="product">
+<div class="media">${cover?`<img src="${seoEscapeHtml(cover)}" alt="${seoEscapeHtml(title)}">`:""}</div>
+<div class="copy">
+<div class="eyebrow">${seoEscapeHtml(brand)}</div>
+<h1>${seoEscapeHtml(p.name||"Product")}</h1>
+<p class="model">${seoEscapeHtml(model||p.code||"")}</p>
+<div class="row"><span>Model Number</span><strong>${seoEscapeHtml(model||p.code||"")}</strong></div>
+<div class="row"><span>GTIN-13</span><strong class="gtin">${seoEscapeHtml(gtin)}</strong></div>
+${p.price?`<div class="row"><span>Price</span><strong>${seoEscapeHtml(p.price)}</strong></div>`:""}
+${p.categoryPath?`<div class="row"><span>Collection</span><strong>${seoEscapeHtml(p.categoryPath)}</strong></div>`:""}
+<p class="desc">${seoEscapeHtml(description)}</p>
+<a class="cta" href="${PUBLIC_ORIGIN}/?barcode=${encodeURIComponent(gtin)}">View full product</a>
+</div>
+</section>
+${gallery?`<div class="gallery">${gallery}</div>`:""}
+</main>
+</body>
+</html>`;
+}
+function buildSitemapXml(products){
+  const today=new Date().toISOString().slice(0,10);
+  const urls=[PUBLIC_ORIGIN+"/",...products.map(productStaticUrl).filter(Boolean)];
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u,i)=>`  <url><loc>${seoEscapeXml(u)}</loc><lastmod>${today}</lastmod><changefreq>${i===0?"weekly":"monthly"}</changefreq><priority>${i===0?"1.0":"0.8"}</priority></url>`).join("\n")}\n</urlset>\n`;
+}
+function buildRobotsTxt(){return `User-agent: *\nAllow: /\n\nSitemap: ${PUBLIC_ORIGIN}/sitemap.xml\n`}
+async function getGitHubContentFile(path){
+  try{return await gh("/contents/"+path+"?ref="+encodeURIComponent(branch))}
+  catch(e){if(/^404\b/.test(String(e.message||"")))return null;throw e}
+}
+async function putTextFileIfChanged(path,content,message){
+  const existing=await getGitHubContentFile(path);
+  if(existing?.content){try{if(decode64(existing.content)===content)return {changed:false,sha:existing.sha}}catch(e){}}
+  const body={message,content:encode64(content),branch};if(existing?.sha)body.sha=existing.sha;
+  const out=await gh("/contents/"+path,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  return {changed:true,sha:out?.content?.sha||""};
+}
+async function deleteGitHubFileIfExists(path,message){
+  const existing=await getGitHubContentFile(path);if(!existing?.sha)return false;
+  await gh("/contents/"+path,{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({message,sha:existing.sha,branch})});return true;
+}
+async function loadSeoManifest(){
+  const f=await getGitHubContentFile(SEO_MANIFEST_FILE);if(!f?.content)return {version:1,pages:{}};
+  try{const x=JSON.parse(decode64(f.content));return x&&x.pages?x:{version:1,pages:{}}}catch(e){return {version:1,pages:{}}}
+}
+async function publishSeoProductPages(){
+  const products=(data.products||[]).filter(p=>p.active!==false && validGTIN13(digitsOnly(p.gtin13||"")));
+  const oldManifest=await loadSeoManifest();
+  const nextManifest={version:1,generatedAt:new Date().toISOString(),pages:{}};
+  let changedCount=0,skippedCount=0,deletedCount=0;
+  for(let i=0;i<products.length;i++){
+    const p=products[i],path=productStaticPath(p),signature=productPageSignature(p);
+    nextManifest.pages[path]=signature;
+    if(oldManifest.pages?.[path]===signature){skippedCount++;continue}
+    setStatus(`Publishing Google product pages… ${i+1}/${products.length}`);
+    await putTextFileIfChanged(path,buildStaticProductPage(p),`Publish product page ${p.modelNumber||p.code||p.id}`);changedCount++;
+  }
+  for(const oldPath of Object.keys(oldManifest.pages||{})){
+    if(nextManifest.pages[oldPath])continue;
+    setStatus("Removing old generated product page…");
+    if(await deleteGitHubFileIfExists(oldPath,"Remove old generated product page"))deletedCount++;
+  }
+  setStatus("Updating sitemap.xml and robots.txt…");
+  await putTextFileIfChanged("sitemap.xml",buildSitemapXml(products),"Update product sitemap");
+  await putTextFileIfChanged("robots.txt",buildRobotsTxt(),"Update robots and sitemap location");
+  await putTextFileIfChanged(SEO_MANIFEST_FILE,JSON.stringify(nextManifest,null,2),"Update generated product page manifest");
+  return {products:products.length,changedCount,skippedCount,deletedCount};
+}
+
 async function loadData(){
   const f=await gh("/contents/"+DATA_FILE+"?ref="+encodeURIComponent(branch));
   data=JSON.parse(decode64(f.content));dataSha=f.sha;dirty=false;
@@ -306,12 +457,16 @@ $("forgetToken").onclick=()=>{localStorage.removeItem(TOKEN_KEY);$("token").valu
 
 $("saveAll").onclick=async()=>{
   try{
-    $("saveAll").disabled=true;setStatus("Saving changes to GitHub...");
+    $("saveAll").disabled=true;setStatus("Saving site data to GitHub...");
     const body={message:"Update site content from admin panel",content:encode64(JSON.stringify(data,null,2)),branch};
     if(dataSha)body.sha=dataSha;
     const out=await gh("/contents/"+DATA_FILE,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    dataSha=out.content.sha;dirty=false;setStatus("Saved successfully. GitHub Pages will update shortly.","ok");renderSummary();
-  }catch(e){$("saveAll").disabled=false;setStatus("Save failed: "+e.message,"err")}
+    dataSha=out.content.sha;
+    const seo=await publishSeoProductPages();
+    dirty=false;
+    setStatus(`Saved. ${seo.products} barcode product page${seo.products===1?"":"s"} published for Google; sitemap.xml updated. GitHub Pages will update shortly.`,"ok");
+    renderSummary();
+  }catch(e){$("saveAll").disabled=false;setStatus("Save/publish failed: "+e.message,"err")}
 };
 
 document.querySelectorAll(".tab").forEach(btn=>btn.onclick=()=>{
