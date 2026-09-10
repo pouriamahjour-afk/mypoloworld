@@ -31,6 +31,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .badge{display:inline-block;padding:3px 7px;border-radius:999px;background:#eef2ee;font-size:11px;margin-left:6px}
 .status{padding:10px 12px;border-radius:6px;background:#f0efe9;font-size:13px}.ok{background:#e6f3e9}.err{background:#f9e3e3}
 .hidden{display:none!important}.help{font-size:12px;color:var(--muted);line-height:1.55}
+.barcode-hint{margin-top:6px;font-size:11px;color:var(--muted);line-height:1.45}.barcode-hint.good{color:#287044}.barcode-hint.bad{color:var(--danger)}
 img.preview{width:88px;height:88px;object-fit:contain;border:1px solid var(--line);background:#fff}
 .search{min-width:260px}
 .product-filterbar{display:grid;grid-template-columns:1.1fr 1.7fr 2fr auto;gap:10px;align-items:end;margin:14px 0 18px;padding:14px;border:1px solid var(--line);background:#faf9f5}
@@ -233,6 +234,28 @@ function moveArray(arr,i,delta){const j=i+delta;if(j<0||j>=arr.length)return;[ar
 function brandName(id){return (data.brands.find(b=>b.id===id)||{}).name||id}
 function brandOptions(selected=""){return data.brands.map(b=>`<option value="${esc(b.id)}" ${b.id===selected?"selected":""}>${esc(b.name)}</option>`).join("")}
 function categoryOptions(brand,selected=""){return (data.categories[brand]||[]).map(p=>`<option value="${esc(p)}" ${p===selected?"selected":""}>${esc(p)}</option>`).join("")}
+function digitsOnly(v=""){return String(v).replace(/\D/g,"")}
+function validGTIN13(v=""){
+  const x=digitsOnly(v);if(x.length!==13)return false;
+  let sum=0;for(let i=0;i<12;i++)sum+=Number(x[i])*(i%2?3:1);
+  return (10-(sum%10))%10===Number(x[12]);
+}
+function starterProductBarcodeMigration(){
+  let changed=false;
+  const p=(data.products||[]).find(x=>x.id==="santa-1132" || (x.brand==="santa" && String(x.code)==="1132"));
+  if(p){
+    if(!p.modelNumber){p.modelNumber="SBS.1.1132.COL01";changed=true}
+    if(!p.gtin13){p.gtin13="8682308298710";changed=true}
+  }
+  return changed;
+}
+function updateBarcodeHint(){
+  const el=$("pBarcodeHint"), input=$("pGTIN13");if(!el||!input)return;
+  const v=digitsOnly(input.value);input.value=v;
+  if(!v){el.className="barcode-hint";el.textContent="Optional. Use the 13-digit EAN / GTIN printed on the product barcode.";return}
+  if(validGTIN13(v)){el.className="barcode-hint good";el.textContent="Valid GTIN-13 ✓"}
+  else{el.className="barcode-hint bad";el.textContent="Invalid GTIN-13 — check the 13 digits."}
+}
 
 function normalize(){
   data ||= clone(defaultData);
@@ -264,11 +287,13 @@ async function loadData(){
   const f=await gh("/contents/"+DATA_FILE+"?ref="+encodeURIComponent(branch));
   data=JSON.parse(decode64(f.content));dataSha=f.sha;dirty=false;
   normalize();
+  const barcodePrepared=starterProductBarcodeMigration();
+  dirty=barcodePrepared;
   $("app").classList.remove("hidden");
-  $("saveAll").disabled=true;
+  $("saveAll").disabled=!dirty;
   loadSiteForm();
   renderAll();
-  setStatus("Connected. Existing site-data.json loaded.","ok");
+  setStatus(barcodePrepared ? "Connected. Model 1132 barcode is prepared in draft. Click Save all changes once to publish it." : "Connected. Existing site-data.json loaded.","ok");
 }
 async function connect(){
   token=$("token").value.trim();repo=$("repo").value.trim();branch=$("branch").value.trim()||"main";
@@ -395,7 +420,7 @@ function renderProducts(){
   const rows=data.products.map((p,i)=>({p,i})).filter(({p})=>{
     if(brandFilter && p.brand!==brandFilter)return false;
     if(categoryFilter && p.categoryPath!==categoryFilter)return false;
-    const hay=[p.code,p.name,p.price,p.categoryPath,brandName(p.brand)].join(" ").toLowerCase();
+    const hay=[p.code,p.modelNumber,p.gtin13,p.name,p.price,p.categoryPath,brandName(p.brand)].join(" ").toLowerCase();
     return !q||hay.includes(q);
   });
 
@@ -418,7 +443,7 @@ function renderProducts(){
     const groupTitle=brandName(brandId);
     const body=items.map(({p,i})=>`<div class="item">
       <div><b>${esc(p.code||p.name||"Untitled")}</b> <span class="badge">${p.active===false?"Hidden":"Live"}</span><br>
-      <small>${esc(p.name||"Product")} · ${esc(p.price||"No price")}</small></div>
+      <small>${esc(p.name||"Product")} · ${esc(p.price||"No price")}${p.gtin13?` · GTIN ${esc(p.gtin13)}`:""}</small></div>
       <div class="actions">
         <button class="ghost" onclick="moveProduct(${i},-1)">↑</button>
         <button class="ghost" onclick="moveProduct(${i},1)">↓</button>
@@ -446,12 +471,14 @@ function duplicateProduct(i){
   data.products.splice(i+1,0,p);markDirty();renderAll();setStatus("Product duplicated in draft. Edit the copy, then Save all changes.","ok");
 }
 function openProduct(i=-1){
-  const p=i>=0?clone(data.products[i]):{id:"",brand:data.brands[0]?.id||"",categoryPath:"",name:"",code:"",price:"",description:"",images:[],active:true};
+  const p=i>=0?clone(data.products[i]):{id:"",brand:data.brands[0]?.id||"",categoryPath:"",name:"",code:"",modelNumber:"",gtin13:"",price:"",description:"",images:[],active:true};
   editingProductImages=[...(p.images||[])];
   openEditor("Product",`<div class="row">
     <div class="c4"><label>Brand</label><select id="pBrand" onchange="refreshProductCategories()">${brandOptions(p.brand)}</select></div>
     <div class="c4"><label>Category</label><select id="pCategory"></select></div>
-    <div class="c4"><label>Model / Code</label><input id="pCode" value="${esc(p.code)}"></div>
+    <div class="c4"><label>Short model / code</label><input id="pCode" value="${esc(p.code)}" placeholder="1132"></div>
+    <div class="c4"><label>Full model number</label><input id="pModelNumber" value="${esc(p.modelNumber||p.code||"")}" placeholder="SBS.1.1132.COL01"></div>
+    <div class="c4"><label>Barcode / GTIN-13</label><input id="pGTIN13" value="${esc(p.gtin13||"")}" inputmode="numeric" maxlength="13" placeholder="8682308298710" oninput="updateBarcodeHint()"><div id="pBarcodeHint" class="barcode-hint"></div></div>
     <div class="c6"><label>Product name</label><input id="pName" value="${esc(p.name)}"></div>
     <div class="c3"><label>Price</label><input id="pPrice" value="${esc(p.price)}" placeholder="$95"></div>
     <div class="c3"><label>Status</label><select id="pActive"><option value="true" ${p.active!==false?"selected":""}>Live</option><option value="false" ${p.active===false?"selected":""}>Hidden</option></select></div>
@@ -462,7 +489,7 @@ function openProduct(i=-1){
     <div class="c6"><label>Upload new image(s)</label><input id="pUpload" type="file" accept="image/*" multiple></div>
     <div class="c12"><button class="primary" onclick="saveProduct(${i})">Save product to draft</button></div>
   </div>`);
-  refreshProductCategories(p.categoryPath);renderImageManager();
+  refreshProductCategories(p.categoryPath);renderImageManager();updateBarcodeHint();
 }
 function renderImageManager(){
   const el=$("imageManager");if(!el)return;
@@ -498,11 +525,18 @@ async function uploadFiles(fileInput){
 }
 async function saveProduct(i){
   try{
+    const gtin13=digitsOnly($("pGTIN13")?.value||"");
+    if(gtin13 && !validGTIN13(gtin13))return setStatus("Barcode is not a valid GTIN-13. Please check the 13 digits.","err");
+    if(gtin13){
+      const duplicate=(data.products||[]).findIndex((p,idx)=>idx!==i && digitsOnly(p.gtin13||"")===gtin13);
+      if(duplicate>=0)return setStatus("This barcode is already assigned to another product.","err");
+    }
     const uploaded=$("pUpload").files.length?await uploadFiles($("pUpload")):[];
     const obj={
       id:i>=0?data.products[i].id:slug($("pBrand").value+"-"+($("pCode").value||$("pName").value)),
       brand:$("pBrand").value,categoryPath:$("pCategory").value,name:$("pName").value.trim(),
-      code:$("pCode").value.trim(),price:$("pPrice").value.trim(),description:$("pDesc").value.trim(),
+      code:$("pCode").value.trim(),modelNumber:$("pModelNumber").value.trim(),gtin13,
+      price:$("pPrice").value.trim(),description:$("pDesc").value.trim(),
       images:[...editingProductImages,...uploaded],active:$("pActive").value==="true"
     };
     if(i>=0)data.products[i]=obj;else data.products.push(obj);
