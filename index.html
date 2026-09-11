@@ -12,8 +12,6 @@
   --paper:#fbfaf6;
   --line:rgba(20,32,25,.14);
   --green:#204d38;
-  --navy:#071b33;
-  --burgundy:#6f1727;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -28,8 +26,9 @@ button,summary,a{-webkit-tap-highlight-color:transparent}
 .eyebrow{margin:0 0 18px;font-size:.76rem;letter-spacing:.25em;text-transform:uppercase;color:#6b706d}
 h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2rem,4vw,3.4rem);font-weight:400;letter-spacing:.06em}
 .intro p:last-child{max-width:560px;margin:20px auto 0;color:#59605c;font-family:Georgia,"Times New Roman",serif;line-height:1.75}
-.brands{width:min(1240px,92vw);margin:auto;padding-bottom:92px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:start}
-.brand-card{border:1px solid var(--line);border-bottom:4px solid var(--accent,#204d38);background:#fff;overflow:hidden}
+.brands{width:min(1240px,92vw);margin:auto;padding-bottom:92px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:start;position:relative;isolation:isolate}
+.brand-card{border:1px solid var(--line);border-bottom:4px solid var(--accent,#204d38);background:#fff;overflow:visible;position:relative;z-index:1}
+.brand-card[open]{z-index:50}
 summary{list-style:none}
 summary::-webkit-details-marker{display:none}
 .brand-summary{cursor:pointer}
@@ -43,17 +42,24 @@ summary::-webkit-details-marker{display:none}
 .brand-label strong{font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:.06em}
 .plus{font-size:1.5rem;transition:.2s}
 .brand-card[open]>.brand-summary .plus{transform:rotate(45deg)}
-.category{border-top:1px solid var(--line);background:#fff}
-.category-title,.subcategory-title{cursor:pointer;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase}
-.category-title{min-height:64px;padding:0 24px;font-size:.78rem;letter-spacing:.16em}
-.category-title:after,.subcategory-title:after{content:"+";font-size:1.25rem}
-.category[open]>.category-title:after,.subcategory[open]>.subcategory-title:after{content:"−"}
-.subcategory{background:#faf9f5;border-top:1px solid rgba(20,32,25,.09)}
-.subcategory-title{min-height:55px;padding:0 30px;font-size:.73rem;letter-spacing:.13em}
+.menu-panel{display:none;position:absolute;left:calc(100% + 10px);top:0;width:280px;background:#fff;border:1px solid var(--line);box-shadow:0 18px 45px rgba(20,32,25,.16);z-index:100;padding:6px 0}
+.brand-card[open]>.menu-panel{display:block}
+.menu-panel .menu-item{position:relative;background:#fff;border:0;border-bottom:1px solid rgba(20,32,25,.08)}
+.menu-panel .menu-item:last-child{border-bottom:0}
+.category-title,.subcategory-title{cursor:pointer;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;min-height:54px;padding:0 18px;font-size:.74rem;letter-spacing:.13em;background:#fff}
+.category-title:after,.subcategory-title:after{content:"→";font-size:1rem;margin-left:16px}
+.menu-item[open]>.category-title,.menu-item[open]>.subcategory-title{background:#f5f2ea}
+.menu-item>.menu-panel{top:-7px;left:calc(100% + 10px)}
+.menu-item[open]>.menu-panel{display:block}
+.subcategory-title{font-size:.71rem}
 .leaf-list{background:#fff}
-.leaf{width:100%;min-height:48px;padding:0 38px;border:0;border-top:1px solid rgba(20,32,25,.07);background:#fff;color:inherit;display:flex;align-items:center;justify-content:space-between;font-family:inherit;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;cursor:pointer}
+.leaf{width:100%;min-height:50px;padding:0 18px;border:0;border-bottom:1px solid rgba(20,32,25,.07);background:#fff;color:inherit;display:flex;align-items:center;justify-content:space-between;font-family:inherit;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;cursor:pointer}
+.leaf-list:last-child .leaf{border-bottom:0}
 .leaf:hover{background:#f5f2ea}
-.leaf:after{content:"→";font-size:1rem}
+.leaf:after{content:"→";font-size:1rem;margin-left:16px}
+@media(min-width:901px){
+  .brands{overflow:visible}
+}
 .collection{width:min(1240px,92vw);margin:0 auto 100px;scroll-margin-top:100px}
 .collection[hidden]{display:none}
 .collection-banner{min-height:clamp(260px,38vw,520px);background:center/cover no-repeat}
@@ -85,17 +91,20 @@ summary::-webkit-details-marker{display:none}
 .detail-row{padding:12px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;font-size:.82rem}
 .detail-row span:first-child{color:#777;text-transform:uppercase;letter-spacing:.1em;font-size:.7rem}
 .product-link{color:inherit;text-underline-offset:3px;word-break:break-all}
-.watch-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;align-items:start}
-.watch-card{background:#fff;border:2px solid var(--green);padding:12px}
-.watch-card img{width:100%;aspect-ratio:1/1;display:block;object-fit:contain;background:#fff}
-.watch-caption{margin:12px 0 0;padding-top:12px;border-top:1px solid rgba(20,32,25,.09);text-align:center;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#4e5a53}
 .empty{grid-column:1/-1;padding:70px 20px;text-align:center;color:#777;border:1px solid var(--line);background:#fff}
 .site-footer{padding:34px 5vw;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;color:#656b67;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase}
 .error-box{margin:30px auto;padding:20px;width:min(900px,92vw);background:#fff;border:1px solid #b66;color:#6a1d1d}
 @media(max-width:900px){
   .site-nav{display:none}
   .brands{grid-template-columns:1fr;max-width:560px}
-  .products,.watch-grid{grid-template-columns:repeat(2,1fr)}
+  .brand-card{overflow:hidden}
+  .menu-panel,.brand-card[open]>.menu-panel,.menu-item[open]>.menu-panel{position:static;display:block;width:auto;border:0;border-top:1px solid var(--line);box-shadow:none;padding:0}
+  .brand-card:not([open])>.menu-panel{display:none}
+  .menu-item:not([open])>.menu-panel{display:none}
+  .category-title,.subcategory-title{padding:0 24px}
+  .category-title:after,.subcategory-title:after{content:"+"}
+  .menu-item[open]>.category-title:after,.menu-item[open]>.subcategory-title:after{content:"−"}
+  .products{grid-template-columns:repeat(2,1fr)}
   .product[open]{grid-column:1/-1}
   .product-details{grid-template-columns:1fr}
 }
@@ -104,7 +113,7 @@ summary::-webkit-details-marker{display:none}
   .brands,.collection{width:calc(100% - 28px)}
   .brand-head{min-height:360px;padding:24px 20px}
   .logo-wrap{height:250px}
-  .products,.watch-grid{grid-template-columns:1fr}
+  .products{grid-template-columns:1fr}
   .product[open] .product-summary{grid-template-columns:1fr}
   .product[open] .product-info{border-left:0;border-top:1px solid var(--line)}
   .detail-gallery{grid-template-columns:1fr}
@@ -114,22 +123,20 @@ summary::-webkit-details-marker{display:none}
 </head>
 <body>
 <header class="site-header">
-  <a class="wordmark" href="#top">MY POLO WORLD</a>
+  <a class="wordmark" href="/" id="homeLink">MY POLO WORLD</a>
   <nav class="site-nav">
-    <a href="#brands">Our Brands</a>
-    <a href="#brands">Collections</a>
+    <a href="#brands" id="brandsLink">Our Brands</a>
+    <a href="#brands" id="collectionsLink">Collections</a>
   </nav>
 </header>
 
 <main id="top">
   <section class="hero" id="hero"></section>
-
   <section class="intro" id="brands">
     <p class="eyebrow">Our Houses</p>
     <h1>Three worlds. One polo spirit.</h1>
     <p>Discover distinct expressions of polo heritage, shaped through sport, style and place.</p>
   </section>
-
   <section class="brands" id="brandGrid"></section>
 
   <section class="collection" id="collection" hidden>
@@ -150,278 +157,347 @@ summary::-webkit-details-marker{display:none}
 </footer>
 
 <script>
-const FALLBACK_WATCHES = [{"model": "SB.1.10607-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10607-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10607-5/SB.1.10607-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10607-5.jpg"]}, {"model": "SB.1.10615-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10615-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10615-4/SB.1.10615-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10615-4.jpg"]}, {"model": "SB.1.10615-1", "images": ["https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10615-1/SB.1.10615-1_1.jpg", "https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10615-1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10615-1.jpg"]}, {"model": "SB.1.10526-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10526-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10526-4/SB.1.10526-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10526-4.jpg"]}, {"model": "SB.1.10596-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10596-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10596-4/SB.1.10596-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10596-4.jpg"]}, {"model": "SB.8.10001-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-8-10001-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.8.10001-5/SB.8.10001-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.8.10001-5.jpg"]}, {"model": "SB.1.10624-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10624-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10624-3/SB.1.10624-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10624-3.jpg"]}, {"model": "SB.1.10498-2", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10498-2.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10498-2/SB.1.10498-2_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10498-2.jpg"]}, {"model": "SB.1.10591-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10591-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10591-5/SB.1.10591-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10591-5.jpg"]}, {"model": "SB.1.10636-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10636-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10636-4/SB.1.10636-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10636-4.jpg"]}, {"model": "SB.1.10547-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10547-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10547-5/SB.1.10547-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10547-5.jpg"]}, {"model": "SB.1.10593-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10593-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10593-5/SB.1.10593-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10593-5.jpg"]}, {"model": "SB.1.10643-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10643-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10643-3/SB.1.10643-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10643-3.jpg"]}, {"model": "SB.1.10538-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10538-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10538-4/SB.1.10538-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10538-4.jpg"]}, {"model": "SB.1.10472-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10472-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10472-5/SB.1.10472-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10472-5.jpg"]}, {"model": "SB.4.10017-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10017-5/SB.4.10017-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10017-5.jpg"]}, {"model": "SB.4.10022-2", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-2.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-2/SB.4.10022-2_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-2.jpg"]}, {"model": "SB.4.10022-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-3/SB.4.10022-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-3.jpg"]}, {"model": "SB.4.10022-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10022-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10022-5/SB.4.10022-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10022-5.jpg"]}, {"model": "SB.4.10021-1", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-1.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-1/SB.4.10021-1_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-1.jpg"]}, {"model": "SB.4.10021-2", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-2.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-2/SB.4.10021-2_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-2.jpg"]}, {"model": "SB.4.10021-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10021-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10021-4/SB.4.10021-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10021-4.jpg"]}, {"model": "SB.4.10015-1", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-1.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10015-1/SB.4.10015-1_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10015-1.jpg"]}, {"model": "SB.4.10015-2", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10015-2.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10015-2/SB.4.10015-2_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10015-2.jpg"]}, {"model": "SB.4.10016-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10016-3/SB.4.10016-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10016-3.jpg"]}, {"model": "SB.4.10016-5", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10016-5.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10016-5/SB.4.10016-5_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10016-5.jpg"]}, {"model": "SB.4.10017-6", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10017-6.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10017-6/SB.4.10017-6_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10017-6.jpg"]}, {"model": "SB.4.10019-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10019-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10019-4/SB.4.10019-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10019-4.jpg"]}, {"model": "SB.5.10003-1", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-1.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10003-1/SB.5.10003-1_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10003-1.jpg"]}, {"model": "SB.5.10003-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10003-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10003-4/SB.5.10003-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10003-4.jpg"]}, {"model": "SB.5.10004-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10004-3/SB.5.10004-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10004-3.jpg"]}, {"model": "SB.5.10004-4", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-5-10004-4.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.5.10004-4/SB.5.10004-4_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.5.10004-4.jpg"]}, {"model": "SB.8.10009-6", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-8-10009-6.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.8.10009-6/SB.8.10009-6_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.8.10009-6.jpg"]}, {"model": "SB.1.10646-3", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-1-10646-3.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.1.10646-3/SB.1.10646-3_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.1.10646-3.jpg"]}, {"model": "SB.4.10023-1", "images": ["https://static.alltime.ru/obj/catalog/watch/santa-barbara-polo-racquet-club/img/big/SB-4-10023-1.jpg", "https://www.bestwatch.ru/images/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/big/SB.4.10023-1/SB.4.10023-1_1.jpg", "https://www.bestwatch.ru/bigimage/Santa%20Barbara%20Polo%20%26%20Racquet%20Club/SB.4.10023-1.jpg"]}];
 let SITE = null;
+let suppressHistory = false;
+const HISTORY_APP = "mypoloworld-v2";
 
-function esc(s="") {
-  return String(s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function esc(s=""){
+  return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 }
-function slug(s="") {
+function slug(s=""){
   return String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
 }
-function normalizeBarcode(v="") {
-  return String(v).trim().toUpperCase().replace(/\s+/g,"");
+function normalizeBarcode(v=""){
+  return String(v).trim().replace(/\s+/g,"");
 }
-function directProductUrl(barcode) {
+function directProductUrl(barcode){
   const b=normalizeBarcode(barcode);
   return b ? ("https://mypoloworld.com/?barcode="+encodeURIComponent(b)) : "https://mypoloworld.com/";
 }
-function brandById(id) {
-  return SITE.brands.find(b => b.id === id) || {id, name:id, accent:"#204d38", logo:""};
+function brandById(id){
+  return SITE.brands.find(b=>b.id===id)||{id,name:id,accent:"#204d38",logo:""};
 }
-
-function buildTree(paths) {
-  const root = {};
-  (paths || []).forEach(path => {
-    const parts = String(path).split("/").map(x => x.trim()).filter(Boolean);
-    let node = root;
-    parts.forEach(part => {
-      node[part] ||= {};
-      node = node[part];
-    });
+function validGTIN13(v=""){
+  const x=String(v).replace(/\D/g,"");
+  if(x.length!==13)return false;
+  let sum=0;
+  for(let i=0;i<12;i++)sum+=Number(x[i])*(i%2?3:1);
+  return (10-(sum%10))%10===Number(x[12]);
+}
+function buildTree(paths){
+  const root={};
+  (paths||[]).forEach(path=>{
+    const parts=String(path).split("/").map(x=>x.trim()).filter(Boolean);
+    let node=root;
+    parts.forEach(part=>{node[part] ||= {};node=node[part]});
   });
   return root;
 }
-
-function renderTreeNode(node, brandId, prefix=[]) {
-  return Object.entries(node).map(([name, children], index) => {
-    const path = [...prefix, name];
-    const keys = Object.keys(children);
-    if (!keys.length) {
-      const full = path.join(" / ");
-      return `<div class="leaf-list"><button class="leaf" type="button" onclick='openCollection(${JSON.stringify(brandId)}, ${JSON.stringify(full)})'>${esc(name)}</button></div>`;
+function renderTreeNode(node,brandId,prefix=[]){
+  const items=Object.entries(node).map(([name,children])=>{
+    const path=[...prefix,name];
+    const keys=Object.keys(children);
+    if(!keys.length){
+      const full=path.join(" / ");
+      return `<div class="leaf-list"><button class="leaf" type="button" data-brand="${esc(brandId)}" data-category="${esc(full)}">${esc(name)}</button></div>`;
     }
-    const cls = prefix.length ? "subcategory" : "category";
-    const titleCls = prefix.length ? "subcategory-title" : "category-title";
-    return `<details class="${cls}">
+    const cls=prefix.length?"subcategory":"category";
+    const titleCls=prefix.length?"subcategory-title":"category-title";
+    const navKey=`path:${brandId}:${path.join(" / ")}`;
+    return `<details class="menu-item ${cls}" data-nav-key="${esc(navKey)}">
       <summary class="${titleCls}">${esc(name)}</summary>
-      ${renderTreeNode(children, brandId, path)}
+      ${renderTreeNode(children,brandId,path)}
     </details>`;
   }).join("");
+  return `<div class="menu-panel">${items}</div>`;
 }
-
-function renderBrands() {
-  const grid = document.getElementById("brandGrid");
-  grid.innerHTML = SITE.brands.map(b => `
-    <details class="brand-card" data-brand="${esc(b.id)}" style="--accent:${esc(b.accent || "#204d38")}">
+function renderBrands(){
+  const grid=document.getElementById("brandGrid");
+  grid.innerHTML=(SITE.brands||[]).map(b=>`
+    <details class="brand-card" data-brand="${esc(b.id)}" data-nav-key="${esc(`brand:${b.id}`)}" style="--accent:${esc(b.accent||"#204d38")}">
       <summary class="brand-summary">
         <div class="brand-head">
-          <div class="logo-wrap">
-            ${b.logo ? `<img class="brand-logo" src="${esc(b.logo)}" alt="${esc(b.name)}">` : ""}
-          </div>
-          <div class="brand-label">
-            <strong>${esc(b.name)}</strong>
-            <span class="plus">+</span>
-          </div>
+          <div class="logo-wrap">${b.logo?`<img class="brand-logo" src="${esc(b.logo)}" alt="${esc(b.name)}">`:""}</div>
+          <div class="brand-label"><strong>${esc(b.name)}</strong><span class="plus">+</span></div>
         </div>
       </summary>
-      ${renderTreeNode(buildTree(SITE.categories[b.id] || []), b.id)}
+      ${renderTreeNode(buildTree(SITE.categories?.[b.id]||[]),b.id)}
     </details>
   `).join("");
+  bindMenuBehavior();
 }
-
-function chooseBanner(brandId, categoryPath) {
-  const leaf = categoryPath.split("/").map(x=>x.trim()).filter(Boolean).pop() || "";
-  const targetId = brandId + "-" + slug(leaf);
-  const active = (SITE.banners || []).filter(b => b.active !== false);
-  return active.find(b => b.brand === brandId && b.location === categoryPath)
-      || active.find(b => b.id === targetId)
-      || active.find(b => b.brand === brandId && String(b.title||"").toLowerCase().includes(leaf.toLowerCase()))
-      || active.find(b => b.brand === brandId && b.location === "collection")
-      || null;
+function closeDetailTree(el){
+  el.querySelectorAll("details[open]").forEach(child=>child.open=false);
+  el.open=false;
 }
-
-function productHTML(p) {
-  const imgs = (p.images || []).filter(Boolean);
-  const cover = imgs[0] || "";
-  const gallery = imgs.slice(1);
-  const b = brandById(p.brand);
-  const barcode = normalizeBarcode(p.barcode || "");
-  const directUrl = barcode ? directProductUrl(barcode) : "";
-  return `<details class="product" data-product-id="${esc(p.id || "")}" data-barcode="${esc(barcode)}">
+function closeSiblings(details){
+  const parent=details.parentElement;
+  if(!parent)return;
+  const selector=details.classList.contains("brand-card")?"details.brand-card":"details.menu-item";
+  Array.from(parent.children).forEach(el=>{
+    if(el!==details && el.matches(selector) && el.open)closeDetailTree(el);
+  });
+}
+function navOpenKeys(){
+  return Array.from(document.querySelectorAll('details[data-nav-key][open]')).map(el=>el.dataset.navKey);
+}
+function restoreMenuKeys(keys=[]){
+  const wanted=new Set(keys);
+  document.querySelectorAll('details[data-nav-key]').forEach(el=>el.open=wanted.has(el.dataset.navKey));
+}
+function bindMenuBehavior(){
+  const grid=document.getElementById("brandGrid");
+  grid.addEventListener("click",event=>{
+    const leaf=event.target.closest("button.leaf");
+    if(leaf){
+      event.preventDefault();
+      openCollection(leaf.dataset.brand,leaf.dataset.category,true);
+      return;
+    }
+    const summary=event.target.closest("summary");
+    if(!summary || !grid.contains(summary))return;
+    const details=summary.parentElement;
+    if(!(details instanceof HTMLDetailsElement))return;
+    if(!details.matches(".brand-card,.menu-item"))return;
+    event.preventDefault();
+    const willOpen=!details.open;
+    if(willOpen){
+      closeSiblings(details);
+      details.open=true;
+    }else{
+      closeDetailTree(details);
+    }
+    if(!suppressHistory){
+      history.pushState({app:HISTORY_APP,type:"menu",openKeys:navOpenKeys()},"",location.href);
+    }
+  });
+}
+function chooseBanner(brandId,categoryPath){
+  const leaf=categoryPath.split("/").map(x=>x.trim()).filter(Boolean).pop()||"";
+  const targetId=brandId+"-"+slug(leaf);
+  const active=(SITE.banners||[]).filter(b=>b.active!==false);
+  return active.find(b=>b.brand===brandId&&b.location===categoryPath)
+    ||active.find(b=>b.id===targetId)
+    ||active.find(b=>b.brand===brandId&&String(b.title||"").toLowerCase().includes(leaf.toLowerCase()))
+    ||active.find(b=>b.brand===brandId&&b.location==="collection")
+    ||null;
+}
+function productHTML(p){
+  const imgs=(p.images||[]).filter(Boolean);
+  const cover=imgs[0]||"";
+  const gallery=imgs.slice(1);
+  const b=brandById(p.brand);
+  const barcode=normalizeBarcode(p.barcode||"");
+  const directUrl=barcode?directProductUrl(barcode):"";
+  const historyId=String(p.id||p.code||p.name||"");
+  return `<details class="product" data-product-id="${esc(historyId)}" data-barcode="${esc(barcode)}">
     <summary class="product-summary">
-      <div class="product-cover">${cover ? `<img src="${esc(cover)}" alt="${esc(p.name || p.code || "Product")}">` : ""}</div>
+      <div class="product-cover">${cover?`<img src="${esc(cover)}" alt="${esc(p.name||p.code||"Product")}">`:""}</div>
       <div class="product-info">
         <div class="product-top">
-          <div>
-            <p class="product-name">${esc(p.name || "Product")}</p>
-            <h3 class="product-code">${esc(p.code || "")}</h3>
-          </div>
-          <div class="product-price">${esc(p.price || "")}</div>
+          <div><p class="product-name">${esc(p.name||"Product")}</p><h3 class="product-code">${esc(p.code||"")}</h3></div>
+          <div class="product-price">${esc(p.price||"")}</div>
         </div>
         <span class="view-details"></span>
       </div>
     </summary>
     <div class="product-details">
-      <div class="detail-gallery">
-        ${gallery.map((src,i)=>`<img src="${esc(src)}" alt="${esc(p.code || p.name)} view ${i+2}">`).join("")}
-      </div>
+      <div class="detail-gallery">${gallery.map((src,i)=>`<img src="${esc(src)}" alt="${esc(p.code||p.name)} view ${i+2}">`).join("")}</div>
       <div class="detail-copy">
         <h4>Product Details</h4>
         <div class="detail-row"><span>Brand</span><span>${esc(b.name)}</span></div>
-        <div class="detail-row"><span>Category</span><span>${esc(p.categoryPath || "")}</span></div>
-        ${p.code ? `<div class="detail-row"><span>Model</span><span>${esc(p.code)}</span></div>` : ""}
-        ${barcode ? `<div class="detail-row"><span>Barcode</span><span>${esc(barcode)}</span></div>` : ""}
-        ${p.price ? `<div class="detail-row"><span>Price</span><span>${esc(p.price)}</span></div>` : ""}
-        ${p.description ? `<div class="detail-row"><span>Description</span><span>${esc(p.description)}</span></div>` : ""}
-        ${directUrl ? `<div class="detail-row"><span>Product link</span><span><a class="product-link" href="${esc(directUrl)}">Open direct link</a></span></div>` : ""}
+        <div class="detail-row"><span>Category</span><span>${esc(p.categoryPath||"")}</span></div>
+        ${p.code?`<div class="detail-row"><span>Model</span><span>${esc(p.code)}</span></div>`:""}
+        ${barcode?`<div class="detail-row"><span>Barcode</span><span>${esc(barcode)}</span></div>`:""}
+        ${p.price?`<div class="detail-row"><span>Price</span><span>${esc(p.price)}</span></div>`:""}
+        ${p.description?`<div class="detail-row"><span>Description</span><span>${esc(p.description)}</span></div>`:""}
+        ${directUrl?`<div class="detail-row"><span>Product link</span><span><a class="product-link" href="${esc(directUrl)}">Open direct link</a></span></div>`:""}
       </div>
     </div>
   </details>`;
 }
-
-function injectProductStructuredData() {
+function setProductMeta(p){
+  const barcode=normalizeBarcode(p?.barcode||"");
+  const b=brandById(p?.brand);
+  const label=[b.name,p?.name||"Product",p?.code||""].filter(Boolean).join(" — ");
+  document.title=label+" | My Polo World";
+  const meta=document.querySelector('meta[name="description"]');
+  if(meta)meta.content=[label,barcode?`Barcode ${barcode}`:"",p?.price||""].filter(Boolean).join(" · ");
+  const canonical=document.querySelector('link[rel="canonical"]');
+  if(canonical)canonical.href=barcode?directProductUrl(barcode):"https://mypoloworld.com/";
   document.getElementById("productStructuredData")?.remove();
-  const graph=(SITE.products||[]).filter(p=>p.active!==false).map(p=>{
-    const b=brandById(p.brand), barcode=normalizeBarcode(p.barcode||"");
-    const item={
-      "@type":"Product",
-      "@id": barcode ? directProductUrl(barcode)+"#product" : "https://mypoloworld.com/#"+(p.id||slug(p.code||p.name||"product")),
-      "name":p.name||p.code||"Product",
-      "sku":p.code||p.id||"",
-      "brand":{"@type":"Brand","name":b.name},
-      "category":p.categoryPath||"",
-      "url":barcode?directProductUrl(barcode):"https://mypoloworld.com/"
-    };
-    if(barcode)item.identifier={"@type":"PropertyValue","propertyID":"MPW Barcode","value":barcode};
-    if((p.images||[])[0])item.image=(p.images||[]).map(src=>new URL(src,location.href).href);
-    if(p.description)item.description=p.description;
-    return item;
-  });
+  if(!p)return;
+  const item={
+    "@context":"https://schema.org",
+    "@type":"Product",
+    "name":p.name||p.code||"Product",
+    "sku":p.code||p.id||"",
+    "brand":{"@type":"Brand","name":b.name},
+    "category":p.categoryPath||"",
+    "url":barcode?directProductUrl(barcode):location.href
+  };
+  if(barcode){
+    if(validGTIN13(barcode))item.gtin13=barcode;
+    else item.identifier={"@type":"PropertyValue","propertyID":"Barcode","value":barcode};
+  }
+  if((p.images||[]).length)item.image=(p.images||[]).map(src=>new URL(src,location.href).href);
+  if(p.description)item.description=p.description;
   const script=document.createElement("script");
-  script.id="productStructuredData";script.type="application/ld+json";
-  script.textContent=JSON.stringify({"@context":"https://schema.org","@graph":graph});
+  script.id="productStructuredData";
+  script.type="application/ld+json";
+  script.textContent=JSON.stringify(item);
   document.head.appendChild(script);
 }
-
-function applyProductMeta(p) {
-  const barcode=normalizeBarcode(p.barcode||"");
-  const b=brandById(p.brand);
-  const label=[b.name,p.name||"Product",p.code||""].filter(Boolean).join(" — ");
-  document.title=label+" | My Polo World";
-  let meta=document.querySelector('meta[name="description"]');
-  if(meta)meta.content=[label,barcode?"Barcode "+barcode:"",p.price||""].filter(Boolean).join(" · ");
-  let canonical=document.querySelector('link[rel="canonical"]');
-  if(canonical&&barcode)canonical.href=directProductUrl(barcode);
+function clearProductMeta(){
+  document.title=SITE?.site?.title||"My Polo World";
+  const meta=document.querySelector('meta[name="description"]');
+  if(meta)meta.content=SITE?.site?.metaDescription||"My Polo World — a curated world of polo lifestyle brands.";
+  const canonical=document.querySelector('link[rel="canonical"]');
+  if(canonical)canonical.href="https://mypoloworld.com/";
+  document.getElementById("productStructuredData")?.remove();
 }
-
-function openRequestedProduct() {
-  const params=new URLSearchParams(location.search);
-  const requestedBarcode=normalizeBarcode(params.get("barcode")||"");
-  const requestedId=String(params.get("product")||"").trim();
-  if(!requestedBarcode&&!requestedId)return;
-  const p=(SITE.products||[]).find(x=>x.active!==false&&(
-    (requestedBarcode&&normalizeBarcode(x.barcode)===requestedBarcode) ||
-    (requestedId&&String(x.id||"")===requestedId)
-  ));
-  if(!p){
-    document.getElementById("loadError").innerHTML='<div class="error-box">Product not found for this barcode or link.</div>';
-    return;
-  }
-  applyProductMeta(p);
-  openCollection(p.brand,p.categoryPath);
-  setTimeout(()=>{
-    const target=[...document.querySelectorAll(".product")].find(el=>el.dataset.productId===String(p.id||"") || (requestedBarcode&&normalizeBarcode(el.dataset.barcode)===requestedBarcode));
-    if(target){
-      document.querySelectorAll(".product").forEach(other=>other.open=false);
-      target.open=true;
-      target.scrollIntoView({behavior:"smooth",block:"start"});
-    }
-  },120);
+function closeAllProducts(){
+  document.querySelectorAll("details.product[open]").forEach(p=>p.open=false);
 }
-
-function renderWatchFallback() {
-  return `<div class="watch-grid">${FALLBACK_WATCHES.map(w => {
-    const sources = esc(JSON.stringify(w.images || []));
-    const first = (w.images || [])[0] || "";
-    return `<article class="watch-card">
-      <img src="${esc(first)}" alt="Santa Barbara ${esc(w.model)}" data-sources='${sources}' data-index="0" referrerpolicy="no-referrer" onerror="showNextWatchImage(this)">
-      <p class="watch-caption">${esc(w.model)}</p>
-    </article>`;
-  }).join("")}</div>`;
+function findProduct(id){
+  return (SITE.products||[]).find(p=>String(p.id||p.code||p.name||"")===String(id))||null;
 }
-
-function showNextWatchImage(img) {
-  try {
-    const sources = JSON.parse(img.dataset.sources || "[]");
-    let index = Number(img.dataset.index || 0) + 1;
-    if(index < sources.length) {
-      img.dataset.index = index;
-      img.src = sources[index];
-    } else {
-      img.onerror = null;
-    }
-  } catch(e) {
-    img.onerror = null;
-  }
-}
-
-function bindProductOpenClose() {
-  document.querySelectorAll(".product-summary").forEach(summary => {
-    summary.addEventListener("click", event => {
+function bindProducts(brandId,categoryPath){
+  document.querySelectorAll(".product-summary").forEach(summary=>{
+    summary.addEventListener("click",event=>{
       event.preventDefault();
-      const product = summary.closest(".product");
-      const shouldOpen = !product.open;
-      document.querySelectorAll(".product").forEach(other => other.open = false);
-      product.open = shouldOpen;
-      if(shouldOpen) setTimeout(()=>product.scrollIntoView({behavior:"smooth",block:"start"}),50);
+      const product=summary.closest(".product");
+      if(product.open){
+        if(history.state?.app===HISTORY_APP&&history.state.type==="product")history.back();
+        else product.open=false;
+        return;
+      }
+      closeAllProducts();
+      product.open=true;
+      const id=product.dataset.productId;
+      const p=findProduct(id);
+      if(p)setProductMeta(p);
+      if(!suppressHistory){
+        history.pushState({app:HISTORY_APP,type:"product",brandId,categoryPath,productId:id},"",p?.barcode?directProductUrl(p.barcode):location.href);
+      }
+      setTimeout(()=>product.scrollIntoView({behavior:"smooth",block:"start"}),30);
     });
   });
 }
+function openCollection(brandId,categoryPath,push=true,scroll=true){
+  const section=document.getElementById("collection");
+  const b=brandById(brandId);
+  const banner=chooseBanner(brandId,categoryPath);
+  const leaf=categoryPath.split("/").map(x=>x.trim()).filter(Boolean).pop()||categoryPath;
+  const products=(SITE.products||[]).filter(p=>p.active!==false&&p.brand===brandId&&p.categoryPath===categoryPath);
 
-function openCollection(brandId, categoryPath) {
-  const section = document.getElementById("collection");
-  const b = brandById(brandId);
-  const banner = chooseBanner(brandId, categoryPath);
-  const leaf = categoryPath.split("/").map(x=>x.trim()).filter(Boolean).pop() || categoryPath;
-  const products = (SITE.products || []).filter(p =>
-    p.active !== false && p.brand === brandId && p.categoryPath === categoryPath
-  );
+  document.getElementById("collectionBrand").textContent=banner?.subtitle||b.name;
+  document.getElementById("collectionHeading").textContent=banner?.title||(leaf+" Collection");
+  const bannerEl=document.getElementById("collectionBanner");
+  if(banner?.image){bannerEl.style.backgroundImage=`url("${banner.image}")`;bannerEl.hidden=false}
+  else{bannerEl.hidden=true;bannerEl.style.backgroundImage=""}
 
-  document.getElementById("collectionBrand").textContent = banner?.subtitle || b.name;
-  document.getElementById("collectionHeading").textContent = banner?.title || (leaf + " Collection");
-
-  const bannerEl = document.getElementById("collectionBanner");
-  if(banner && banner.image) {
-    bannerEl.style.backgroundImage = `url("${banner.image}")`;
-    bannerEl.hidden = false;
-  } else {
-    bannerEl.hidden = true;
-    bannerEl.style.backgroundImage = "";
-  }
-
-  const content = document.getElementById("collectionContent");
-  if(products.length) {
-    content.innerHTML = `<div class="products">${products.map(productHTML).join("")}</div>`;
-    bindProductOpenClose();
-  } else if(brandId === "santa" && categoryPath === "Accessories / Watches") {
-    content.innerHTML = renderWatchFallback();
-  } else {
-    content.innerHTML = `<div class="empty">Collection coming soon.</div>`;
-  }
-
-  section.hidden = false;
-  setTimeout(()=>section.scrollIntoView({behavior:"smooth",block:"start"}),50);
+  const content=document.getElementById("collectionContent");
+  content.innerHTML=products.length?`<div class="products">${products.map(productHTML).join("")}</div>`:`<div class="empty">Collection coming soon.</div>`;
+  section.hidden=false;
+  if(products.length)bindProducts(brandId,categoryPath);
+  if(push&&!suppressHistory)history.pushState({app:HISTORY_APP,type:"collection",brandId,categoryPath},"",location.pathname);
+  if(scroll)setTimeout(()=>section.scrollIntoView({behavior:"smooth",block:"start"}),30);
 }
+function showHome(scroll=true){
+  suppressHistory=true;
+  document.getElementById("collection").hidden=true;
+  closeAllProducts();
+  restoreMenuKeys([]);
+  clearProductMeta();
+  suppressHistory=false;
+  if(scroll)setTimeout(()=>document.getElementById("brands")?.scrollIntoView({behavior:"smooth",block:"start"}),20);
+}
+function applyState(state){
+  if(!state||state.app!==HISTORY_APP)return;
+  suppressHistory=true;
+  try{
+    if(state.type==="home"){
+      showHome(false);
+      window.scrollTo({top:0,behavior:"auto"});
+    }else if(state.type==="menu"){
+      document.getElementById("collection").hidden=true;
+      closeAllProducts();
+      restoreMenuKeys(state.openKeys||[]);
+      clearProductMeta();
+    }else if(state.type==="collection"){
+      restoreMenuKeys([]);
+      openCollection(state.brandId,state.categoryPath,false,false);
+      clearProductMeta();
+      setTimeout(()=>document.getElementById("collection")?.scrollIntoView({behavior:"auto",block:"start"}),0);
+    }else if(state.type==="product"){
+      restoreMenuKeys([]);
+      openCollection(state.brandId,state.categoryPath,false,false);
+      const product=[...document.querySelectorAll("details.product")].find(el=>el.dataset.productId===String(state.productId));
+      if(product){
+        closeAllProducts();
+        product.open=true;
+        const p=findProduct(state.productId);
+        if(p)setProductMeta(p);
+        setTimeout(()=>product.scrollIntoView({behavior:"auto",block:"start"}),0);
+      }
+    }
+  }finally{
+    setTimeout(()=>{suppressHistory=false},0);
+  }
+}
+function initializeHistory(){
+  const params=new URLSearchParams(location.search);
+  const barcode=normalizeBarcode(params.get("barcode")||"");
+  history.replaceState({app:HISTORY_APP,type:"home"},"",location.pathname);
+  if(barcode){
+    const p=(SITE.products||[]).find(x=>x.active!==false&&normalizeBarcode(x.barcode||"")===barcode);
+    if(p){
+      const state={app:HISTORY_APP,type:"product",brandId:p.brand,categoryPath:p.categoryPath,productId:String(p.id||p.code||p.name||"")};
+      history.pushState(state,"",directProductUrl(barcode));
+      applyState(state);
+      return;
+    }
+  }
+  showHome(false);
+}
+window.addEventListener("popstate",event=>{
+  if(event.state?.app===HISTORY_APP)applyState(event.state);
+});
+document.getElementById("homeLink").addEventListener("click",event=>{
+  event.preventDefault();
+  history.pushState({app:HISTORY_APP,type:"home"},"",location.pathname);
+  applyState(history.state);
+});
+document.getElementById("brandsLink").addEventListener("click",event=>{
+  event.preventDefault();
+  history.pushState({app:HISTORY_APP,type:"home"},"",location.pathname);
+  applyState(history.state);
+  setTimeout(()=>document.getElementById("brands")?.scrollIntoView({behavior:"smooth",block:"start"}),20);
+});
+document.getElementById("collectionsLink").addEventListener("click",event=>{
+  event.preventDefault();
+  history.pushState({app:HISTORY_APP,type:"home"},"",location.pathname);
+  applyState(history.state);
+  setTimeout(()=>document.getElementById("brands")?.scrollIntoView({behavior:"smooth",block:"start"}),20);
+});
+async function loadSite(){
+  try{
+    const r=await fetch("site-data.json?v="+Date.now(),{cache:"no-store"});
+    if(!r.ok)throw new Error("site-data.json could not be loaded ("+r.status+")");
+    SITE=await r.json();
 
-async function loadSite() {
-  try {
-    const r = await fetch("site-data.json?v=" + Date.now(), {cache:"no-store"});
-    if(!r.ok) throw new Error("site-data.json could not be loaded (" + r.status + ")");
-    SITE = await r.json();
+    document.title=SITE.site?.title||"My Polo World";
+    document.querySelector(".wordmark").textContent=(SITE.site?.title||"My Polo World").toUpperCase();
 
-    document.title = SITE.site?.title || "My Polo World";
-    document.querySelector(".wordmark").textContent = (SITE.site?.title || "My Polo World").toUpperCase();
-
-    const homeBanner = (SITE.banners || []).find(b => b.active !== false && (b.id === "home-hero" || b.location === "home-hero"));
-    const heroImage = homeBanner?.image || SITE.site?.heroImage || "assets/fall-winter-banner.png";
-    document.getElementById("hero").style.backgroundImage = `url("${heroImage}")`;
+    const homeBanner=(SITE.banners||[]).find(b=>b.active!==false&&(b.id==="home-hero"||b.location==="home-hero"));
+    const heroImage=homeBanner?.image||SITE.site?.heroImage||"assets/fall-winter-banner.png";
+    document.getElementById("hero").style.backgroundImage=`url("${heroImage}")`;
 
     renderBrands();
-    injectProductStructuredData();
-    openRequestedProduct();
-  } catch(e) {
-    document.getElementById("loadError").innerHTML = `<div class="error-box">Website data could not be loaded. ${esc(e.message)}</div>`;
+    initializeHistory();
+  }catch(e){
+    document.getElementById("loadError").innerHTML=`<div class="error-box">Website data could not be loaded. ${esc(e.message)}</div>`;
   }
 }
 loadSite();
