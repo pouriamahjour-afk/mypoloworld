@@ -6,423 +6,137 @@
 <meta name="robots" content="noindex,nofollow">
 <title>My Polo World — Admin</title>
 <style>
-:root{--ink:#162019;--paper:#f7f4ec;--card:#fff;--line:#d9d7d0;--green:#204d38;--danger:#9b2c2c;--muted:#6c746f}
-*{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}
-header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:16px 4vw;display:flex;gap:16px;align-items:center;justify-content:space-between}
-h1{font:400 24px Georgia,serif;margin:0}.sub{color:var(--muted);font-size:12px}
-.wrap{width:min(1180px,94vw);margin:26px auto 80px}
-.panel{background:#fff;border:1px solid var(--line);padding:20px;margin-bottom:18px}
-.row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.c12{grid-column:span 12}.c6{grid-column:span 6}.c4{grid-column:span 4}.c3{grid-column:span 3}
-label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 7px;color:#58605b}
-input,select,textarea,button{font:inherit} input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);background:#fff;border-radius:6px}
-textarea{min-height:92px;resize:vertical} button{border:0;border-radius:6px;padding:10px 15px;cursor:pointer}
-.primary{background:var(--green);color:#fff}.secondary{background:#ecebe6}.danger{background:#f7e7e7;color:var(--danger)}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab{background:#e9e7e0}.tab.active{background:var(--green);color:#fff}
-.view{display:none}.view.active{display:block}
-.toolbar{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-.list{display:grid;gap:10px}.item{border:1px solid var(--line);background:#fff;padding:14px;display:flex;justify-content:space-between;gap:16px;align-items:center}
-.item small{color:var(--muted)} .actions{display:flex;gap:7px;flex-wrap:wrap}
-.badge{display:inline-block;padding:3px 7px;border-radius:999px;background:#eef2ee;font-size:11px;margin-left:6px}
-.status{padding:10px 12px;border-radius:6px;background:#f0efe9;font-size:13px}.ok{background:#e6f3e9}.err{background:#f9e3e3}
-.hidden{display:none!important}.help{font-size:12px;color:var(--muted);line-height:1.55}
-.field-inline{display:flex;gap:8px;align-items:stretch}.field-inline input{flex:1}.field-inline button{white-space:nowrap}.mono{font-family:Consolas,Monaco,monospace;letter-spacing:.04em}
-img.preview{width:88px;height:88px;object-fit:contain;border:1px solid var(--line);background:#fff}
-hr{border:0;border-top:1px solid var(--line);margin:20px 0}
-@media(max-width:760px){.c6,.c4,.c3{grid-column:span 12}.item{align-items:flex-start;flex-direction:column}header{align-items:flex-start;flex-direction:column}}
+html,body{margin:0;width:100%;height:100%;background:#f7f4ec;font-family:Arial,sans-serif}
+#loading{position:fixed;inset:0;display:grid;place-items:center;color:#204d38;font-size:16px}
+#adminFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#f7f4ec;visibility:hidden}
+#error{display:none;position:fixed;inset:0;padding:40px;color:#8b1f1f;background:#fff;font:16px/1.6 Arial,sans-serif}
 </style>
 </head>
 <body>
-<header>
-  <div><h1>MY POLO WORLD — ADMIN</h1><div class="sub">Products · Categories · Banners · Brands</div></div>
-  <button class="primary" id="saveAll" disabled>Save all changes</button>
-</header>
-
-<div class="wrap">
-  <section class="panel" id="connectPanel">
-    <div class="row">
-      <div class="c6">
-        <label>GitHub fine-grained token</label>
-        <input id="token" type="password" autocomplete="off" placeholder="github_pat_...">
-      </div>
-      <div class="c3">
-        <label>Repository</label>
-        <input id="repo" value="pouriamahjour-afk/mypoloworld">
-      </div>
-      <div class="c3">
-        <label>Branch</label>
-        <input id="branch" value="main">
-      </div>
-      <div class="c12">
-        <button class="primary" id="connectBtn">Connect to GitHub</button>
-        <span class="help">The token is never written into this page or site-data.json. It stays only in this open tab.</span>
-      </div>
-    </div>
-  </section>
-
-  <div id="status" class="status">Not connected.</div>
-
-  <div id="app" class="hidden">
-    <div class="tabs">
-      <button class="tab active" data-view="dashboard">Dashboard</button>
-      <button class="tab" data-view="products">Products</button>
-      <button class="tab" data-view="categories">Categories</button>
-      <button class="tab" data-view="banners">Banners</button>
-      <button class="tab" data-view="brands">Brands</button>
-    </div>
-
-    <section class="view active" id="view-dashboard">
-      <div class="panel">
-        <h2>Dashboard</h2>
-        <p class="help">Changes are edited here first. They go live only after you click <b>Save all changes</b>.</p>
-        <div id="summary"></div>
-      </div>
-    </section>
-
-    <section class="view" id="view-products">
-      <div class="panel">
-        <div class="toolbar"><h2>Products</h2><div class="actions"><button class="secondary" onclick="generateMissingBarcodes()">Generate missing barcodes</button><button class="primary" onclick="openProduct()">+ Add product</button></div></div>
-        <div id="productList" class="list"></div>
-      </div>
-    </section>
-
-    <section class="view" id="view-categories">
-      <div class="panel">
-        <div class="toolbar"><h2>Categories</h2><button class="primary" onclick="openCategory()">+ Add category path</button></div>
-        <p class="help">Use paths such as: <b>Apparels / Women / Skirts</b>. You can create as many levels as you want.</p>
-        <div id="categoryList" class="list"></div>
-      </div>
-    </section>
-
-    <section class="view" id="view-banners">
-      <div class="panel">
-        <div class="toolbar"><h2>Banners</h2><button class="primary" onclick="openBanner()">+ Add banner</button></div>
-        <div id="bannerList" class="list"></div>
-      </div>
-    </section>
-
-    <section class="view" id="view-brands">
-      <div class="panel">
-        <div class="toolbar"><h2>Brands</h2><button class="primary" onclick="openBrand()">+ Add brand</button></div>
-        <div id="brandList" class="list"></div>
-      </div>
-    </section>
-
-    <section class="panel hidden" id="editor">
-      <div class="toolbar"><h2 id="editorTitle">Editor</h2><button class="secondary" onclick="closeEditor()">Close</button></div>
-      <div id="editorBody"></div>
-    </section>
-  </div>
-</div>
+<div id="loading">Loading admin panel…</div>
+<div id="error"></div>
+<iframe id="adminFrame" title="My Polo World Admin"></iframe>
 
 <script>
-const DATA_FILE="site-data.json";
-let token="", repo="", branch="main", data=null, dataSha=null, dirty=false;
+const SOURCE='https://raw.githubusercontent.com/pouriamahjour-afk/mypoloworld/b20b56bc707cad6e1e953cb29f8c5cacc50a2ae1/admin.html';
 
-const defaultData={
-  version:1,
-  site:{title:"My Polo World",heroImage:"assets/fall-winter-banner.png"},
-  brands:[
-    {id:"santa",name:"Santa Barbara Polo & Racquet Club",logo:"assets/santa-barbara.jpeg",accent:"#204d38"},
-    {id:"sanmarco",name:"Polo San Marco",logo:"assets/polo-san-marco.png",accent:"#071b33"},
-    {id:"venezia",name:"Venezia Polo",logo:"assets/venezia-polo.png",accent:"#6f1727"}
-  ],
-  categories:{
-    santa:["Apparels / Men / Underwear","Apparels / Men / Shirts","Apparels / Men / T-Shirts","Apparels / Men / Polo Shirts","Apparels / Men / Pants","Apparels / Men / Sweater","Apparels / Men / Blouse","Apparels / Men / Hoodie","Apparels / Women / Blouse","Apparels / Women / Skirts","Apparels / Women / Shorts","Apparels / Women / Underwear","Apparels / Women / Pants","Apparels / Women / Sweater","Apparels / Women / Hoodie","Apparels / Kids / Down","Apparels / Kids / Up","Accessories / Eyewear / Optical Frames","Accessories / Eyewear / Sunglasses","Accessories / Belt","Accessories / Hat","Accessories / Bracelet","Accessories / Bag","Accessories / Necklace","Accessories / Watches","Home / Bed","Home / Living Room","Home / Kitchen","Home / Decoration"],
-    sanmarco:["Apparels / Men","Apparels / Women","Apparels / Kids","Accessories / Eyewear / Optical Frames","Accessories / Eyewear / Sunglasses","Home"],
-    venezia:["Apparels / Men","Apparels / Women","Apparels / Kids","Accessories / Eyewear / Optical Frames","Accessories / Eyewear / Sunglasses","Home"]
-  },
-  banners:[
-    {id:"home-hero",brand:"",location:"home-hero",title:"",subtitle:"",image:"assets/fall-winter-banner.png",active:true},
-    {id:"santa-sunglasses",brand:"santa",location:"collection",title:"Sunglasses Collection",subtitle:"Santa Barbara Polo & Racquet Club",image:"assets/santa-barbara-eyewear-banner.png",active:true}
-  ],
-  products:[
-    {id:"santa-1132",brand:"santa",categoryPath:"Accessories / Eyewear / Sunglasses",name:"Santa Barbara Sunglasses",code:"1132",price:"$100.7",description:"",images:["assets/sb-1132-front.png","assets/sb-1132-three-quarter.png","assets/sb-1132-side.png","assets/sb-1132-model.png"],active:true},
-    {id:"santa-1137",brand:"santa",categoryPath:"Accessories / Eyewear / Sunglasses",name:"Santa Barbara Sunglasses",code:"1137",price:"$80.3",description:"",images:["assets/sb-1137-front.png","assets/sb-1137-three-quarter.png","assets/sb-1137-side.png","assets/sb-1137-model.png"],active:true},
-    {id:"santa-1154",brand:"santa",categoryPath:"Accessories / Eyewear / Sunglasses",name:"Santa Barbara Sunglasses",code:"1154",price:"$62",description:"",images:["assets/sb-1154-front.png","assets/sb-1154-three-quarter.png","assets/sb-1154-side.png","assets/sb-1154-model.png"],active:true},
-    {id:"santa-1170",brand:"santa",categoryPath:"Accessories / Eyewear / Sunglasses",name:"Santa Barbara Sunglasses",code:"1170",price:"$96",description:"",images:["assets/sb-1170-front.png","assets/sb-1170-three-quarter.png","assets/sb-1170-side.png","assets/sb-1170-model.png"],active:true}
-  ]
-};
+const frame=document.getElementById('adminFrame');
+const loading=document.getElementById('loading');
+const errorBox=document.getElementById('error');
 
-function $(id){return document.getElementById(id)}
-function esc(s=""){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function slug(s=""){return s.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"") || ("item-"+Date.now())}
-function clone(o){return JSON.parse(JSON.stringify(o))}
-function setStatus(msg,type=""){ $("status").className="status "+type; $("status").textContent=msg }
-function markDirty(){dirty=true;$("saveAll").disabled=false;renderSummary()}
+function patchAdmin(){
+  try{
+    const doc=frame.contentDocument;
+    if(!doc || !doc.body) return;
 
-async function gh(path,opts={}){
-  const r=await fetch("https://api.github.com/repos/"+repo+path,{
-    ...opts,
-    headers:{
-      "Accept":"application/vnd.github+json",
-      "Authorization":"Bearer "+token,
-      "X-GitHub-Api-Version":"2022-11-28",
-      ...(opts.headers||{})
+    const patch=doc.createElement('script');
+    patch.textContent=`
+(function(){
+  const originalOpenProduct=openProduct;
+
+  openProduct=function(i=-1){
+    originalOpenProduct(i);
+
+    const field=$("pBarcode");
+    if(!field)return;
+
+    if(i<0){
+      field.value="";
+      updateProductLink();
     }
-  });
-  if(!r.ok){let t=await r.text();throw new Error(r.status+" "+t)}
-  return r.status===204?null:r.json();
-}
-function decode64(s){
-  const bin=atob(s.replace(/\n/g,"")); const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
-}
-function encode64(s){
-  const bytes=new TextEncoder().encode(s); let bin=""; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin);
-}
-async function loadData(){
-  try{
-    const f=await gh("/contents/"+DATA_FILE+"?ref="+encodeURIComponent(branch));
-    data=JSON.parse(decode64(f.content)); dataSha=f.sha;
-    setStatus("Connected. Existing site-data.json loaded.","ok");
+
+    field.placeholder="Optional — enter real barcode when available";
+
+    const box=field.closest(".c6");
+    if(box){
+      const label=box.querySelector("label");
+      if(label)label.textContent="Barcode (optional)";
+
+      const help=box.querySelector(".help");
+      if(help)help.textContent="Optional. Leave blank until you have the real barcode.";
+
+      const generateButton=box.querySelector("button");
+      if(generateButton)generateButton.style.display="none";
+    }
+  };
+
+  saveProduct=async function(i){
+    try{
+      const barcode=normalizeBarcode($("pBarcode").value);
+
+      if(barcode){
+        const duplicate=data.products.findIndex((p,idx)=>idx!==i&&normalizeBarcode(p.barcode)===barcode);
+        if(duplicate>=0){
+          return setStatus("This barcode is already used by product "+(data.products[duplicate].code||data.products[duplicate].name)+".","err");
+        }
+      }
+
+      const uploaded=$("pUpload").files.length?await uploadFiles($("pUpload")):[];
+      const currentImages=$("pImages").value.split(/\\n+/).map(x=>x.trim()).filter(Boolean);
+
+      const existing=i>=0?data.products[i]:{};
+
+      const obj={
+        ...existing,
+        id:i>=0?existing.id:slug($("pBrand").value+"-"+($("pCode").value||$("pName").value)),
+        brand:$("pBrand").value,
+        categoryPath:$("pCategory").value,
+        name:$("pName").value.trim(),
+        code:$("pCode").value.trim(),
+        barcode,
+        price:$("pPrice").value.trim(),
+        description:$("pDesc").value.trim(),
+        images:[...currentImages,...uploaded],
+        active:$("pActive").value==="true"
+      };
+
+      if(i>=0)data.products[i]=obj;
+      else data.products.push(obj);
+
+      markDirty();
+      renderAll();
+      closeEditor();
+      setStatus("Product changed in draft. Click Save all changes to publish.","ok");
+    }catch(e){
+      setStatus("Image upload/product save failed: "+e.message,"err");
+    }
+  };
+
+  const bulk=[...document.querySelectorAll("button")]
+    .find(b=>b.textContent.trim()==="Generate missing barcodes");
+  if(bulk)bulk.style.display="none";
+
+  setStatus("Panel ready. Barcode is optional; prices can be saved without one.","ok");
+})();
+`;
+
+    doc.body.appendChild(patch);
+
+    frame.style.visibility='visible';
+    loading.style.display='none';
   }catch(e){
-    if(String(e.message).startsWith("404")){
-      data=clone(defaultData); dataSha=null; dirty=true;
-      setStatus("Connected. site-data.json does not exist yet; a starter version is loaded. Click Save all changes to create it.","ok");
-    }else throw e;
+    errorBox.style.display='block';
+    errorBox.textContent='Admin patch failed: '+e.message;
+    loading.style.display='none';
   }
-  normalize(); $("app").classList.remove("hidden"); $("saveAll").disabled=!dirty; renderAll();
 }
-function normalize(){
-  data.site ||= {title:"My Polo World",heroImage:""};
-  data.brands ||= []; data.categories ||= {}; data.banners ||= []; data.products ||= [];
-  data.brands.forEach(b=>data.categories[b.id] ||= []);
-  data.products.forEach(p=>{ p.barcode=normalizeBarcode(p.barcode||""); });
-}
-function normalizeBarcode(v=""){return String(v).trim().toUpperCase().replace(/\s+/g,"")}
-function generateUniqueBarcode(){
-  let code="";
-  do{
-    const a=Date.now().toString().slice(-8);
-    const r=crypto.getRandomValues(new Uint32Array(1))[0].toString().padStart(10,"0").slice(-6);
-    code="MPW-"+a+"-"+r;
-  }while(data.products.some(p=>normalizeBarcode(p.barcode)===code));
-  return code;
-}
-function productUrl(barcode){
-  const b=normalizeBarcode(barcode);
-  return b ? (location.origin+"/?barcode="+encodeURIComponent(b)) : "";
-}
-function updateProductLink(){
-  if($("pProductUrl")) $("pProductUrl").value=productUrl($("pBarcode")?.value||"");
-}
-function generateBarcodeIntoForm(){
-  if(!$("pBarcode"))return;
-  $("pBarcode").value=generateUniqueBarcode();
-  updateProductLink();
-}
-async function copyProductLink(){
-  const value=$("pProductUrl")?.value||"";
-  if(!value)return setStatus("Generate or enter a barcode first.","err");
-  try{await navigator.clipboard.writeText(value);setStatus("Product link copied.","ok")}
-  catch(e){$("pProductUrl").select();document.execCommand("copy");setStatus("Product link copied.","ok")}
-}
-function generateMissingBarcodes(){
-  if(!data)return;
-  let n=0;
-  data.products.forEach(p=>{if(!normalizeBarcode(p.barcode)){p.barcode=generateUniqueBarcode();n++}});
-  if(!n)return setStatus("All products already have barcodes.","ok");
-  markDirty();renderAll();setStatus(n+" barcode"+(n===1?"":"s")+" generated in draft. Click Save all changes to publish.","ok");
-}
-function xmlEsc(s=""){return String(s).replace(/[<>&'"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"}[c]))}
-function buildSitemap(){
-  const base="https://mypoloworld.com/";
-  const urls=[base,...data.products.filter(p=>p.active!==false&&normalizeBarcode(p.barcode)).map(p=>base+"?barcode="+encodeURIComponent(normalizeBarcode(p.barcode)))];
-  return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(u=>'  <url><loc>'+xmlEsc(u)+'</loc></url>').join('\n')+'\n</urlset>\n';
-}
-async function putTextFile(path,text,message){
-  let sha=null;
-  try{const f=await gh("/contents/"+path+"?ref="+encodeURIComponent(branch));sha=f.sha}catch(e){if(!String(e.message).startsWith("404"))throw e}
-  const body={message,content:encode64(text),branch}; if(sha)body.sha=sha;
-  return gh("/contents/"+path,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-}
-$("connectBtn").onclick=async()=>{
-  token=$("token").value.trim(); repo=$("repo").value.trim(); branch=$("branch").value.trim()||"main";
-  if(!token)return setStatus("Paste the GitHub token first.","err");
-  try{
-    setStatus("Connecting...");
-    await gh("");
-    await loadData();
-  }catch(e){setStatus("Connection failed: "+e.message,"err")}
-};
-$("saveAll").onclick=async()=>{
-  try{
-    $("saveAll").disabled=true; setStatus("Saving changes to GitHub...");
-    const body={message:"Update site content from admin panel",content:encode64(JSON.stringify(data,null,2)),branch};
-    if(dataSha)body.sha=dataSha;
-    const out=await gh("/contents/"+DATA_FILE,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    dataSha=out.content.sha;
-    try{await putTextFile("sitemap.xml",buildSitemap(),"Update product sitemap from admin panel")}
-    catch(e){dirty=false;renderSummary();setStatus("Site data saved, but sitemap update failed: "+e.message,"err");return}
-    dirty=false; setStatus("Saved successfully. Site data and product sitemap updated; GitHub Pages will refresh shortly.","ok"); renderSummary();
-  }catch(e){$("saveAll").disabled=false;setStatus("Save failed: "+e.message,"err")}
-};
 
-document.querySelectorAll(".tab").forEach(btn=>btn.onclick=()=>{
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-  document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
-  btn.classList.add("active"); $("view-"+btn.dataset.view).classList.add("active"); closeEditor();
-});
+frame.addEventListener('load',patchAdmin);
 
-function renderAll(){renderSummary();renderProducts();renderCategories();renderBanners();renderBrands()}
-function renderSummary(){
-  if(!data)return;
-  $("summary").innerHTML=`<div class="row">
-    <div class="c3 panel"><b>${data.brands.length}</b><br><span class="help">Brands</span></div>
-    <div class="c3 panel"><b>${Object.values(data.categories).flat().length}</b><br><span class="help">Category paths</span></div>
-    <div class="c3 panel"><b>${data.products.length}</b><br><span class="help">Products · ${data.products.filter(p=>normalizeBarcode(p.barcode)).length} barcoded</span></div>
-    <div class="c3 panel"><b>${data.banners.length}</b><br><span class="help">Banners</span></div>
-    <div class="c12"><span class="badge">${dirty?"Unsaved changes":"Everything saved"}</span></div>
-  </div>`;
-}
-function brandName(id){return (data.brands.find(b=>b.id===id)||{}).name||id}
-function brandOptions(selected=""){return data.brands.map(b=>`<option value="${esc(b.id)}" ${b.id===selected?"selected":""}>${esc(b.name)}</option>`).join("")}
-function categoryOptions(brand,selected=""){return (data.categories[brand]||[]).map(p=>`<option value="${esc(p)}" ${p===selected?"selected":""}>${esc(p)}</option>`).join("")}
-
-function renderProducts(){
-  $("productList").innerHTML=data.products.length?data.products.map((p,i)=>`<div class="item">
-    <div><b>${esc(p.code||p.name)}</b> <span class="badge">${p.active===false?"Hidden":"Live"}</span><br><small>${esc(brandName(p.brand))} · ${esc(p.categoryPath)} · ${esc(p.price)}${p.barcode?" · Barcode: "+esc(p.barcode):" · No barcode"}</small></div>
-    <div class="actions"><button class="secondary" onclick="openProduct(${i})">Edit</button><button class="danger" onclick="deleteProduct(${i})">Delete</button></div>
-  </div>`).join(""):`<p class="help">No products yet.</p>`;
-}
-function openProduct(i=-1){
-  const p=i>=0?clone(data.products[i]):{id:"",brand:data.brands[0]?.id||"",categoryPath:"",name:"",code:"",barcode:generateUniqueBarcode(),price:"",description:"",images:[],active:true};
-  openEditor("Product",`<div class="row">
-    <div class="c4"><label>Brand</label><select id="pBrand" onchange="refreshProductCategories()">${brandOptions(p.brand)}</select></div>
-    <div class="c4"><label>Category</label><select id="pCategory"></select></div>
-    <div class="c4"><label>Model / Code</label><input id="pCode" value="${esc(p.code)}"></div>
-    <div class="c6"><label>Product name</label><input id="pName" value="${esc(p.name)}"></div>
-    <div class="c6"><label>Barcode</label><div class="field-inline"><input class="mono" id="pBarcode" value="${esc(p.barcode||"")}" oninput="updateProductLink()" placeholder="MPW-..."><button class="secondary" type="button" onclick="generateBarcodeIntoForm()">Generate</button></div><div class="help">Unique internal product identifier. You can replace it with your own barcode value.</div></div>
-    <div class="c3"><label>Price</label><input id="pPrice" value="${esc(p.price)}" placeholder="$95"></div>
-    <div class="c3"><label>Status</label><select id="pActive"><option value="true" ${p.active!==false?"selected":""}>Live</option><option value="false" ${p.active===false?"selected":""}>Hidden</option></select></div>
-    <div class="c6"><label>Direct product URL</label><div class="field-inline"><input class="mono" id="pProductUrl" readonly><button class="secondary" type="button" onclick="copyProductLink()">Copy link</button></div></div>
-    <div class="c12"><label>Description</label><textarea id="pDesc">${esc(p.description||"")}</textarea></div>
-    <div class="c12"><label>Image paths — one per line</label><textarea id="pImages">${esc((p.images||[]).join("\n"))}</textarea></div>
-    <div class="c6"><label>Upload image(s)</label><input id="pUpload" type="file" accept="image/*" multiple></div>
-    <div class="c12"><button class="primary" onclick="saveProduct(${i})">Save product</button></div>
-  </div>`);
-  refreshProductCategories(p.categoryPath);
-  updateProductLink();
-}
-function refreshProductCategories(selected){
-  const b=$("pBrand")?.value;if(!$("pCategory"))return;
-  $("pCategory").innerHTML=categoryOptions(b,selected||$("pCategory").value);
-}
-async function uploadFiles(fileInput){
-  const paths=[];
-  for(const file of [...fileInput.files]){
-    const arr=new Uint8Array(await file.arrayBuffer()); let bin=""; arr.forEach(b=>bin+=String.fromCharCode(b));
-    const content=btoa(bin); const safe=(file.name||"image").toLowerCase().replace(/[^a-z0-9._-]+/g,"-");
-    const path="assets/uploads/"+Date.now()+"-"+Math.random().toString(36).slice(2,7)+"-"+safe;
-    await gh("/contents/"+path,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:"Upload image from admin panel",content,branch})});
-    paths.push(path);
-  }
-  return paths;
-}
-async function saveProduct(i){
-  try{
-    const barcode=normalizeBarcode($("pBarcode").value);
-    if(!barcode)return setStatus("Every product needs a barcode. Enter one or click Generate.","err");
-    const duplicate=data.products.findIndex((p,idx)=>idx!==i&&normalizeBarcode(p.barcode)===barcode);
-    if(duplicate>=0)return setStatus("This barcode is already used by product "+(data.products[duplicate].code||data.products[duplicate].name)+".","err");
-    const uploaded=$("pUpload").files.length?await uploadFiles($("pUpload")):[];
-    const currentImages=$("pImages").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
-    const obj={
-      id:i>=0?data.products[i].id:slug($("pBrand").value+"-"+($("pCode").value||$("pName").value)),
-      brand:$("pBrand").value,categoryPath:$("pCategory").value,name:$("pName").value.trim(),
-      code:$("pCode").value.trim(),barcode,price:$("pPrice").value.trim(),description:$("pDesc").value.trim(),
-      images:[...currentImages,...uploaded],active:$("pActive").value==="true"
-    };
-    if(i>=0)data.products[i]=obj;else data.products.push(obj);
-    markDirty();renderAll();closeEditor();setStatus("Product changed in draft. Click Save all changes to publish.","ok");
-  }catch(e){setStatus("Image upload/product save failed: "+e.message,"err")}
-}
-function deleteProduct(i){if(confirm("Delete this product?")){data.products.splice(i,1);markDirty();renderAll()}}
-
-function renderCategories(){
-  let out=[];
-  data.brands.forEach(b=>(data.categories[b.id]||[]).forEach((p,i)=>out.push(`<div class="item"><div><b>${esc(p)}</b><br><small>${esc(b.name)}</small></div><div class="actions"><button class="secondary" onclick="openCategory('${esc(b.id)}',${i})">Edit</button><button class="danger" onclick="deleteCategory('${esc(b.id)}',${i})">Delete</button></div></div>`)));
-  $("categoryList").innerHTML=out.join("")||`<p class="help">No categories yet.</p>`;
-}
-function openCategory(brand="",i=-1){
-  const b=brand||data.brands[0]?.id||"";const value=i>=0?data.categories[b][i]:"";
-  openEditor("Category path",`<div class="row">
-    <div class="c4"><label>Brand</label><select id="cBrand">${brandOptions(b)}</select></div>
-    <div class="c8"><label>Path</label><input id="cPath" value="${esc(value)}" placeholder="Apparels / Women / Jackets"></div>
-    <div class="c12"><button class="primary" onclick="saveCategory('${esc(b)}',${i})">Save category</button></div>
-  </div>`);
-}
-function saveCategory(oldBrand,i){
-  const nb=$("cBrand").value,p=$("cPath").value.trim();if(!p)return;
-  data.categories[nb] ||= [];
-  if(i>=0){data.categories[oldBrand].splice(i,1);data.categories[nb].push(p)}else data.categories[nb].push(p);
-  data.categories[nb]=[...new Set(data.categories[nb])].sort();
-  markDirty();renderAll();closeEditor();
-}
-function deleteCategory(b,i){if(confirm("Delete this category path?")){data.categories[b].splice(i,1);markDirty();renderAll()}}
-
-function renderBanners(){
-  $("bannerList").innerHTML=data.banners.length?data.banners.map((b,i)=>`<div class="item">
-    <div style="display:flex;gap:12px;align-items:center">${b.image?`<img class="preview" src="${esc(b.image)}">`:""}<div><b>${esc(b.id)}</b> <span class="badge">${b.active===false?"Hidden":"Live"}</span><br><small>${esc(b.location)}${b.brand?" · "+esc(brandName(b.brand)):""}</small></div></div>
-    <div class="actions"><button class="secondary" onclick="openBanner(${i})">Edit</button><button class="danger" onclick="deleteBanner(${i})">Delete</button></div>
-  </div>`).join(""):`<p class="help">No banners yet.</p>`;
-}
-function openBanner(i=-1){
-  const b=i>=0?clone(data.banners[i]):{id:"banner-"+Date.now(),brand:"",location:"",title:"",subtitle:"",image:"",active:true};
-  openEditor("Banner",`<div class="row">
-    <div class="c4"><label>Banner ID</label><input id="bId" value="${esc(b.id)}"></div>
-    <div class="c4"><label>Brand (optional)</label><select id="bBrand"><option value="">All / Home</option>${brandOptions(b.brand)}</select></div>
-    <div class="c4"><label>Location</label><input id="bLocation" value="${esc(b.location)}" placeholder="home-hero"></div>
-    <div class="c6"><label>Title</label><input id="bTitle" value="${esc(b.title||"")}"></div>
-    <div class="c6"><label>Subtitle</label><input id="bSubtitle" value="${esc(b.subtitle||"")}"></div>
-    <div class="c8"><label>Image path</label><input id="bImage" value="${esc(b.image||"")}"></div>
-    <div class="c4"><label>Status</label><select id="bActive"><option value="true" ${b.active!==false?"selected":""}>Live</option><option value="false" ${b.active===false?"selected":""}>Hidden</option></select></div>
-    <div class="c6"><label>Upload replacement image</label><input id="bUpload" type="file" accept="image/*"></div>
-    <div class="c12"><button class="primary" onclick="saveBanner(${i})">Save banner</button></div>
-  </div>`);
-}
-async function saveBanner(i){
-  try{
-    const uploads=$("bUpload").files.length?await uploadFiles($("bUpload")):[];
-    const obj={id:$("bId").value.trim()||("banner-"+Date.now()),brand:$("bBrand").value,location:$("bLocation").value.trim(),title:$("bTitle").value.trim(),subtitle:$("bSubtitle").value.trim(),image:uploads[0]||$("bImage").value.trim(),active:$("bActive").value==="true"};
-    if(i>=0)data.banners[i]=obj;else data.banners.push(obj);
-    markDirty();renderAll();closeEditor();
-  }catch(e){setStatus("Banner save failed: "+e.message,"err")}
-}
-function deleteBanner(i){if(confirm("Delete this banner?")){data.banners.splice(i,1);markDirty();renderAll()}}
-
-function renderBrands(){
-  $("brandList").innerHTML=data.brands.length?data.brands.map((b,i)=>`<div class="item">
-    <div style="display:flex;gap:12px;align-items:center">${b.logo?`<img class="preview" src="${esc(b.logo)}">`:""}<div><b>${esc(b.name)}</b><br><small>ID: ${esc(b.id)} · ${esc(b.accent||"")}</small></div></div>
-    <div class="actions"><button class="secondary" onclick="openBrand(${i})">Edit</button><button class="danger" onclick="deleteBrand(${i})">Delete</button></div>
-  </div>`).join(""):`<p class="help">No brands yet.</p>`;
-}
-function openBrand(i=-1){
-  const b=i>=0?clone(data.brands[i]):{id:"",name:"",logo:"",accent:"#204d38"};
-  openEditor("Brand",`<div class="row">
-    <div class="c3"><label>ID</label><input id="rId" value="${esc(b.id)}" ${i>=0?"readonly":""}></div>
-    <div class="c5"><label>Name</label><input id="rName" value="${esc(b.name)}"></div>
-    <div class="c2"><label>Accent</label><input id="rAccent" type="color" value="${esc(b.accent||"#204d38")}"></div>
-    <div class="c8"><label>Logo path</label><input id="rLogo" value="${esc(b.logo||"")}"></div>
-    <div class="c4"><label>Upload logo</label><input id="rUpload" type="file" accept="image/*"></div>
-    <div class="c12"><button class="primary" onclick="saveBrand(${i})">Save brand</button></div>
-  </div>`);
-}
-async function saveBrand(i){
-  try{
-    const uploads=$("rUpload").files.length?await uploadFiles($("rUpload")):[];
-    const id=i>=0?data.brands[i].id:slug($("rId").value||$("rName").value);
-    const obj={id,name:$("rName").value.trim(),logo:uploads[0]||$("rLogo").value.trim(),accent:$("rAccent").value};
-    if(i>=0)data.brands[i]=obj;else{data.brands.push(obj);data.categories[id]=[]}
-    markDirty();renderAll();closeEditor();
-  }catch(e){setStatus("Brand save failed: "+e.message,"err")}
-}
-function deleteBrand(i){
-  const b=data.brands[i];if(!confirm("Delete brand "+b.name+"? Products are not deleted automatically."))return;
-  data.brands.splice(i,1);delete data.categories[b.id];markDirty();renderAll();
-}
-function openEditor(title,html){$("editorTitle").textContent=title;$("editorBody").innerHTML=html;$("editor").classList.remove("hidden");$("editor").scrollIntoView({behavior:"smooth",block:"start"})}
-function closeEditor(){$("editor").classList.add("hidden");$("editorBody").innerHTML=""}
+fetch(SOURCE,{cache:'no-store'})
+  .then(r=>{
+    if(!r.ok)throw new Error('Could not load admin source ('+r.status+')');
+    return r.text();
+  })
+  .then(html=>{
+    html=html.replace('<head>','<head><base href="https://mypoloworld.com/">');
+    frame.srcdoc=html;
+  })
+  .catch(e=>{
+    loading.style.display='none';
+    errorBox.style.display='block';
+    errorBox.textContent='Could not load admin panel: '+e.message;
+  });
 </script>
 </body>
 </html>
