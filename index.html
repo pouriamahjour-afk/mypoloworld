@@ -110,6 +110,59 @@ summary::-webkit-details-marker{display:none}
 .product[open]>.product-details{border-top:1px solid var(--line);padding:28px;display:grid;grid-template-columns:2fr 1fr;gap:35px}
 .detail-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .detail-gallery img{width:100%;aspect-ratio:1/1;object-fit:contain;border:1px solid rgba(20,32,25,.08);background:#fff}
+
+.product[open] .product-cover img,
+.product[open] .detail-gallery img{cursor:zoom-in}
+
+/* FULL-SCREEN PRODUCT IMAGE VIEWER */
+.image-lightbox[hidden]{display:none}
+.image-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  background:rgba(5,9,7,.94);
+  display:grid;
+  place-items:center;
+  padding:34px 78px;
+}
+.lightbox-image{
+  display:block;
+  max-width:min(92vw,1500px);
+  max-height:88vh;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  background:#fff;
+  box-shadow:0 24px 70px rgba(0,0,0,.38);
+}
+.lightbox-control{
+  position:absolute;
+  border:1px solid rgba(255,255,255,.45);
+  background:rgba(0,0,0,.32);
+  color:#fff;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  line-height:1;
+  backdrop-filter:blur(4px);
+}
+.lightbox-control:hover{background:rgba(255,255,255,.13)}
+.lightbox-close{top:18px;right:22px;width:48px;height:48px;font-size:2rem}
+.lightbox-prev,.lightbox-next{top:50%;transform:translateY(-50%);width:54px;height:70px;font-size:2.4rem}
+.lightbox-prev{left:18px}
+.lightbox-next{right:18px}
+.lightbox-counter{
+  position:absolute;
+  left:50%;
+  bottom:16px;
+  transform:translateX(-50%);
+  color:#fff;
+  padding:7px 12px;
+  background:rgba(0,0,0,.34);
+  font-size:.72rem;
+  letter-spacing:.14em;
+}
+
 .detail-copy h4{margin:0 0 22px;font-family:Georgia,"Times New Roman",serif;font-size:1.6rem;font-weight:400}
 .detail-row{padding:12px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;font-size:.82rem}
 .detail-row span:first-child{color:#777;text-transform:uppercase;letter-spacing:.1em;font-size:.7rem}
@@ -161,6 +214,12 @@ summary::-webkit-details-marker{display:none}
   .product[open] .product-info{border-left:0;border-top:1px solid var(--line)}
   .detail-gallery{grid-template-columns:1fr}
   .site-footer{flex-direction:column;text-align:center}
+  .image-lightbox{padding:58px 12px 54px}
+  .lightbox-image{max-width:96vw;max-height:82vh}
+  .lightbox-close{top:10px;right:10px;width:44px;height:44px}
+  .lightbox-prev,.lightbox-next{width:44px;height:58px;font-size:2rem}
+  .lightbox-prev{left:6px}
+  .lightbox-next{right:6px}
 }
 </style>
 </head>
@@ -249,6 +308,14 @@ summary::-webkit-details-marker{display:none}
 
   <div id="loadError"></div>
 </main>
+
+<div class="image-lightbox" id="imageLightbox" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Product image viewer">
+  <button class="lightbox-control lightbox-close" type="button" aria-label="Close image viewer" onclick="closeImageLightbox()">×</button>
+  <button class="lightbox-control lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous image" onclick="stepImageLightbox(-1)">‹</button>
+  <img class="lightbox-image" id="lightboxImage" alt="">
+  <button class="lightbox-control lightbox-next" id="lightboxNext" type="button" aria-label="Next image" onclick="stepImageLightbox(1)">›</button>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
 
 <footer class="site-footer">
   <span>© 2026 My Polo World</span>
@@ -624,6 +691,92 @@ function closeAllProducts(){
 function findProduct(id){
   return (SITE.products||[]).find(p=>String(p.id||p.code||p.name||"")===String(id))||null;
 }
+
+/* Full-screen product image viewer */
+const LIGHTBOX = {images:[], index:0};
+
+function renderImageLightbox(){
+  const box=document.getElementById("imageLightbox");
+  const img=document.getElementById("lightboxImage");
+  const counter=document.getElementById("lightboxCounter");
+  const prev=document.getElementById("lightboxPrev");
+  const next=document.getElementById("lightboxNext");
+  if(!box || !img || !LIGHTBOX.images.length)return;
+
+  const item=LIGHTBOX.images[LIGHTBOX.index];
+  img.src=item.src;
+  img.alt=item.alt || "Product image";
+  counter.textContent=`${LIGHTBOX.index+1} / ${LIGHTBOX.images.length}`;
+
+  const multiple=LIGHTBOX.images.length>1;
+  prev.hidden=!multiple;
+  next.hidden=!multiple;
+}
+
+function openImageLightbox(images,index=0){
+  if(!Array.isArray(images) || !images.length)return;
+  LIGHTBOX.images=images;
+  LIGHTBOX.index=Math.max(0,Math.min(index,images.length-1));
+
+  const box=document.getElementById("imageLightbox");
+  if(!box)return;
+  box.hidden=false;
+  box.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  renderImageLightbox();
+}
+
+function stepImageLightbox(delta){
+  if(!LIGHTBOX.images.length)return;
+  LIGHTBOX.index=(LIGHTBOX.index+delta+LIGHTBOX.images.length)%LIGHTBOX.images.length;
+  renderImageLightbox();
+}
+
+function closeImageLightbox(){
+  const box=document.getElementById("imageLightbox");
+  if(!box || box.hidden)return;
+  box.hidden=true;
+  box.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+  const img=document.getElementById("lightboxImage");
+  if(img)img.removeAttribute("src");
+}
+
+document.addEventListener("click",event=>{
+  const target=event.target;
+  if(!(target instanceof Element))return;
+
+  const box=document.getElementById("imageLightbox");
+  if(box && target===box){
+    closeImageLightbox();
+    return;
+  }
+
+  const clicked=target.closest("details.product[open] .product-cover img, details.product[open] .detail-gallery img");
+  if(!clicked)return;
+
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+
+  const product=clicked.closest("details.product");
+  const productImages=Array.from(product.querySelectorAll(".product-cover img, .detail-gallery img"));
+  const index=Math.max(0,productImages.indexOf(clicked));
+
+  openImageLightbox(productImages.map(image=>({
+    src:image.currentSrc || image.src,
+    alt:image.alt || "Product image"
+  })),index);
+},true);
+
+document.addEventListener("keydown",event=>{
+  const box=document.getElementById("imageLightbox");
+  if(!box || box.hidden)return;
+  if(event.key==="Escape")closeImageLightbox();
+  if(event.key==="ArrowLeft")stepImageLightbox(-1);
+  if(event.key==="ArrowRight")stepImageLightbox(1);
+});
+
 function bindProducts(brandId,categoryPath){
   document.querySelectorAll(".product-summary").forEach(summary=>{
     summary.addEventListener("click",event=>{
