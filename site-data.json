@@ -92,7 +92,7 @@
     {
       "id": "santa-sunglasses",
       "brand": "santa",
-      "location": "collection",
+      "location": "ACCESSORIES/EYEWEAR/SUNGLASSES",
       "title": "Sunglasses Collection",
       "subtitle": "Santa Barbara Polo & Racquet Club",
       "image": "assets/santa-barbara-eyewear-banner.png",
@@ -132,6 +132,15 @@
       "title": "SANTABARBARA WATCHES WORLD",
       "subtitle": "",
       "image": "assets/uploads/1789035629138-k5s7w-chatgpt-image-sep-10-2026-01_44_20-pm.png",
+      "active": true
+    },
+    {
+      "id": "SANTA OPTICAL",
+      "brand": "santa",
+      "location": "ACCESSORIES/EYEWEAR/OPTICAL FRAMES",
+      "title": "OPTICAL FRAMES COLLECTION",
+      "subtitle": "OPTICAL FRAMES COLLECTION",
+      "image": "",
       "active": true
     }
   ],
