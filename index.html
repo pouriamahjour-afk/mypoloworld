@@ -21,6 +21,29 @@ button,summary,a{-webkit-tap-highlight-color:transparent}
 .wordmark{color:inherit;text-decoration:none;font-family:Georgia,"Times New Roman",serif;font-size:1.2rem;letter-spacing:.22em}
 .site-nav{display:flex;gap:28px}
 .site-nav a{color:inherit;text-decoration:none;text-transform:uppercase;font-size:.78rem;letter-spacing:.16em}
+
+.header-actions{display:flex;align-items:center;gap:20px}
+.search-toggle{appearance:none;border:0;background:transparent;color:inherit;cursor:pointer;padding:10px 0;text-transform:uppercase;font:500 .78rem/1 "Helvetica Neue",Arial,sans-serif;letter-spacing:.16em;display:flex;align-items:center;gap:8px}
+.search-toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8}
+.search-overlay{position:fixed;inset:0;background:rgba(20,32,25,.42);backdrop-filter:blur(4px);z-index:1000;padding:94px 20px 30px;display:flex;align-items:flex-start;justify-content:center}
+.search-overlay[hidden]{display:none}
+.search-panel{width:min(760px,96vw);max-height:calc(100vh - 125px);overflow:auto;background:var(--paper);border:1px solid var(--line);box-shadow:0 26px 80px rgba(20,32,25,.28)}
+.search-head{position:sticky;top:0;z-index:2;background:var(--paper);padding:22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px}
+.search-input-wrap{flex:1;display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;padding:0 15px}
+.search-input-wrap svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;flex:0 0 auto}
+#siteSearchInput{width:100%;height:54px;border:0;outline:0;background:transparent;color:var(--ink);font:400 1rem/1.2 "Helvetica Neue",Arial,sans-serif}
+#siteSearchInput::placeholder{color:#8a8f8c}
+.search-close{appearance:none;border:0;background:transparent;color:inherit;cursor:pointer;width:42px;height:42px;font-size:1.65rem;line-height:1}
+.search-help{margin:0;padding:16px 22px;color:#737975;font:400 .82rem/1.55 Georgia,"Times New Roman",serif;border-bottom:1px solid var(--line)}
+.search-results{padding:8px}
+.search-result{appearance:none;width:100%;border:0;border-bottom:1px solid rgba(20,32,25,.09);background:transparent;color:inherit;text-align:left;padding:16px 14px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.search-result:last-child{border-bottom:0}
+.search-result:hover,.search-result:focus{background:#f3f0e8;outline:none}
+.search-result-title{display:block;font-family:Georgia,"Times New Roman",serif;font-size:1.08rem;letter-spacing:.025em}
+.search-result-meta{display:block;margin-top:6px;color:#747a76;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;line-height:1.5}
+.search-result-price{font-family:Georgia,"Times New Roman",serif;white-space:nowrap}
+.search-empty{padding:36px 18px;text-align:center;color:#777;font-family:Georgia,"Times New Roman",serif}
+
 .hero{width:100%;min-height:clamp(300px,47vw,650px);background:#f0ede5 center/cover no-repeat;border-bottom:1px solid var(--line)}
 .intro{max-width:760px;margin:auto;padding:74px 24px 46px;text-align:center}
 .eyebrow{margin:0 0 18px;font-size:.76rem;letter-spacing:.25em;text-transform:uppercase;color:#6b706d}
@@ -113,6 +136,8 @@ summary::-webkit-details-marker{display:none}
 .error-box{margin:30px auto;padding:20px;width:min(900px,92vw);background:#fff;border:1px solid #b66;color:#6a1d1d}
 @media(max-width:900px){
   .site-nav{display:none}
+  .site-header{padding-left:20px;padding-right:20px}
+  .search-toggle span{display:none}
   .brands{grid-template-columns:1fr;max-width:560px}
   .brand-card{overflow:hidden}
   .menu-panel,.brand-card[open]>.menu-panel,.menu-item[open]>.menu-panel{position:static;display:block;width:auto;border:0;border-top:1px solid var(--line);box-shadow:none;padding:0}
@@ -142,12 +167,34 @@ summary::-webkit-details-marker{display:none}
 <body>
 <header class="site-header">
   <a class="wordmark" href="/" id="homeLink">MY POLO WORLD</a>
-  <nav class="site-nav">
-    <a href="#brands" id="brandsLink">Our Brands</a>
-    <a href="#brands" id="collectionsLink">Collections</a>
-    <a href="#about" id="aboutLink">About Us</a>
-  </nav>
+  <div class="header-actions">
+    <nav class="site-nav">
+      <a href="#brands" id="brandsLink">Our Brands</a>
+      <a href="#brands" id="collectionsLink">Collections</a>
+      <a href="#about" id="aboutLink">About Us</a>
+    </nav>
+    <button class="search-toggle" id="searchToggle" type="button" aria-label="Search products">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l5 5"></path></svg>
+      <span>Search</span>
+    </button>
+  </div>
 </header>
+
+<div class="search-overlay" id="searchOverlay" hidden>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search products">
+    <div class="search-head">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l5 5"></path></svg>
+        <input id="siteSearchInput" type="search" autocomplete="off" spellcheck="false" placeholder="Search model, barcode, product or brand…">
+      </div>
+      <button class="search-close" id="searchClose" type="button" aria-label="Close search">×</button>
+    </div>
+    <p class="search-help">Search by model number, barcode, product name, brand, category or subcategory.</p>
+    <div class="search-results" id="searchResults">
+      <div class="search-empty">Start typing to search products.</div>
+    </div>
+  </div>
+</div>
 
 <main id="top">
   <section class="hero" id="hero"></section>
@@ -324,6 +371,169 @@ function bindMenuBehavior(){
     }
   });
 }
+
+function searchText(v=""){
+  return String(v)
+    .toLowerCase()
+    .trim()
+    .replace(/[._\-\/\\]+/g," ")
+    .replace(/\s+/g," ");
+}
+
+function searchProducts(query){
+  if(!SITE)return [];
+
+  const q=searchText(query);
+  if(!q)return [];
+
+  const terms=q.split(" ").filter(Boolean);
+
+  return (SITE.products||[])
+    .filter(p=>p.active!==false)
+    .map(p=>{
+      const b=brandById(p.brand);
+
+      const fields={
+        barcode:searchText(p.barcode||""),
+        code:searchText(p.code||""),
+        id:searchText(p.id||""),
+        name:searchText(p.name||""),
+        brand:searchText(b.name||""),
+        category:searchText(p.categoryPath||""),
+        description:searchText(p.description||""),
+        price:searchText(p.price||"")
+      };
+
+      const hay=Object.values(fields).join(" ");
+
+      if(!terms.every(term=>hay.includes(term)))return null;
+
+      let score=10;
+
+      if(fields.barcode===q)score=1000;
+      else if(fields.code===q)score=950;
+      else if(fields.id===q)score=900;
+      else if(fields.name===q)score=850;
+      else if(fields.brand===q)score=800;
+      else if(fields.category===q)score=780;
+      else{
+        if(fields.barcode.startsWith(q))score+=300;
+        if(fields.code.startsWith(q))score+=280;
+        if(fields.name.startsWith(q))score+=240;
+        if(fields.brand.startsWith(q))score+=180;
+        if(fields.category.includes(q))score+=170;
+        if(fields.description.includes(q))score+=80;
+        score += Object.values(fields).filter(v=>v.includes(q)).length * 20;
+      }
+
+      return {p,b,score};
+    })
+    .filter(Boolean)
+    .sort((a,b)=>b.score-a.score || String(a.p.code||"").localeCompare(String(b.p.code||"")))
+    .slice(0,20);
+}
+
+function renderSearchResults(query){
+  const box=document.getElementById("searchResults");
+  if(!box)return;
+  const q=String(query||"").trim();
+
+  if(!q){
+    box.innerHTML='<div class="search-empty">Start typing to search products.</div>';
+    return;
+  }
+
+  const matches=searchProducts(q);
+  if(!matches.length){
+    box.innerHTML='<div class="search-empty">No products found.</div>';
+    return;
+  }
+
+  box.innerHTML=matches.map(({p,b})=>{
+    const id=String(p.id||p.code||p.name||"");
+    const meta=[
+      b.name,
+      p.code ? "Model "+p.code : "",
+      p.barcode ? "Barcode "+p.barcode : "",
+      p.categoryPath||""
+    ].filter(Boolean).join(" · ");
+
+    return `<button class="search-result" type="button" data-search-product-id="${esc(id)}">
+      <span>
+        <span class="search-result-title">${esc(p.name||p.code||"Product")}</span>
+        <span class="search-result-meta">${esc(meta)}</span>
+      </span>
+      <span class="search-result-price">${esc(p.price||"")}</span>
+    </button>`;
+  }).join("");
+}
+
+function openSearch(){
+  const overlay=document.getElementById("searchOverlay");
+  const input=document.getElementById("siteSearchInput");
+  if(!overlay||!input)return;
+  overlay.hidden=false;
+  document.body.style.overflow="hidden";
+  input.value="";
+  renderSearchResults("");
+  setTimeout(()=>input.focus(),20);
+}
+
+function closeSearch(){
+  const overlay=document.getElementById("searchOverlay");
+  if(!overlay)return;
+  overlay.hidden=true;
+  document.body.style.overflow="";
+}
+
+function openProductFromSearch(productId){
+  const p=findProduct(productId);
+  if(!p)return;
+  closeSearch();
+  openCollection(p.brand,p.categoryPath,true,false);
+  setTimeout(()=>{
+    const product=[...document.querySelectorAll("details.product")].find(el=>el.dataset.productId===String(productId));
+    const summary=product?.querySelector(".product-summary");
+    if(summary)summary.click();
+  },40);
+}
+
+function bindSearch(){
+  const toggle=document.getElementById("searchToggle");
+  const close=document.getElementById("searchClose");
+  const overlay=document.getElementById("searchOverlay");
+  const input=document.getElementById("siteSearchInput");
+  const results=document.getElementById("searchResults");
+
+  toggle?.addEventListener("click",openSearch);
+  close?.addEventListener("click",closeSearch);
+
+  overlay?.addEventListener("click",event=>{
+    if(event.target===overlay)closeSearch();
+  });
+
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape" && overlay && !overlay.hidden)closeSearch();
+  });
+
+  input?.addEventListener("input",()=>renderSearchResults(input.value));
+  input?.addEventListener("keydown",event=>{
+    if(event.key==="Enter"){
+      const first=searchProducts(input.value)[0];
+      if(first){
+        event.preventDefault();
+        openProductFromSearch(String(first.p.id||first.p.code||first.p.name||""));
+      }
+    }
+  });
+
+  results?.addEventListener("click",event=>{
+    const btn=event.target.closest("[data-search-product-id]");
+    if(!btn)return;
+    openProductFromSearch(btn.dataset.searchProductId);
+  });
+}
+
 function chooseBanner(brandId,categoryPath){
   const leaf=categoryPath.split("/").map(x=>x.trim()).filter(Boolean).pop()||"";
   const targetId=brandId+"-"+slug(leaf);
@@ -587,6 +797,7 @@ async function loadSite(){
     document.getElementById("hero").style.backgroundImage=`url("${heroImage}")`;
 
     renderBrands();
+    bindSearch();
     initializeHistory();
   }catch(e){
     document.getElementById("loadError").innerHTML=`<div class="error-box">Website data could not be loaded. ${esc(e.message)}</div>`;
