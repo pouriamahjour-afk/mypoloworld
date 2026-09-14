@@ -668,6 +668,22 @@
       ],
       "active": true,
       "barcode": ""
+    },
+    {
+      "id": "santa-sb-1059-03",
+      "brand": "santa",
+      "categoryPath": "Accessories / Eyewear / Optical Frames",
+      "name": "SANTA BARBARA OPTICAL FRAME",
+      "code": "SB 1059 03",
+      "barcode": "8682308292657",
+      "price": "$91.3",
+      "description": "",
+      "images": [
+        "assets/uploads/1789367595708-m56ll-sb1059_01.png",
+        "assets/uploads/1789367598199-c7v7z-sb1059_02.png",
+        "assets/uploads/1789367600532-p603p-sb1059_03.png"
+      ],
+      "active": true
     }
   ]
 }
