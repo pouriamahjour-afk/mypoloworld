@@ -61,7 +61,8 @@ summary::-webkit-details-marker{display:none}
 .brand-card[data-brand="venezia"] .brand-head{background:#f4eee8}
 .logo-wrap{width:100%;height:325px;display:grid;place-items:center}
 .brand-logo{max-width:91%;max-height:305px;object-fit:contain;mix-blend-mode:multiply}
-.brand-card[data-brand="santa"] .brand-logo{max-width:96%;max-height:315px}
+.brand-card[data-brand="santa"] .logo-wrap{overflow:hidden}
+.brand-card[data-brand="santa"] .brand-logo{max-width:100%;max-height:315px;transform:scale(1.55);transform-origin:center center}
 .brand-label{width:100%;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px}
 .brand-label strong{font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:.06em}
 .brand-label-copy{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
@@ -234,6 +235,7 @@ summary::-webkit-details-marker{display:none}
     <nav class="site-nav">
       <a href="#brands" id="brandsLink">Our Brands</a>
       <a href="#brands" id="collectionsLink">Collections</a>
+      <a href="santa-barbara-brand-portfolio.html" id="portfolioLink">Portfolio</a>
       <a href="#about" id="aboutLink">About Us</a>
     </nav>
     <button class="search-toggle" id="searchToggle" type="button" aria-label="Search products">
