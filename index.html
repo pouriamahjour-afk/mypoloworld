@@ -44,7 +44,8 @@ button,summary,a{-webkit-tap-highlight-color:transparent}
 .search-result-price{font-family:Georgia,"Times New Roman",serif;white-space:nowrap}
 .search-empty{padding:36px 18px;text-align:center;color:#777;font-family:Georgia,"Times New Roman",serif}
 
-.hero{width:100%;min-height:clamp(300px,47vw,650px);background:#f0ede5 center/cover no-repeat;border-bottom:1px solid var(--line)}
+.hero{width:100%;min-height:clamp(300px,47vw,650px);background:#f0ede5 center/cover no-repeat;border-bottom:1px solid var(--line);position:relative;overflow:hidden}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .intro{max-width:760px;margin:auto;padding:74px 24px 46px;text-align:center}
 .eyebrow{margin:0 0 18px;font-size:.76rem;letter-spacing:.25em;text-transform:uppercase;color:#6b706d}
 h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2rem,4vw,3.4rem);font-weight:400;letter-spacing:.06em}
@@ -946,8 +947,24 @@ async function loadSite(){
     document.querySelector(".wordmark").textContent=(SITE.site?.title||"My Polo World").toUpperCase();
 
     const homeBanner=(SITE.banners||[]).find(b=>b.active!==false&&(b.id==="home-hero"||b.location==="home-hero"));
+    const hero=document.getElementById("hero");
     const heroImage=homeBanner?.image||SITE.site?.heroImage||"assets/fall-winter-banner.png";
-    document.getElementById("hero").style.backgroundImage=`url("${heroImage}")`;
+    const heroVideo=homeBanner?.video||SITE.site?.heroVideo||"";
+    hero.style.backgroundImage=`url("${heroImage}")`;
+    hero.querySelector(".hero-video")?.remove();
+    if(heroVideo){
+      const video=document.createElement("video");
+      video.className="hero-video";
+      video.src=heroVideo;
+      video.autoplay=true;
+      video.muted=true;
+      video.loop=true;
+      video.playsInline=true;
+      video.preload="metadata";
+      video.setAttribute("aria-hidden","true");
+      video.addEventListener("error",()=>video.remove());
+      hero.appendChild(video);
+    }
 
     renderBrands();
     bindSearch();
