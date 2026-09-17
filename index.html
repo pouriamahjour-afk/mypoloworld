@@ -438,6 +438,19 @@ function bindMenuBehavior(){
     if(!(details instanceof HTMLDetailsElement))return;
     if(!details.matches(".brand-card,.menu-item"))return;
     event.preventDefault();
+
+    // Polo San Marco and Venezia Polo are not live yet.
+    // A click on either brand opens a proper Coming Soon page instead of an empty menu.
+    if(details.classList.contains("brand-card")){
+      const brandId=details.dataset.brand;
+      if(brandId==="sanmarco" || brandId==="venezia"){
+        closeSiblings(details);
+        closeDetailTree(details);
+        showComingSoon(brandId,true,true);
+        return;
+      }
+    }
+
     const willOpen=!details.open;
     if(willOpen){
       closeSiblings(details);
@@ -445,9 +458,8 @@ function bindMenuBehavior(){
     }else{
       closeDetailTree(details);
     }
-    if(!suppressHistory){
-      history.pushState({app:HISTORY_APP,type:"menu",openKeys:navOpenKeys()},"",location.href);
-    }
+    // Opening and closing menus is UI state only; it must not create browser-history
+    // entries. This keeps the Back button moving between real pages/views.
   });
 }
 
@@ -833,6 +845,34 @@ function showAboutUs(push=true,scroll=true){
   if(scroll)setTimeout(()=>section.scrollIntoView({behavior:"smooth",block:"start"}),20);
 }
 
+function showComingSoon(brandId,push=true,scroll=true){
+  hideAboutUs();
+  closeAllProducts();
+  restoreMenuKeys([]);
+  clearProductMeta();
+
+  const section=document.getElementById("collection");
+  const b=brandById(brandId);
+  document.getElementById("collectionBrand").textContent=b.name;
+  document.getElementById("collectionHeading").textContent="UNDER CONSTRUCTION";
+
+  const bannerEl=document.getElementById("collectionBanner");
+  bannerEl.hidden=true;
+  bannerEl.style.backgroundImage="";
+
+  document.getElementById("collectionContent").innerHTML=`
+    <div class="empty" style="padding:90px 20px;background:#fff;color:#142019">
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.8rem,4vw,3rem);letter-spacing:.08em;margin-bottom:14px;color:#142019">COMING SOON</div>
+      <div style="text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;color:#777">${esc(b.name)}</div>
+    </div>`;
+  section.hidden=false;
+
+  if(push&&!suppressHistory){
+    history.pushState({app:HISTORY_APP,type:"comingSoon",brandId},"",location.pathname);
+  }
+  if(scroll)setTimeout(()=>section.scrollIntoView({behavior:"smooth",block:"start"}),30);
+}
+
 function openCollection(brandId,categoryPath,push=true,scroll=true){
   hideAboutUs();
   const section=document.getElementById("collection");
@@ -880,6 +920,9 @@ function applyState(state){
     }else if(state.type==="about"){
       showAboutUs(false,false);
       setTimeout(()=>document.getElementById("aboutUs")?.scrollIntoView({behavior:"auto",block:"start"}),0);
+    }else if(state.type==="comingSoon"){
+      showComingSoon(state.brandId,false,false);
+      setTimeout(()=>document.getElementById("collection")?.scrollIntoView({behavior:"auto",block:"start"}),0);
     }else if(state.type==="collection"){
       hideAboutUs();
       restoreMenuKeys([]);
@@ -924,7 +967,13 @@ function initializeHistory(){
   showHome(false);
 }
 window.addEventListener("popstate",event=>{
-  if(event.state?.app===HISTORY_APP)applyState(event.state);
+  if(event.state?.app===HISTORY_APP){
+    applyState(event.state);
+    return;
+  }
+  // If the browser lands on this document without one of our saved app states,
+  // restore the home view instead of leaving a stale product/collection on screen.
+  showHome(false);
 });
 document.getElementById("homeLink").addEventListener("click",event=>{
   event.preventDefault();
