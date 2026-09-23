@@ -51,9 +51,13 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
         <label>Branch</label>
         <input id="branch" value="main">
       </div>
-      <div class="c12">
+      <div class="c12" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
         <button class="primary" id="connectBtn">Connect to GitHub</button>
-        <span class="help">The token is never written into this page or site-data.json. It stays only in this open tab.</span>
+        <label style="display:inline-flex;align-items:center;gap:7px;margin:0;text-transform:none;letter-spacing:0">
+          <input id="rememberLogin" type="checkbox" checked style="width:auto"> Remember this device
+        </label>
+        <button class="secondary" id="forgetBtn" type="button">Forget saved login</button>
+        <span class="help" style="display:block;flex-basis:100%">The token is never written into this page or site-data.json. When “Remember this device” is checked, it is saved only in this browser and the panel reconnects automatically next time.</span>
       </div>
     </div>
   </section>
@@ -115,6 +119,7 @@ hr{border:0;border-top:1px solid var(--line);margin:20px 0}
 
 <script>
 const DATA_FILE="site-data.json";
+const STORAGE_KEY="mypoloworld-admin-github-v1";
 let token="", repo="", branch="main", data=null, dataSha=null, dirty=false;
 
 const defaultData={
@@ -187,15 +192,49 @@ function normalize(){
   data.brands ||= []; data.categories ||= {}; data.banners ||= []; data.products ||= [];
   data.brands.forEach(b=>data.categories[b.id] ||= []);
 }
-$("connectBtn").onclick=async()=>{
+function saveLogin(){
+  if(!$("rememberLogin").checked){
+    localStorage.removeItem(STORAGE_KEY);
+    return;
+  }
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({token,repo,branch}));
+}
+function loadSavedLogin(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if(!saved?.token)return false;
+    $("token").value=saved.token;
+    $("repo").value=saved.repo||"pouriamahjour-afk/mypoloworld";
+    $("branch").value=saved.branch||"main";
+    $("rememberLogin").checked=true;
+    return true;
+  }catch(e){
+    localStorage.removeItem(STORAGE_KEY);
+    return false;
+  }
+}
+async function connectToGitHub(isAuto=false){
   token=$("token").value.trim(); repo=$("repo").value.trim(); branch=$("branch").value.trim()||"main";
   if(!token)return setStatus("Paste the GitHub token first.","err");
   try{
-    setStatus("Connecting...");
+    setStatus(isAuto?"Reconnecting automatically...":"Connecting...");
     await gh("");
     await loadData();
-  }catch(e){setStatus("Connection failed: "+e.message,"err")}
+    saveLogin();
+  }catch(e){
+    if(isAuto)localStorage.removeItem(STORAGE_KEY);
+    setStatus("Connection failed: "+e.message,"err");
+  }
+}
+$("connectBtn").onclick=()=>connectToGitHub(false);
+$("forgetBtn").onclick=()=>{
+  localStorage.removeItem(STORAGE_KEY);
+  token="";
+  $("token").value="";
+  $("rememberLogin").checked=false;
+  setStatus("Saved login removed from this browser.");
 };
+if(loadSavedLogin())connectToGitHub(true);
 $("saveAll").onclick=async()=>{
   try{
     $("saveAll").disabled=true; setStatus("Saving changes to GitHub...");
