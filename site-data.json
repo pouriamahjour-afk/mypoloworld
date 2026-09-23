@@ -701,13 +701,12 @@
       "categoryPath": "Accessories / Eyewear / Optical Frames",
       "name": "SANTA BARBARA OPTICAL FRAME",
       "code": "SB 105902 02",
-      "barcode": "8682308292640",
       "price": "$91.3",
       "description": "",
       "images": [
+        "assets/uploads/1789369630712-gfn8x-sb1059_06.png",
         "assets/uploads/1789369623615-qgv8e-sb1059_04.png",
-        "assets/uploads/1789369627338-9c051-sb1059_05.png",
-        "assets/uploads/1789369630712-gfn8x-sb1059_06.png"
+        "assets/uploads/1789369627338-9c051-sb1059_05.png"
       ],
       "active": true
     },
@@ -733,13 +732,12 @@
       "categoryPath": "Accessories / Eyewear / Optical Frames",
       "name": "SANTA BARBARA OPTICAL FRAME",
       "code": "SB 1059 01",
-      "barcode": "8682308292633",
       "price": "$91.3",
       "description": "",
       "images": [
+        "assets/uploads/1789371139947-6c35g-sb1059_09.png",
         "assets/uploads/1789371134992-3hgyq-sb1059_07.png",
-        "assets/uploads/1789371138100-2oj0d-sb1059_08.png",
-        "assets/uploads/1789371139947-6c35g-sb1059_09.png"
+        "assets/uploads/1789371138100-2oj0d-sb1059_08.png"
       ],
       "active": true
     }
