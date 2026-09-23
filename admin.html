@@ -26,6 +26,12 @@ textarea{min-height:92px;resize:vertical} button{border:0;border-radius:6px;padd
 .status{padding:10px 12px;border-radius:6px;background:#f0efe9;font-size:13px}.ok{background:#e6f3e9}.err{background:#f9e3e3}
 .hidden{display:none!important}.help{font-size:12px;color:var(--muted);line-height:1.55}
 img.preview{width:88px;height:88px;object-fit:contain;border:1px solid var(--line);background:#fff}
+.product-image-manager{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:12px}
+.product-image-card{border:1px solid var(--line);background:#faf9f5;padding:10px;border-radius:8px}
+.product-image-card img{width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:6px;display:block}
+.product-image-card .cover-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;min-height:38px}
+.product-image-card .path{font-size:10px;color:var(--muted);word-break:break-all;margin-top:7px}
+.cover-badge{display:inline-block;background:var(--green);color:#fff;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:bold}
 hr{border:0;border-top:1px solid var(--line);margin:20px 0}
 @media(max-width:760px){.c6,.c4,.c3{grid-column:span 12}.item{align-items:flex-start;flex-direction:column}header{align-items:flex-start;flex-direction:column}}
 </style>
@@ -282,11 +288,48 @@ function openProduct(i=-1){
     <div class="c3"><label>Price</label><input id="pPrice" value="${esc(p.price)}" placeholder="$95"></div>
     <div class="c3"><label>Status</label><select id="pActive"><option value="true" ${p.active!==false?"selected":""}>Live</option><option value="false" ${p.active===false?"selected":""}>Hidden</option></select></div>
     <div class="c12"><label>Description</label><textarea id="pDesc">${esc(p.description||"")}</textarea></div>
-    <div class="c12"><label>Image paths — one per line</label><textarea id="pImages">${esc((p.images||[]).join("\n"))}</textarea></div>
+    <div class="c12">
+      <label>Product images — first image is the cover</label>
+      <textarea id="pImages" oninput="renderProductImageManager()">${esc((p.images||[]).join("\n"))}</textarea>
+      <div id="pImageManager" class="product-image-manager"></div>
+      <p class="help">The image marked COVER is the photo shown in the product grid. Click <b>Set as cover</b> under another image to change it.</p>
+    </div>
     <div class="c6"><label>Upload image(s)</label><input id="pUpload" type="file" accept="image/*" multiple></div>
     <div class="c12"><button class="primary" onclick="saveProduct(${i})">Save product</button></div>
   </div>`);
   refreshProductCategories(p.categoryPath);
+  renderProductImageManager();
+}
+function editorImagePaths(){
+  return ($("pImages")?.value||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
+}
+function renderProductImageManager(){
+  const box=$("pImageManager");
+  if(!box)return;
+  const imgs=editorImagePaths();
+  if(!imgs.length){
+    box.innerHTML=`<p class="help">No product images yet.</p>`;
+    return;
+  }
+  box.innerHTML=imgs.map((src,i)=>`<div class="product-image-card">
+    <img src="${esc(src)}" alt="Product image ${i+1}" onerror="this.style.opacity='.25'">
+    <div class="cover-row">
+      <span class="help">Image ${i+1}</span>
+      ${i===0
+        ? `<span class="cover-badge">COVER</span>`
+        : `<button type="button" class="secondary" onclick="setProductCover(${i})">Set as cover</button>`}
+    </div>
+    <div class="path">${esc(src)}</div>
+  </div>`).join("");
+}
+function setProductCover(index){
+  const imgs=editorImagePaths();
+  if(index<=0 || index>=imgs.length)return;
+  const chosen=imgs.splice(index,1)[0];
+  imgs.unshift(chosen);
+  $("pImages").value=imgs.join("\n");
+  renderProductImageManager();
+  setStatus("Cover changed in the product draft. Click Save product, then Save all changes.","ok");
 }
 function refreshProductCategories(selected){
   const b=$("pBrand")?.value;if(!$("pCategory"))return;
